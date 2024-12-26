@@ -1,6 +1,6 @@
 import { Paper } from '@mui/material';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { ghcolors, materialDark, materialLight, prism, vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 function CodeArea() {
     const codeString = `
@@ -70,7 +70,7 @@ class Main {
                 overflow: 'auto', // 스크롤 가능
             }}
         >
-            <SyntaxHighlighter language="java" style={vs}>
+            <SyntaxHighlighter language="java" style={materialLight}>
                 {codeString}
             </SyntaxHighlighter>
         </Paper>
