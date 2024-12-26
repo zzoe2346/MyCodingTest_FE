@@ -1,9 +1,20 @@
 import { Paper, Typography, Link, Chip, IconButton, Collapse } from '@mui/material';
-import { styled } from '@mui/system';
 import { useState } from 'react';
 
 // ResultInfo 컴포넌트
-const ResultInfo = ({ result }) => {
+interface Result {
+    submissionId: string;
+    userId: string;
+    problemId: string;
+    resultText: string;
+    memory: string;
+    time: string;
+    language: string;
+    codeLength: string;
+    submittedAt: string;
+}
+
+const ResultInfo = ({ result }: { result: Result }) => {
 
     const [showDetails, setShowDetails] = useState(true); // 초기 상태는 정보를 보이도록 설정
     const handleToggleDetails = () => {

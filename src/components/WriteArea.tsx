@@ -1,5 +1,5 @@
 import { Button, Paper, TextField, Typography } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import ReactMarkdown from 'react-markdown';
 
 function WriteArea() {
@@ -28,13 +28,13 @@ function WriteArea() {
       const data = await response.json();
       setPostId(data.id);
     } catch (error) {
-      setError(error.message);
+      setError((error as any).message);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleRead = async (id) => {
+  const handleRead = async (id: number) => {
     setIsLoading(true);
     setError(null);
     try {
@@ -44,11 +44,11 @@ function WriteArea() {
       }
       const data = await response.json();
       setContent(data.content);
-      setPostId(id);
+    //   setPostId(null);
     } catch (error) {
-      setError(error.message);
+    //   setError(error: any);
     } finally {
-      setIsLoading(false);
+    //   setIsLoading(false);
     }
   };
 
@@ -67,7 +67,7 @@ function WriteArea() {
         throw new Error('Network response was not ok');
       }
     } catch (error) {
-      setError(error.message);
+    //   setError(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -86,13 +86,13 @@ function WriteArea() {
       setContent("");
       setPostId(null);
     } catch (error) {
-      setError(error.message);
+    //   setError(error.message);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: { target: { value: SetStateAction<string>; }; }) => {
     setContent(event.target.value);
   };
 
