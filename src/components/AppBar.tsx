@@ -10,15 +10,15 @@ function MyAppBar() {
                     My Coding Test👍
                 </Typography>
                 <Button component={RouterLink} to="/" color="primary">
-          리뷰대기문제
+          리뷰대기
         </Button>
         <Button component={RouterLink} to="/review" color="primary">
-          모든문제
+          MyProblem
         </Button>
         <Button component={RouterLink} to="/about" color="primary">
-          About
+          리뷰
         </Button>
-                <Button>Login</Button>
+                <Button component={RouterLink} to="/login" >Login</Button>
             </Toolbar>
         </AppBar>
     );
