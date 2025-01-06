@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+axios.defaults.withCredentials = true
+
 const api = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: 'https://localhost:8443',
     withCredentials: true,            // 쿠키 포함 설정
 });
 
