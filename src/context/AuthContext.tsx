@@ -3,8 +3,6 @@ import axios from 'axios';
 import api from "../api/api.ts";
 import {User} from "../hooks/types.ts";
 
-axios.defaults.withCredentials = true;
-
 interface AuthContextType {
     isLoggedIn: boolean;
     user: User | null;
