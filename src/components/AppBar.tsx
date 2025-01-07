@@ -60,7 +60,7 @@ function LogoAndTitle() {
                 }}
             >
                 <img
-                    src="../../public/logo.png"
+                    src="public/logo.png"
                     alt="My Coding Test Logo"
                     style={{height: '60px'}}
                 />
