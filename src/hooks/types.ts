@@ -8,7 +8,7 @@ export interface LoginForm {
     error: string;
 }
 
-export interface SolvedProblemWithReviewStatus {
+export interface SolvedProblemWithReview {
     solvedProblemId: number;
     problemNumber: number;
     problemTitle: string;
@@ -18,17 +18,17 @@ export interface SolvedProblemWithReviewStatus {
     reviewId: number;
     difficultyLevel: number;
     importanceLevel: number;
-    tags: string|null;
+    tags: string | null;
     isReviewed: boolean;
 }
 
-export interface ApiResponse {
+export interface PageResponse<T> {
     totalElements: number;
     totalPages: number;
     first: boolean;
     last: boolean;
     size: number;
-    content: SolvedProblemWithReviewStatus[];
+    content: T[];
     number: number;
     sort: {
         empty: boolean;
@@ -49,9 +49,4 @@ export interface ApiResponse {
         unpaged: boolean;
     };
     empty: boolean;
-}
-
-export interface UseApiDataOptions {
-    page: number;
-    pageSize: number;
 }
