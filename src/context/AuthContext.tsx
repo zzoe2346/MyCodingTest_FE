@@ -10,6 +10,7 @@ interface AuthContextType {
     loading: boolean;
     signIn: (username: string, password: string) => Promise<void>;
     signOut: () => Promise<void>;
+    unreviewedCount: number
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -31,6 +32,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     const [user, setUser] = useState<User | null>(null);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
+    const [unreviewedCount, setUnreviewedCount] = useState(0);
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -38,6 +40,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
                 const response = await api.get<User>('/api/me');
                 setUser(response.data);
                 setIsLoggedIn(true);
+
+                const response2 = await api.get('/api/solved-problems/unreviewed-count');
+                setUnreviewedCount(response2.data.count);
             } catch (err) {
                 console.error("사용자 인증 정보를 가져오는데 실패했습니다:", err);
                 setUser(null);
@@ -90,7 +95,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     };
 
     return (
-        <AuthContext.Provider value={{isLoggedIn, user, error, loading, signIn, signOut}}>
+        <AuthContext.Provider value={{isLoggedIn, user, error, loading, signIn, signOut,unreviewedCount}}>
             {children}
         </AuthContext.Provider>
     );
