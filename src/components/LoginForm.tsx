@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Box, Button, Paper, TextField, Typography} from '@mui/material';
 import {useAuth} from "../context/AuthContext.tsx";
+import {Link as RouterLink} from "react-router-dom";
 
 const LoginForm: React.FC = () => {
     const {isLoggedIn, error, loading, signIn} = useAuth();
@@ -32,7 +33,7 @@ const LoginForm: React.FC = () => {
                         required
                         fullWidth
                         id="username"
-                        label="사용자 이름"
+                        label="ID"
                         name="username"
                         autoComplete="username"
                         autoFocus
@@ -44,7 +45,7 @@ const LoginForm: React.FC = () => {
                         required
                         fullWidth
                         name="password"
-                        label="비밀번호"
+                        label="PASSWORD"
                         type="password"
                         id="password"
                         autoComplete="current-password"
@@ -64,6 +65,17 @@ const LoginForm: React.FC = () => {
                         disabled={loading}
                     >
                         {loading ? '로그인 중...' : '로그인'}
+                    </Button>
+                    <Button
+                        type="button"
+                        fullWidth
+                        variant="contained"
+                        sx={{mt: 0, mb: 2}}
+                        disabled={loading}
+                        component={RouterLink}
+                        to="/sign-up"
+                    >
+                        회원가입
                     </Button>
                 </Paper>
             )}

@@ -50,15 +50,27 @@ function UserMenu() {
                     </Menu>
                 </>
             ) : (
-                <Typography variant="caption" marginRight="1rem">
+                <Typography variant="body2" marginRight="1rem">
                     <Link
                         component={RouterLink}
                         to="/login"
                         color="primary"
                         underline="hover"
-                        margin="3px"
+                        margin="1px"
                     >
-                        Login
+                        로그인
+                    </Link>
+                    <Box component="span" sx={{ color: 'gray', mx: 1 }}>
+                        /
+                    </Box>
+                    <Link
+                        component={RouterLink}
+                        to="/sign-up"
+                        color="primary"
+                        underline="hover"
+                        margin="1px"
+                    >
+                        회원가입
                     </Link>
                 </Typography>
             )}

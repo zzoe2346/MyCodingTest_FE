@@ -2,7 +2,7 @@ import './App.css'
 import MyAppBar from './components/AppBar'
 import {Route, Routes} from 'react-router-dom'
 import Review from './pages/Review'
-import AuthPage from './pages/AuthPage'
+import LoginPage from './pages/LoginPage.tsx'
 import {AuthProvider} from "./context/AuthContext.tsx";
 import PrivateRoute from "./components/PrivateRoute.tsx";
 import SolveProblemListPage from "./pages/AllSolvedProblemPage.tsx";
@@ -10,6 +10,7 @@ import {createTheme, ThemeProvider} from "@mui/material";
 import FavoirteSolvedProblem from "./pages/FavoriteSolvedProblemPage.tsx";
 import ReviewClearSolvedProblemPage from "./pages/ReviewClearSolvedProblemPage.tsx";
 import ReviewUnClearSolvedProblemPage from "./pages/ReviewUnClearSolvedProblemPage.tsx";
+import SignUpPage from "./pages/SignUpPage.tsx";
 
 const theme = createTheme({
     components: {
@@ -29,6 +30,14 @@ const theme = createTheme({
                 },
             },
         },
+        MuiContainer: {
+            styleOverrides: {
+                root: {
+                    maxWidth: 'xl',
+                    marginTop: '10px',
+                },
+            },
+        }
     },
 
 
@@ -41,7 +50,8 @@ function App() {
             <AuthProvider>
                 <MyAppBar/>
                 <Routes>
-                    <Route path="/login" element={<AuthPage/>}/>
+                    <Route path="/login" element={<LoginPage/>}/>
+                    <Route path="/sign-up" element={<SignUpPage/>}/>
                     <Route path="/solvedProblems" element={<SolveProblemListPage/>}/>
                     <Route
                         path="/review"
