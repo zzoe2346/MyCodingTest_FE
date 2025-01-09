@@ -1,35 +1,53 @@
-import {AppBar, Box, Button, Link, Toolbar, Typography} from "@mui/material";
+import {AppBar, Avatar, Badge, Box, Button, Container, Link, Menu, MenuItem, Toolbar, Typography} from "@mui/material";
 import {Link as RouterLink, useLocation} from 'react-router-dom';
 import {useAuth} from "../context/AuthContext.tsx";
+import React, {useState} from "react";
 
-// 1. 로그인 상태에 따른 상단 메뉴 컴포넌트
 function UserMenu() {
     const {isLoggedIn, user, signOut} = useAuth();
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
-        <Box display="flex" justifyContent='flex-end'>
+        <Box display="flex" justifyContent='flex-end' sx={{padding: '0 0', margin: '0 0'}}>
             {isLoggedIn ? (
                 <>
-                    <Typography variant="caption" marginRight="1rem">
-                        <Link
-                            component={RouterLink}
-                            to="/mypage"
-                            color="primary"
-                            underline="hover"
-                        >
+                    <div style={{textAlign: 'center'}}>
+                        <Avatar
+                            alt={user?.username}
+                            onClick={handleMenuOpen}
+                            sx={{cursor: 'pointer'}}
+                        />
+                        <div style={{fontSize: '12px', color: '#555', marginTop: '2px'}}>
                             {user?.username}
-                        </Link>
-                    </Typography>
-                    <Typography variant="caption" marginRight="1rem">
-                        <Link
-                            onClick={signOut}
-                            color="primary"
-                            underline="hover"
-                            style={{cursor: 'pointer'}}
-                        >
+                        </div>
+                    </div>
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={handleMenuClose}
+                    >
+                        <MenuItem onClick={() => {
+                            handleMenuClose();
+                            // 마이페이지로 이동 나중에 라우드 되도록 수정
+                            window.location.href = '/mypage';
+                        }}>
+                            마이페이지
+                        </MenuItem>
+                        <MenuItem onClick={() => {
+                            handleMenuClose();
+                            signOut();
+                        }}>
                             로그아웃
-                        </Link>
-                    </Typography>
+                        </MenuItem>
+                    </Menu>
                 </>
             ) : (
                 <Typography variant="caption" marginRight="1rem">
@@ -48,7 +66,6 @@ function UserMenu() {
     );
 }
 
-// 2. 로고 및 타이틀 컴포넌트
 function LogoAndTitle() {
     return (
         <>
@@ -60,43 +77,29 @@ function LogoAndTitle() {
                 }}
             >
                 <img
-                    src="public/logo.png"
+                    src="/images/logo.png"
                     alt="My Coding Test Logo"
                     style={{height: '60px'}}
                 />
             </Box>
-            {/*<Typography*/}
-            {/*    color="primary"*/}
-            {/*    variant="h4"*/}
-            {/*    padding="5px"*/}
-            {/*    sx={{*/}
-            {/*        flexGrow: 1,*/}
-            {/*        fontFamily: 'Lilita One, monospace',*/}
-            {/*        fontWeight: '500',*/}
-            {/*        whiteSpace: 'nowrap'*/}
-            {/*    }}*/}
-            {/*>*/}
-            {/*    My Coding Test*/}
-            {/*</Typography>*/}
         </>
     );
 }
 
-// 현재 경로에 따른 버튼 스타일을 반환하는 함수
 function getButtonStyle(currentPath: string, targetPath: string) {
     const isActive = currentPath === targetPath || currentPath.startsWith(targetPath + '/');
     return {
-        fontWeight: isActive ? 'bold' : 'normal',
-        // textDecoration: isActive ? 'underline' : 'none',
+        fontWeight: isActive ? '800' : 'normal',
+        // color: isActive ? 'red' : 'secondary'
     };
 }
 
-// 3. 하단 메뉴 버튼 컴포넌트 (수정됨)
 function NavigationButtons() {
+    const {unreviewedCount} = useAuth();
     const location = useLocation();
 
     return (
-        <Box sx={{display: 'flex', alignItems: 'center', ml: 3}}>
+        <Box sx={{display: 'flex', alignItems: 'center', ml: 3, gap: 2}}>
             <Button
                 component={RouterLink}
                 to="/"
@@ -115,23 +118,23 @@ function NavigationButtons() {
             >
                 푼 문제들
             </Button>
+            <Badge badgeContent={unreviewedCount} color="warning">
+                <Button
+                    component={RouterLink}
+                    to="/review-unclear"
+                    color="primary"
+                    size="large"
+                    sx={getButtonStyle(location.pathname, "/review-unclear")}
+                >
+                    복습 대기 문제들
+                </Button>
+            </Badge>
             <Button
                 component={RouterLink}
-                to="/review"
+                to="/review-clear"
                 color="primary"
                 size="large"
-                sx={getButtonStyle(location.pathname, "/review")}
-            >
-                복습 대기 문제들
-            </Button>
-
-
-            <Button
-                component={RouterLink}
-                to="/review-complete"
-                color="primary"
-                size="large"
-                sx={getButtonStyle(location.pathname, "/review-complete")}
+                sx={getButtonStyle(location.pathname, "/review-clear")}
             >
                 복습 완료 문제들
             </Button>
@@ -146,10 +149,10 @@ function NavigationButtons() {
             </Button>
             <Button
                 component={RouterLink}
-                to="/about"
+                to="/favorite"
                 color="primary"
                 size="large"
-                sx={getButtonStyle(location.pathname, "/about")}
+                sx={getButtonStyle(location.pathname, "/favorite")}
             >
                 북마크 문제들
             </Button>
@@ -157,12 +160,9 @@ function NavigationButtons() {
     );
 }
 
-
-// MyAppBar 컴포넌트
 function MyAppBar() {
     return (
         <>
-            <UserMenu/>
             <AppBar
                 sx={{
                     height: 'auto',
@@ -173,13 +173,20 @@ function MyAppBar() {
                 }}
                 position="static"
             >
-                <Toolbar>
-                    <Box sx={{display: 'flex', alignItems: 'center'}}> {/* Flex 컨테이너 추가 */}
-                        <LogoAndTitle/>
-                        <NavigationButtons/>
-                    </Box>
-                    <Box sx={{flexGrow: 1}}/> {/* 남은 공간을 채워 UserMenu를 오른쪽 정렬 */}
-                </Toolbar>
+                <Container maxWidth="xl">
+                    <Toolbar disableGutters
+                             sx={{
+                                 minHeight: '48px', // 기본 높이를 48px로 줄임
+                                 padding: '0 0px', // 상하 여백 0, 좌우 여백 16px
+                             }}>
+                        <Box sx={{display: 'flex', alignItems: 'center'}}> {/* Flex 컨테이너 추가 */}
+                            <LogoAndTitle/>
+                            <NavigationButtons/>
+                        </Box>
+                        <Box sx={{flexGrow: 1}}/> {/* 남은 공간을 채워 UserMenu를 오른쪽 정렬 */}
+                        <UserMenu/>
+                    </Toolbar>
+                </Container>
             </AppBar>
         </>
     );
