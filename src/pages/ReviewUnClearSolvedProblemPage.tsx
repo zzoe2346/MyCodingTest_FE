@@ -11,7 +11,7 @@ export default () => {
                     <Divider></Divider>
                 </Grid2>
                 <Grid2 size={12}>
-                    <SolvedProblemTable isReviewed={false}/>
+                    <SolvedProblemTable isReviewed={false} isFavorite={false} initSortField={"recentSubmitAt"}/>
                 </Grid2>
             </Grid2>
         </Container>

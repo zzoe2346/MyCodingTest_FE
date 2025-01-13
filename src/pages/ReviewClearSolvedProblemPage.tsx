@@ -10,7 +10,7 @@ const ReviewClearSolvedProblemPage = () => {
                     <Divider></Divider>
                 </Grid2>
                 <Grid2 size={12}>
-                    <SolvedProblemTable isReviewed={true}/>
+                    <SolvedProblemTable isReviewed={true} isFavorite={false} initSortField={"review.reviewedAt"}/>
                 </Grid2>
             </Grid2>
         </Container>

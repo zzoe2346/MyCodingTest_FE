@@ -17,15 +17,19 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import useSolvedProblem, {Order} from "../hooks/useSolvedProblem.ts";
 import {SolvedProblemWithReview} from "../hooks/types.ts";
+import {Link} from 'react-router-dom'
 import React from "react";
 
 interface SolvedProblemTableProps {
-    isReviewed?: boolean;
+    isReviewed?: boolean | null;
     isFavorite?: boolean;
+    initSortField: string;
+    isTagged?: boolean;
+    tagId?: number | undefined;
 }
 
 interface HeadCell {
-    id: keyof SolvedProblemWithReview;
+    id: keyof SolvedProblemWithReview | string;
     label: string;
     disableSorting?: boolean;
 }
@@ -35,20 +39,20 @@ const headCells: HeadCell[] = [
     {id: 'problemTitle', label: '문제 제목'},
     {id: 'recentSubmitAt', label: '최근 제출 시간'},
     {id: 'recentResultText', label: '최근 결과'},
-    {id: 'difficultyLevel', label: '난이도'},
-    {id: 'importanceLevel', label: '중요도'},
-    {id: 'isReviewed', label: '복습'},
+    {id: 'review.difficultyLevel', label: '난이도'},
+    {id: 'review.importanceLevel', label: '중요도'},
+    {id: 'review.reviewedAt', label: '복습'},
     {id: 'isFavorite', label: '북마크', disableSorting: true},
 ];
 
 interface TableHeaderProps {
-    handleRequestSort: (property: keyof SolvedProblemWithReview) => void;
+    handleRequestSort: (property: keyof SolvedProblemWithReview | string) => void;
     order: Order;
     orderBy: string;
 }
 
 const TableHeader: React.FC<TableHeaderProps> = ({handleRequestSort, order, orderBy}) => {
-    const createSortHandler = (property: keyof SolvedProblemWithReview) => () => {
+    const createSortHandler = (property: keyof SolvedProblemWithReview | string) => () => {
         handleRequestSort(property);
     };
     return (
@@ -97,19 +101,33 @@ const TableBodyComponent: React.FC<TableBodyProps> = ({rows, handleFavorite}) =>
                     </TableCell>
                     <TableCell>{row.recentResultText}</TableCell>
                     <TableCell>
-                        {row.isReviewed
-                            ? row.difficultyLevel
-                            : <Rating name="half-rating-read" defaultValue={0} size="small" readOnly/>}
+                        <Rating name="half-rating-read" value={row.difficultyLevel} size="small" readOnly/>
                     </TableCell>
                     <TableCell>
-                        {row.isReviewed
-                            ? <Rating name="half-rating-read" defaultValue={row.importanceLevel} size="small" readOnly/>
-                            : <Rating name="half-rating-read" defaultValue={0} size="small" readOnly/>}
+                        <Rating name="half-rating-read" value={row.importanceLevel} size="small" readOnly/>
                     </TableCell>
                     <TableCell>
-                        {row.isReviewed
-                            ? <Button>다시보기</Button>
-                            : <Button>복습하기</Button>}
+                        <Link to={`/review/${row.solvedProblemId}`}
+                              state={{problemData: row as SolvedProblemWithReview}}>
+                            <Button>
+                                {row.isReviewed ? (
+                                    <div style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        margin: "0px"
+                                    }}>
+                                        <div>다시보기</div>
+                                        <div style={{
+                                            fontSize: "0.8rem",
+                                            marginTop: "0px"
+                                        }}>{new Date(row.reviewedAt).toLocaleDateString()}</div>
+                                    </div>
+                                ) : (
+                                    "복습하기"
+                                )}
+                            </Button>
+                        </Link>
                     </TableCell>
                     <TableCell>
                         {row.isFavorite ?
@@ -129,7 +147,7 @@ const TableBodyComponent: React.FC<TableBodyProps> = ({rows, handleFavorite}) =>
     );
 };
 
-const SolvedProblemTable = ({isReviewed, isFavorite}: SolvedProblemTableProps) => {
+const SolvedProblemTable = ({isReviewed, isFavorite, initSortField, isTagged, tagId}: SolvedProblemTableProps) => {
     const {
         page,
         rowsPerPage,
@@ -140,12 +158,18 @@ const SolvedProblemTable = ({isReviewed, isFavorite}: SolvedProblemTableProps) =
         handleFavorite,
         handleRequestSort,
         order,
-        orderBy
-    } = useSolvedProblem({isReviewed, isFavorite, field: 'recentSubmitAt', order: 'desc'});
+        orderBy,
+        dataLoaded, // dataLoaded 상태 사용
+    } = useSolvedProblem({isReviewed, isFavorite, field: initSortField, order: 'desc', tagId, isTagged});
+
 
     return (
         <Box sx={{height: 600, width: '100%'}}>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper}
+                            sx={{
+                                opacity: dataLoaded ? 1 : 0, // dataLoaded에 따라 opacity 변경
+                                transition: 'opacity 0.5s ease-in-out' // 부드러운 트랜지션 효과
+                            }}>
                 <Table sx={{minWidth: 650}} aria-label="simple table">
                     <TableHeader
                         handleRequestSort={handleRequestSort}

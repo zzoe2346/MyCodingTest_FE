@@ -5,106 +5,40 @@ import api from "../api/api.ts";
 export type Order = 'asc' | 'desc';
 
 interface FilterOptions {
-    isReviewed?: boolean;
+    isReviewed?: boolean | null;
     isFavorite?: boolean;
     field: string;
     order: Order;
+    isTagged?: boolean
+    tagId?: number
 }
 
-const initialSolvedProblems: SolvedProblemWithReview[] = [
-    {
-        solvedProblemId: 0,
-        problemNumber: 0,
-        problemTitle: "로딩 중...",
-        recentSubmitAt: "...",
-        recentResultText: "...",
-        isFavorite: false,
-        reviewId: 0,
-        difficultyLevel: 0,
-        importanceLevel: 0,
-        tags: null,
-        isReviewed: false,
-    },
-    {
-        solvedProblemId: 1,
-        problemNumber: 0,
-        problemTitle: "로딩 중...",
-        recentSubmitAt: "...",
-        recentResultText: "...",
-        isFavorite: false,
-        reviewId: 0,
-        difficultyLevel: 0,
-        importanceLevel: 0,
-        tags: null,
-        isReviewed: false,
-    },
-    {
-        solvedProblemId: 2,
-        problemNumber: 0,
-        problemTitle: "로딩 중...",
-        recentSubmitAt: "...",
-        recentResultText: "...",
-        isFavorite: false,
-        reviewId: 0,
-        difficultyLevel: 0,
-        importanceLevel: 0,
-        tags: null,
-        isReviewed: false,
-    },
-    {
-        solvedProblemId: 3,
-        problemNumber: 0,
-        problemTitle: "로딩 중...",
-        recentSubmitAt: "...",
-        recentResultText: "...",
-        isFavorite: false,
-        reviewId: 0,
-        difficultyLevel: 0,
-        importanceLevel: 0,
-        tags: null,
-        isReviewed: false,
-    },
-    {
-        solvedProblemId: 4,
-        problemNumber: 0,
-        problemTitle: "로딩 중...",
-        recentSubmitAt: "...",
-        recentResultText: "...",
-        isFavorite: false,
-        reviewId: 0,
-        difficultyLevel: 0,
-        importanceLevel: 0,
-        tags: null,
-        isReviewed: false,
-    }
-];
-
-const defaultFilterOptions: FilterOptions = {
-    isReviewed: false,
-    isFavorite: false,
-    order: 'desc',
-    field: 'recentSubmitAt'
-};
-
-const useSolvedProblem = (filterOptions: FilterOptions = defaultFilterOptions) => {
+const useSolvedProblem = (filterOptions: FilterOptions) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [rows, setRows] = useState<SolvedProblemWithReview[]>(initialSolvedProblems);
+    const [rows, setRows] = useState<SolvedProblemWithReview[]>([]);
     const [loading, setLoading] = useState(false);
     const [count, setCount] = useState(0);
     const [options, setOptions] = useState<FilterOptions>(filterOptions);
+    const [dataLoaded, setDataLoaded] = useState(false); // 데이터 로드 상태 추가
+
 
     const fetchData = async (page: number, rowsPerPage: number) => {
         setLoading(true);
-        let apiPath = '/api/solved-problems';
-        if (options.isFavorite) apiPath += '/favorites';
-        if (options.isReviewed) apiPath += '/review';
+        setDataLoaded(false); // 데이터 로딩 시작 시 dataLoaded를 false로 설정
+
         try {
+            let apiPath = '/api/solved-problems';
+            if (options.isTagged) apiPath += `/tags/${options.tagId}`
+            if (options.isFavorite) apiPath += '/favorites';
+            if (options.isReviewed !== null) apiPath += `/review/${options.isReviewed}`;
             const response = await api.get<PageResponse<SolvedProblemWithReview>>(
-                apiPath += `?page=${page}&size=${rowsPerPage}&sort=${options.field},${options.order}`
+                apiPath + `?page=${page}&size=${rowsPerPage}&sort=${options.field},${options.order}`
             );
             setRows(response.data.content);
             setCount(response.data.totalElements);
+            setDataLoaded(true); // 데이터 로딩 완료 시 dataLoaded를 true로 설정
+
         } catch (error) {
             console.error('Error fetching data:', error);
         } finally {
@@ -143,7 +77,7 @@ const useSolvedProblem = (filterOptions: FilterOptions = defaultFilterOptions) =
         }
     }
 
-    const handleRequestSort = useCallback((property: keyof SolvedProblemWithReview) => {
+    const handleRequestSort = useCallback((property: keyof SolvedProblemWithReview | string) => {
         setOptions((prev) => ({
             ...prev,
             order: prev.field === property && prev.order === 'asc' ? 'desc' : 'asc',
@@ -163,7 +97,8 @@ const useSolvedProblem = (filterOptions: FilterOptions = defaultFilterOptions) =
         handleFavorite,
         handleRequestSort,
         order: options.order,
-        orderBy: options.field
+        orderBy: options.field,
+        dataLoaded
     };
 }
 
