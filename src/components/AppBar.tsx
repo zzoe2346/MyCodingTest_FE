@@ -60,7 +60,7 @@ function UserMenu() {
                     >
                         로그인
                     </Link>
-                    <Box component="span" sx={{ color: 'gray', mx: 1 }}>
+                    <Box component="span" sx={{color: 'gray', mx: 1}}>
                         /
                     </Box>
                     <Link

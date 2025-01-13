@@ -1,7 +1,7 @@
 import './App.css'
 import MyAppBar from './components/AppBar'
 import {Route, Routes} from 'react-router-dom'
-import Review from './pages/Review'
+import ReviewPage from './pages/ReviewPage.tsx'
 import LoginPage from './pages/LoginPage.tsx'
 import {AuthProvider} from "./context/AuthContext.tsx";
 import PrivateRoute from "./components/PrivateRoute.tsx";
@@ -11,6 +11,7 @@ import FavoirteSolvedProblem from "./pages/FavoriteSolvedProblemPage.tsx";
 import ReviewClearSolvedProblemPage from "./pages/ReviewClearSolvedProblemPage.tsx";
 import ReviewUnClearSolvedProblemPage from "./pages/ReviewUnClearSolvedProblemPage.tsx";
 import SignUpPage from "./pages/SignUpPage.tsx";
+import TagPage from "./pages/TagPage.tsx";
 
 const theme = createTheme({
     components: {
@@ -39,8 +40,6 @@ const theme = createTheme({
             },
         }
     },
-
-
 });
 
 
@@ -54,13 +53,14 @@ function App() {
                     <Route path="/sign-up" element={<SignUpPage/>}/>
                     <Route path="/solvedProblems" element={<SolveProblemListPage/>}/>
                     <Route
-                        path="/review"
+                        path="/review/:solvedProblemId"
                         element={
                             <PrivateRoute>
-                                <Review/>
+                                <ReviewPage/>
                             </PrivateRoute>
                         }
                     />
+                    {/*<Route path="/review/:solvedProblemId" element={<ReviewPage />} />*/}
                     <Route
                         path="/favorite"
                         element={
@@ -82,6 +82,14 @@ function App() {
                         element={
                             <PrivateRoute>
                                 <ReviewUnClearSolvedProblemPage/>
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/tag"
+                        element={
+                            <PrivateRoute>
+                                <TagPage/>
                             </PrivateRoute>
                         }
                     />
