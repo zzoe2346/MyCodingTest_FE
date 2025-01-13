@@ -20,6 +20,7 @@ export interface SolvedProblemWithReview {
     importanceLevel: number;
     tags: string | null;
     isReviewed: boolean;
+    reviewedAt: string;
 }
 
 export interface PageResponse<T> {
