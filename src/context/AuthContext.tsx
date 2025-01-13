@@ -11,6 +11,7 @@ interface AuthContextType {
     signIn: (username: string, password: string) => Promise<void>;
     signOut: () => Promise<void>;
     unreviewedCount: number
+    setUnreviewedCount: (count: number) => void; // 추가
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -94,8 +95,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
         setUser(null);
     };
 
+
     return (
-        <AuthContext.Provider value={{isLoggedIn, user, error, loading, signIn, signOut,unreviewedCount}}>
+        <AuthContext.Provider
+            value={{isLoggedIn, user, error, loading, signIn, signOut, unreviewedCount, setUnreviewedCount}}>
             {children}
         </AuthContext.Provider>
     );
