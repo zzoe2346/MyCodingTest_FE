@@ -13,6 +13,14 @@ const LoginForm: React.FC = () => {
         await signIn(username, password);
     };
 
+    const handleGoogleLogin = () => {
+        // 구글 OAuth 2.0 로그인 URL
+        const googleLoginUrl = 'https://localhost:8443/oauth2/authorization/google';
+        // 로그인 페이지로 리디렉션
+        window.location.href = googleLoginUrl;
+    };
+
+
     if (loading) {
         return (
             <Typography>LOADING...</Typography>
@@ -57,6 +65,21 @@ const LoginForm: React.FC = () => {
                             {error}
                         </Typography>
                     )}
+                    <Button
+                        onClick={handleGoogleLogin}
+                        style={{
+                            padding: 0, // 내부 패딩 제거
+                            border: 'none', // 테두리 제거
+                            background: 'none', // 배경 제거
+                            boxShadow: 'none', // 그림자 제거
+                        }}
+                    >
+                        <img
+                            src="images/google-icon.svg"
+                            alt="Google Icon"
+                            style={{ width: '100%', height: '100%' ,objectFit: 'fill' }}
+                        />
+                    </Button>
                     <Button
                         type="submit"
                         fullWidth

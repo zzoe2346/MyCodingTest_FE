@@ -1,18 +1,24 @@
 import {AppBar, Avatar, Badge, Box, Button, Container, Link, Menu, MenuItem, Toolbar, Typography} from "@mui/material";
-import {Link as RouterLink, useLocation} from 'react-router-dom';
+import {Link as RouterLink, useLocation, useNavigate} from 'react-router-dom';
 import {useAuth} from "../context/AuthContext.tsx";
 import React, {useState} from "react";
 
 function UserMenu() {
     const {isLoggedIn, user, signOut} = useAuth();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
+    const navigate = useNavigate();
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
 
     const handleMenuClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleSignOut = async () => {
+        handleMenuClose();
+        await signOut();
+        navigate('/login');
     };
 
     return (
@@ -41,10 +47,7 @@ function UserMenu() {
                         }}>
                             마이페이지
                         </MenuItem>
-                        <MenuItem onClick={() => {
-                            handleMenuClose();
-                            signOut();
-                        }}>
+                        <MenuItem onClick={handleSignOut}>
                             로그아웃
                         </MenuItem>
                     </Menu>
