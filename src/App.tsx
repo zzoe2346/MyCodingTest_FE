@@ -35,7 +35,7 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     maxWidth: 'xl',
-                    marginTop: '10px',
+                    marginTop: '1px',
                 },
             },
         }

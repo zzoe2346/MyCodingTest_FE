@@ -89,12 +89,13 @@ function LogoAndTitle() {
                     flexGrow: 1,
                     display: 'flex',
                     alignItems: 'center',
+                    paddingTop: '0px'
                 }}
             >
                 <img
-                    src="/images/logo.png"
+                    src="/images/logo.svg"
                     alt="My Coding Test Logo"
-                    style={{height: '60px'}}
+                    style={{height: '70px'}}
                 />
             </Box>
         </>
@@ -185,14 +186,18 @@ function MyAppBar() {
                     boxShadow: 'none',
                     borderBottom: '1px solid #bdbdbd',
                     top: 'auto',
+                    paddingTop: 0,
+                    paddingBottom: 1,
+                    margin: 0,
                 }}
                 position="static"
             >
-                <Container maxWidth="xl">
+                <Container maxWidth="xl" sx={{padding: 0}}>
                     <Toolbar disableGutters
                              sx={{
-                                 minHeight: '48px', // 기본 높이를 48px로 줄임
+                                 height: '40px', // 기본 높이를 48px로 줄임
                                  padding: '0 0px', // 상하 여백 0, 좌우 여백 16px
+                                 margin: 0
                              }}>
                         <Box sx={{display: 'flex', alignItems: 'center'}}> {/* Flex 컨테이너 추가 */}
                             <LogoAndTitle/>
