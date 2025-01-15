@@ -14,7 +14,7 @@ const SocialLoginButton:React.FC<SocialLoginButtonProps> = ({ src, alt, onClick 
             border: 'none',
             background: 'none',
             boxShadow: 'none',
-            width: 'auto', // 모든 버튼 너비 통일
+            width: '50%', // 모든 버튼 너비 통일
             height: 'auto', // 모든 버튼 높이 통일
             display: 'flex', // 이미지 중앙 정렬
             justifyContent: 'center', // 이미지 중앙 정렬
@@ -62,17 +62,17 @@ const Login = () => {
 
                 {/* 컴포넌트화된 소셜 로그인 버튼 사용 */}
                 <SocialLoginButton
-                    src="images/my-google.svg"
+                    src="images/my-google.png"
                     alt="Google Icon"
                     onClick={handleGoogleLogin}
                 />
                 <SocialLoginButton
-                    src="images/my-kakao.svg"
+                    src="images/my-kakao.png"
                     alt="Kakao Icon"
                     onClick={handleKakaoLogin}
                 />
                 <SocialLoginButton
-                    src="images/my-naver.svg"
+                    src="images/my-naver.png"
                     alt="Naver Icon"
                     onClick={handleNaverLogin}
                 />
