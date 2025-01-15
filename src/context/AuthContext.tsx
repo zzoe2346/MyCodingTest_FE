@@ -1,6 +1,5 @@
 import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
-import axios from 'axios';
-import api from "../api/api.ts";
+import apiClient from "../api/apiClient.ts";
 import {User} from "../hooks/types.ts";
 
 interface AuthContextType {
@@ -8,10 +7,9 @@ interface AuthContextType {
     user: User | null;
     error: string;
     loading: boolean;
-    signIn: (username: string, password: string) => Promise<void>;
     signOut: () => Promise<void>;
     unreviewedCount: number
-    setUnreviewedCount: (count: number) => void; // 추가
+    setUnreviewedCount: (count: number) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -38,14 +36,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await api.get<User>('/api/me');
-                setUser(response.data);
+                const [userResponse, unreviewedResponse] = await Promise.all([
+                    apiClient.get<User>('/api/me'),
+                    apiClient.get('/api/solved-problems/unreviewed-count'),
+                ]);
+                setUser(userResponse.data);
                 setIsLoggedIn(true);
-
-                const response2 = await api.get('/api/solved-problems/unreviewed-count');
-                setUnreviewedCount(response2.data.count);
+                setUnreviewedCount(unreviewedResponse.data.count);
             } catch (err) {
-                console.error("사용자 인증 정보를 가져오는데 실패했습니다:", err);
+                console.error('Failed to fetch user authentication information:', err);
                 setUser(null);
                 setIsLoggedIn(false);
             } finally {
@@ -56,49 +55,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
         checkAuth();
     }, []);
 
-    const signIn = async (username: string, password: string) => {
-        setLoading(true);
-        setError('');
-        try {
-            await api.post('/sign-in', {username, password});
-            const response = await api.get<User>('/api/me');
-            setUser(response.data);
-            setIsLoggedIn(true);
-        } catch (err) {
-            handleAuthError(err);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const signOut = async () => {
         setLoading(true);
         try {
-            await api.post('/sign-out');
+            await apiClient.post('api/sign-out');
             setIsLoggedIn(false);
             setUser(null);
         } catch (err) {
             console.error(err);
-            setError('로그아웃 중 오류가 발생했습니다.');
+            setError('Error occurred during logout');
         } finally {
             setLoading(false);
         }
     };
 
-    const handleAuthError = (err: unknown) => {
-        if (axios.isAxiosError(err) && err.response) {
-            setError(err.response.data.message || '로그인에 실패했습니다.');
-        } else {
-            setError('로그인 중 오류가 발생했습니다.');
-        }
-        setIsLoggedIn(false);
-        setUser(null);
-    };
-
-
     return (
         <AuthContext.Provider
-            value={{isLoggedIn, user, error, loading, signIn, signOut, unreviewedCount, setUnreviewedCount}}>
+            value={{isLoggedIn, user, error, loading, signOut, unreviewedCount, setUnreviewedCount}}>
             {children}
         </AuthContext.Provider>
     );
