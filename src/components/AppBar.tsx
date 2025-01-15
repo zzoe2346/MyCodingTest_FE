@@ -1,12 +1,45 @@
-import {AppBar, Avatar, Badge, Box, Button, Container, Link, Menu, MenuItem, Toolbar, Typography} from "@mui/material";
+import {
+    AppBar,
+    Avatar,
+    Badge,
+    Box,
+    Button,
+    Container,
+    Link,
+    Menu,
+    MenuItem,
+    Stack,
+    Toolbar,
+    Typography
+} from "@mui/material";
 import {Link as RouterLink, useLocation, useNavigate} from 'react-router-dom';
 import {useAuth} from "../context/AuthContext.tsx";
 import React, {useState} from "react";
 
-function UserMenu() {
+function Logo() {
+    return (
+        <Box
+            sx={{
+                flexGrow: 1,
+                display: 'flex',
+                alignItems: 'center',
+                paddingTop: '0px'
+            }}
+        >
+            <img
+                src="/images/logo.svg"
+                alt="My Coding Test Logo"
+                style={{height: '65px'}}
+            />
+        </Box>
+    );
+}
+
+function UserStatus() {
     const {isLoggedIn, user, signOut} = useAuth();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const navigate = useNavigate();
+
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -25,35 +58,32 @@ function UserMenu() {
         <Box display="flex" justifyContent='flex-end' sx={{padding: '0 0', margin: '0 0'}}>
             {isLoggedIn ? (
                 <>
-                    <div style={{textAlign: 'center'}}>
+                    <Stack direction="column" alignItems="center" spacing={0}>
                         <Avatar
-                            alt={user?.username}
+                            src={user?.picture}
                             onClick={handleMenuOpen}
                             sx={{cursor: 'pointer'}}
                         />
-                        <div style={{fontSize: '12px', color: '#555', marginTop: '2px'}}>
-                            {user?.username}
-                        </div>
-                    </div>
+                        <Typography color={"black"} variant="caption">{user?.name}</Typography>
+                    </Stack>
                     <Menu
                         anchorEl={anchorEl}
                         open={Boolean(anchorEl)}
                         onClose={handleMenuClose}
                     >
                         <MenuItem onClick={() => {
-                            handleMenuClose();
-                            // 마이페이지로 이동 나중에 라우드 되도록 수정
-                            window.location.href = '/mypage';
+                            navigate('/my-page')
+                            handleMenuClose()
                         }}>
-                            마이페이지
+                            <Typography color={"black"}>마이페이지</Typography>
                         </MenuItem>
                         <MenuItem onClick={handleSignOut}>
-                            로그아웃
+                            <Typography color={"red"}>로그아웃</Typography>
                         </MenuItem>
                     </Menu>
                 </>
             ) : (
-                <Typography variant="body2" marginRight="1rem">
+                <Typography variant="body1">
                     <Link
                         component={RouterLink}
                         to="/login"
@@ -63,42 +93,9 @@ function UserMenu() {
                     >
                         로그인
                     </Link>
-                    <Box component="span" sx={{color: 'gray', mx: 1}}>
-                        /
-                    </Box>
-                    <Link
-                        component={RouterLink}
-                        to="/sign-up"
-                        color="primary"
-                        underline="hover"
-                        margin="1px"
-                    >
-                        회원가입
-                    </Link>
                 </Typography>
             )}
         </Box>
-    );
-}
-
-function LogoAndTitle() {
-    return (
-        <>
-            <Box
-                sx={{
-                    flexGrow: 1,
-                    display: 'flex',
-                    alignItems: 'center',
-                    paddingTop: '0px'
-                }}
-            >
-                <img
-                    src="/images/logo.svg"
-                    alt="My Coding Test Logo"
-                    style={{height: '70px'}}
-                />
-            </Box>
-        </>
     );
 }
 
@@ -106,7 +103,6 @@ function getButtonStyle(currentPath: string, targetPath: string) {
     const isActive = currentPath === targetPath || currentPath.startsWith(targetPath + '/');
     return {
         fontWeight: isActive ? '800' : 'normal',
-        // color: isActive ? 'red' : 'secondary'
     };
 }
 
@@ -172,6 +168,15 @@ function NavigationButtons() {
             >
                 북마크 문제들
             </Button>
+            <Button
+                component={RouterLink}
+                to="/favorite"
+                color="error"
+                size="large"
+                sx={getButtonStyle(location.pathname, "/favorite")}
+            >
+                이용가이드
+            </Button>
         </Box>
     );
 }
@@ -184,7 +189,7 @@ function MyAppBar() {
                     height: 'auto',
                     backgroundColor: 'white',
                     boxShadow: 'none',
-                    borderBottom: '1px solid #bdbdbd',
+                    borderBottom: '2px solid #bdbdbd',
                     top: 'auto',
                     paddingTop: 0,
                     paddingBottom: 1,
@@ -192,19 +197,19 @@ function MyAppBar() {
                 }}
                 position="static"
             >
-                <Container maxWidth="xl" sx={{padding: 0}}>
+                <Container maxWidth="xl">
                     <Toolbar disableGutters
                              sx={{
-                                 height: '40px', // 기본 높이를 48px로 줄임
-                                 padding: '0 0px', // 상하 여백 0, 좌우 여백 16px
+                                 height: '40px',
+                                 padding: '0 0px',
                                  margin: 0
                              }}>
-                        <Box sx={{display: 'flex', alignItems: 'center'}}> {/* Flex 컨테이너 추가 */}
-                            <LogoAndTitle/>
+                        <Box sx={{display: 'flex', alignItems: 'center'}}>
+                            <Logo/>
                             <NavigationButtons/>
                         </Box>
-                        <Box sx={{flexGrow: 1}}/> {/* 남은 공간을 채워 UserMenu를 오른쪽 정렬 */}
-                        <UserMenu/>
+                        <Box sx={{flexGrow: 1}}/>
+                        <UserStatus/>
                     </Toolbar>
                 </Container>
             </AppBar>
