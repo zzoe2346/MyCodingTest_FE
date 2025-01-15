@@ -59,7 +59,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     const signOut = async () => {
         setLoading(true);
         try {
-            await apiClient.post('api/sign-out');
+            await apiClient.get('/api/sign-out');
             setIsLoggedIn(false);
             setUser(null);
         } catch (err) {

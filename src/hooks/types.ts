@@ -1,5 +1,6 @@
 export interface User {
-    username: string;
+    picture: string;
+    name: string;
 }
 
 export interface LoginForm {
