@@ -1,5 +1,5 @@
 import {Container, Grid2} from "@mui/material";
-import SignUpForm from "../components/SignUpForm.tsx";
+import SignUpForm from "../components/deprecated/SignUpForm.tsx";
 
 
 export default () =>{

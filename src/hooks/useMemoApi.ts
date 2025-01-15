@@ -1,6 +1,6 @@
 // useMemoApi.ts
 import {useCallback, useState} from 'react';
-import api from "../api/api.ts";
+import apiClient from "../api/apiClient.ts";
 
 interface MemoData {
     content: string;
@@ -25,7 +25,7 @@ function useMemoApi(): UseMemoApiResult {
         setIsLoading(true);
         setError(null);
         try {
-            const response = await api.get(`/api/solved-problems/reviews/${reviewId}/memo`);
+            const response = await apiClient.get(`/api/solved-problems/reviews/${reviewId}/memo`);
             if (response.status === 404) {
                 setMemo(null);
                 return;
@@ -42,7 +42,7 @@ function useMemoApi(): UseMemoApiResult {
         setIsLoading(true);
         setError(null);
         try {
-            await api.post(`/api/solved-problems/reviews/${reviewId}/memo`, {
+            await apiClient.post(`/api/solved-problems/reviews/${reviewId}/memo`, {
                 content: content,
             });
             // 응답 데이터가 없으므로 setMemo를 호출하지 않음

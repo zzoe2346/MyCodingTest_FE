@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useParams} from 'react-router-dom';
 import {Paper} from "@mui/material";
-import api from "../api/api.ts";
+import apiClient from "../api/apiClient.ts";
 
 interface Tag {
     title: string;
@@ -47,7 +47,7 @@ const TagUpdater = () => {
 
     const fetchInitialTags = async () => {
         try {
-            const response = await api.get(`/api/solved-problems/${solvedProblemId}/tags`);
+            const response = await apiClient.get(`/api/solved-problems/${solvedProblemId}/tags`);
             const tagIds: number[] = response.data.tagIds; // tagIds 추출
             const initialTags = tagIds
                 .map(tagId => algorithmTags.find(tag => tag.id === tagId))
@@ -65,7 +65,7 @@ const TagUpdater = () => {
     const handleUpdateTags = async () => {
         const tagIds = selectedTags.map((tag) => tag.id);
         try {
-            await api.put(`/api/solved-problems/${solvedProblemId}/tags`, {tagIds});
+            await apiClient.put(`/api/solved-problems/${solvedProblemId}/tags`, {tagIds});
             console.log('Tags updated successfully!');
         } catch (error) {
             console.error('Error updating tags:', error);

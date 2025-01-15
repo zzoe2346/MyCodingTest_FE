@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {PageResponse, SolvedProblemWithReview} from "./types.ts";
-import api from "../api/api.ts";
+import apiClient from "../api/apiClient.ts";
 
 export type Order = 'asc' | 'desc';
 
@@ -32,7 +32,7 @@ const useSolvedProblem = (filterOptions: FilterOptions) => {
             if (options.isTagged) apiPath += `/tags/${options.tagId}`
             if (options.isFavorite) apiPath += '/favorites';
             if (options.isReviewed !== null) apiPath += `/review/${options.isReviewed}`;
-            const response = await api.get<PageResponse<SolvedProblemWithReview>>(
+            const response = await apiClient.get<PageResponse<SolvedProblemWithReview>>(
                 apiPath + `?page=${page}&size=${rowsPerPage}&sort=${options.field},${options.order}`
             );
             setRows(response.data.content);
@@ -66,7 +66,7 @@ const useSolvedProblem = (filterOptions: FilterOptions) => {
 
     const handleFavorite = async (solvedProblemId: number) => {
         try {
-            await api.patch(`/api/solved-problems/${solvedProblemId}/favorite`);
+            await apiClient.patch(`/api/solved-problems/${solvedProblemId}/favorite`);
             setRows(prevRows =>
                 prevRows.map(row =>
                     row.solvedProblemId === solvedProblemId ? {...row, isFavorite: !row.isFavorite} : row

@@ -1,5 +1,5 @@
 import {Box, Button, CircularProgress, Divider, Grid2, Paper, TextField, Typography,} from "@mui/material";
-import {useSignup} from "../hooks/useSignUp.ts";
+import {useSignup} from "../../hooks/useSignUp.ts";
 
 const SignupForm = () => {
     const {

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Box, Button, CircularProgress, Typography} from '@mui/material';
-import api from '../api/api';
+import apiClient from '../api/apiClient.ts';
 
 interface Tag {
     title: string;
@@ -53,7 +53,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({onTagSelect}) => {
             setIsLoading(true);
             setError(null);
             try {
-                const tagResponse = await api.get<{ tagIds: number[] }>(
+                const tagResponse = await apiClient.get<{ tagIds: number[] }>(
                     '/api/solved-problems/tags'
                 );
                 setTagIds(tagResponse.data.tagIds);

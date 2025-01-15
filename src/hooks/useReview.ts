@@ -1,5 +1,5 @@
 import {SyntheticEvent, useEffect, useState} from "react";
-import api from "../api/api.ts";
+import apiClient from "../api/apiClient.ts";
 import {useAuth} from "../context/AuthContext.tsx";
 import {formatDate} from "../util/DateFormatter.ts";
 
@@ -35,7 +35,7 @@ export const useReview = (reviewId: number) => {
 
     const handleSave = async (difficultyValue: number | null, importanceValue: number | null) => {
         try {
-            await api.put(`/api/solved-problems/reviews/${reviewId}/levels`, {
+            await apiClient.put(`/api/solved-problems/reviews/${reviewId}/levels`, {
                 difficultyLevel: difficultyValue,
                 importanceLevel: importanceValue,
             });
@@ -47,7 +47,7 @@ export const useReview = (reviewId: number) => {
 
     const handleStatusSave = async () => {
         try {
-            await api.put(`/api/solved-problems/reviews/${reviewId}/status`, {
+            await apiClient.put(`/api/solved-problems/reviews/${reviewId}/status`, {
                 reviewed: true,
                 reviewedAt: new Date().toString()
             });
@@ -63,7 +63,7 @@ export const useReview = (reviewId: number) => {
 
     const fetchData = async () => {
         try {
-            const response = await api.get<ReviewResponse>(`/api/solved-problems/reviews/${reviewId}`);
+            const response = await apiClient.get<ReviewResponse>(`/api/solved-problems/reviews/${reviewId}`);
             setDifficulty(response.data.difficultyLevel);
             setImportance(response.data.importanceLevel);
             setReviewed(response.data.reviewed);

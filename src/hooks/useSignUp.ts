@@ -1,5 +1,5 @@
 import {useState} from "react";
-import api from "../api/api.ts";
+import apiClient from "../api/apiClient.ts";
 import {useNavigate} from "react-router-dom";
 
 export interface SignupFormState {
@@ -41,7 +41,7 @@ export const useSignup = () => {
     const handleSignup = async () => {
         //회원가입 로직
         try {
-            const response = await api.post("/sign-up", {
+            const response = await apiClient.post("/sign-up", {
                 username: formState.id,
                 password: formState.password,
                 email: formState.email,
@@ -61,7 +61,7 @@ export const useSignup = () => {
     const checkIdDuplicate = async (id: string): Promise<boolean> => {
         // ID 중복 확인 로직
         try {
-            const response = await api.post("auth/check-id", {id}); // 실제 요청 경로는 서버 API에 맞게 수정
+            const response = await apiClient.post("auth/check-id", {id}); // 실제 요청 경로는 서버 API에 맞게 수정
             return response.data.isDuplicate;
         } catch (error) {
             console.error("ID 중복 확인 실패:", error);
@@ -81,7 +81,7 @@ export const useSignup = () => {
         setLoading(true);
         try {
             // 서버에 이메일 인증 요청을 보내는 로직
-            const response = await api.post("/auth/send-verification-email", {
+            const response = await apiClient.post("/auth/send-verification-email", {
                 email: formState.email,
             }); // 실제 요청 경로는 서버 API에 맞게 수정
             console.log("인증 이메일 전송:", response.data);
@@ -98,7 +98,7 @@ export const useSignup = () => {
         setLoading(true);
         try {
             // 서버에 인증 코드 검증 요청을 보내는 로직
-            const response = await api.post("/auth/verify-code", {
+            const response = await apiClient.post("/auth/verify-code", {
                 email: formState.email,
                 code: formState.verificationCode,
             }); // 실제 요청 경로는 서버 API에 맞게 수정

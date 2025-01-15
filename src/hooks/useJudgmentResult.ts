@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import api from '../api/api';
+import apiClient from '../api/apiClient.ts';
 
 export interface JudgmentResult {
     submissionId: number;
@@ -26,7 +26,7 @@ export const useJudgmentResult = (solvedProblemId: string | undefined) => {
             setLoading(true);
             setError(null);
             try {
-                const response = await api.get<JudgmentResult[]>(
+                const response = await apiClient.get<JudgmentResult[]>(
                     `/api/solved-problems/${solvedProblemId}/judgment-results`
                 );
                 setJudgmentResults(response.data);

@@ -1,7 +1,7 @@
 import {CircularProgress, Paper, Typography} from '@mui/material';
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
 import {materialLight} from 'react-syntax-highlighter/dist/esm/styles/prism';
-import api from "../api/api.ts";
+import apiClient from "../api/apiClient.ts";
 import {useEffect, useState} from "react";
 
 interface CodeAreaProps {
@@ -17,7 +17,7 @@ function CodeArea({judgmentResultId, language}: CodeAreaProps) {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await api.get(`/api/solved-problems/judgment-results/${judgmentResultId}/submitted-code`);
+            const response = await apiClient.get(`/api/solved-problems/judgment-results/${judgmentResultId}/submitted-code`);
             setCode(response.data.code); // 응답 데이터에 코드 내용이 있다고 가정
         } catch (error) {
             console.error('Error fetching data:', error);
