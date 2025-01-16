@@ -51,7 +51,8 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({ src, alt, onClick
 
 const Login = () => {
     const handleGoogleLogin = () => {
-        console.log('Google Login Clicked');
+        //window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+        window.location.href = 'https://api.mycodingtest.com/oauth2/authorization/google';
     };
 
     const handleKakaoLogin = () => {
