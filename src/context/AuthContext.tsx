@@ -32,28 +32,54 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
     const [unreviewedCount, setUnreviewedCount] = useState(0);
-
     useEffect(() => {
         const checkAuth = async () => {
             try {
+                // 두 API 요청을 병렬로 보냅니다.
                 const [userResponse, unreviewedResponse] = await Promise.all([
                     apiClient.get<User>('/api/me'),
                     apiClient.get('/api/solved-problems/unreviewed-count'),
                 ]);
+
+                // 각각의 응답을 상태에 저장합니다.
                 setUser(userResponse.data);
                 setIsLoggedIn(true);
                 setUnreviewedCount(unreviewedResponse.data.count);
             } catch (err) {
+                // 요청 실패 시 오류를 처리합니다.
                 console.error('Failed to fetch user authentication information:', err);
                 setUser(null);
                 setIsLoggedIn(false);
             } finally {
+                // 로딩 상태를 false로 설정합니다.
                 setLoading(false);
             }
         };
 
         checkAuth();
     }, []);
+
+    // useEffect(() => {
+    //     const checkAuth = async () => {
+    //         try {
+    //             const [userResponse, unreviewedResponse] = await Promise.all([
+    //                 apiClient.get<User>('/api/me'),
+    //                 apiClient.get('/api/solved-problems/unreviewed-count'),
+    //             ]);
+    //             setUser(userResponse.data);
+    //             setIsLoggedIn(true);
+    //             setUnreviewedCount(unreviewedResponse.data.count);
+    //         } catch (err) {
+    //             console.error('Failed to fetch user authentication information:', err);
+    //             setUser(null);
+    //             setIsLoggedIn(false);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+    //
+    //     checkAuth();
+    // }, []);
 
 
     const signOut = async () => {
