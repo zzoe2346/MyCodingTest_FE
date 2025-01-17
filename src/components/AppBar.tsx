@@ -13,7 +13,7 @@ import {
     Typography
 } from "@mui/material";
 import {Link as RouterLink, useLocation, useNavigate} from 'react-router-dom';
-import {useAuth} from "../context/AuthContext.tsx";
+import {UserAuth} from "../context/AuthContext.tsx";
 import React, {useState} from "react";
 
 function Logo() {
@@ -36,7 +36,7 @@ function Logo() {
 }
 
 function UserStatus() {
-    const {isLoggedIn, user, signOut} = useAuth();
+    const {isLoggedIn, user, signOut} = UserAuth();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const navigate = useNavigate();
 
@@ -107,7 +107,7 @@ function getButtonStyle(currentPath: string, targetPath: string) {
 }
 
 function NavigationButtons() {
-    const {unreviewedCount} = useAuth();
+    const {unreviewedCount} = UserAuth();
     const location = useLocation();
 
     return (

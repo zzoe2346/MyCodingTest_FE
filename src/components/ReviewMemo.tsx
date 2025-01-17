@@ -1,4 +1,3 @@
-// ReviewMemo.tsx
 import {Box, Button, Paper, TextField, Typography} from "@mui/material";
 import {SetStateAction, useEffect, useState} from "react";
 import ReactMarkdown from 'react-markdown';

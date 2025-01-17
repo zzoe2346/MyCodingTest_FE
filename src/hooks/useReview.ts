@@ -1,6 +1,6 @@
 import {SyntheticEvent, useEffect, useState} from "react";
 import apiClient from "../api/apiClient.ts";
-import {useAuth} from "../context/AuthContext.tsx";
+import {UserAuth} from "../context/AuthContext.tsx";
 import {formatDate} from "../util/DateFormatter.ts";
 
 
@@ -16,7 +16,7 @@ export const useReview = (reviewId: number) => {
     const [importance, setImportance] = useState<number | null>(null);
     const [reviewed, setReviewed] = useState<boolean | null>(null);
     const [reviewedAt, setReviewedAt] = useState<string | null>(null);
-    const {unreviewedCount, setUnreviewedCount} = useAuth();
+    const {unreviewedCount, setUnreviewedCount} = UserAuth();
 
     const handleDifficultyChange = (_event: SyntheticEvent<Element, Event>, newValue: number | null) => {
         setDifficulty(newValue);

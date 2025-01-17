@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {Box, Button, Paper, TextField, Typography} from '@mui/material';
-import {useAuth} from "../../context/AuthContext.tsx";
+import {UserAuth} from "../../context/AuthContext.tsx";
 import {Link as RouterLink} from "react-router-dom";
 
 const LoginForm: React.FC = () => {
-    const {isLoggedIn, error, loading} = useAuth();
+    const {isLoggedIn, error, loading} = UserAuth();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
