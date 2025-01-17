@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Paper, Stack, Typography, Button, Divider, Box } from '@mui/material';
+import React, {useState} from 'react';
+import {Box, Button, Divider, Paper, Stack, Typography} from '@mui/material';
 
 interface SocialLoginButtonProps {
     src: string; // 이미지 경로
@@ -7,7 +7,7 @@ interface SocialLoginButtonProps {
     onClick: () => void; // 클릭 이벤트 핸들러
 }
 
-const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({ src, alt, onClick }) => {
+const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({src, alt, onClick}) => {
     const [loaded, setLoaded] = useState(false);
 
     return (
@@ -18,8 +18,8 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({ src, alt, onClick
                 border: 'none',
                 background: 'none',
                 boxShadow: 'none',
-                width: '50%', // 모든 버튼 너비 통일
-                height: 'auto', // 모든 버튼 높이 통일
+                width: '55%', // 모든 버튼 너비 통일
+                height: '100%', // 모든 버튼 높이 통일
                 display: 'flex', // 이미지 중앙 정렬
                 justifyContent: 'center', // 이미지 중앙 정렬
                 alignItems: 'center', // 이미지 중앙 정렬
@@ -40,7 +40,8 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({ src, alt, onClick
                     style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'contain',
+                        objectFit: 'cover',
+                        display: 'block'
                     }}
                     onLoad={() => setLoaded(true)}
                 />
@@ -51,33 +52,38 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({ src, alt, onClick
 
 const Login = () => {
     const handleGoogleLogin = () => {
-        //window.location.href = 'http://localhost:8080/oauth2/authorization/google';
-        window.location.href = 'https://api.mycodingtest.com/oauth2/authorization/google';
+        window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+        // window.location.href = 'https://api.mycodingtest.com/oauth2/authorization/google';
     };
 
     const handleKakaoLogin = () => {
-        console.log('Kakao Login Clicked');
+        window.location.href = 'http://localhost:8080/oauth2/authorization/kakao';
+        // window.location.href = 'https://api.mycodingtest.com/oauth2/authorization/kakao';
     };
 
     const handleNaverLogin = () => {
-        console.log('Naver Login Clicked');
+        window.location.href = 'http://localhost:8080/oauth2/authorization/naver';
+        // window.location.href = 'https://api.mycodingtest.com/oauth2/authorization/naver';
     };
 
     return (
-        <Paper sx={{ padding: 4, width: '700px' }}>
+        <Paper sx={{padding: 4, width: '700px'}}>
             <Stack spacing={3} direction="column" alignItems="center">
                 <Typography variant="h4" align="center">
                     Login
                 </Typography>
                 <Typography variant="body1" align="center">
+                    서비스를 이용하기 위해선 로그인이 필요합니다
+                    <br/>
                     회원가입 없이 간편하게 로그인하세요
                 </Typography>
-                <Divider sx={{ width: '100%', marginY: 2 }} />
+
+                <Divider sx={{width: '100%', marginY: 2}}/>
 
                 {/* 컴포넌트화된 소셜 로그인 버튼 사용 */}
-                <SocialLoginButton src="images/my-google.png" alt="Google Icon" onClick={handleGoogleLogin} />
-                <SocialLoginButton src="images/my-kakao.png" alt="Kakao Icon" onClick={handleKakaoLogin} />
-                <SocialLoginButton src="images/my-naver.png" alt="Naver Icon" onClick={handleNaverLogin} />
+                <SocialLoginButton src="images/my-google.png" alt="Google Icon" onClick={handleGoogleLogin}/>
+                <SocialLoginButton src="images/my-kakao.png" alt="Kakao Icon" onClick={handleKakaoLogin}/>
+                <SocialLoginButton src="images/my-naver.png" alt="Naver Icon" onClick={handleNaverLogin}/>
             </Stack>
         </Paper>
     );
