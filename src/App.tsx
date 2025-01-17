@@ -10,7 +10,6 @@ import {createTheme, ThemeProvider} from "@mui/material";
 import FavoirteSolvedProblem from "./pages/FavoriteSolvedProblemPage.tsx";
 import ReviewClearSolvedProblemPage from "./pages/ReviewClearSolvedProblemPage.tsx";
 import ReviewUnClearSolvedProblemPage from "./pages/ReviewUnClearSolvedProblemPage.tsx";
-import SignUpPage from "./pages/SignUpPage.tsx";
 import TagPage from "./pages/TagPage.tsx";
 
 const theme = createTheme({
@@ -35,7 +34,7 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     maxWidth: 'xl',
-                    marginTop: '1px',
+                    marginTop: '0px',
                 },
             },
         }
@@ -49,9 +48,9 @@ function App() {
             <AuthProvider>
                 <MyAppBar/>
                 <Routes>
-                    <Route path="/login" element={<LoginPage/>}/>
-                    <Route path="/sign-up" element={<SignUpPage/>}/>
                     <Route path="/solvedProblems" element={<SolveProblemListPage/>}/>
+                    <Route path="/login" element={<LoginPage/>}/>
+
                     <Route
                         path="/review/:solvedProblemId"
                         element={
