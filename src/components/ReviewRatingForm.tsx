@@ -1,5 +1,7 @@
 import {Divider, Paper, Rating, Stack, Typography} from "@mui/material";
 import {useReview} from "../hooks/useReview.ts";
+import {SyntheticEvent} from "react";
+import {useSnackbar} from "notistack";
 
 interface ReviewRatingFormProps {
     reviewId: number;
@@ -9,9 +11,26 @@ export const ReviewRatingForm = ({reviewId}: ReviewRatingFormProps) => {
     const {
         difficulty,
         importance,
-        handleDifficultyChange,
-        handleImportanceChange,
+        setDifficulty,
+        setImportance,
+        handleSave,
     } = useReview(reviewId);
+    const {enqueueSnackbar} = useSnackbar()
+
+
+    const handleDifficultyChange = (_event: SyntheticEvent<Element, Event>, newValue: number | null) => {
+        setDifficulty(newValue);
+        handleSave(newValue, importance);
+        enqueueSnackbar('체감 난이도 저장 완료!', { variant: 'success' });
+    };
+
+    const handleImportanceChange = (_event: SyntheticEvent<Element, Event>, newValue: number | null) => {
+        setImportance(newValue);
+        handleSave(difficulty, newValue);
+        enqueueSnackbar('재복습 필요도 저장 완료!', { variant: 'success' });
+
+    };
+
 
     return (
         <Stack direction="row" spacing={1}>
