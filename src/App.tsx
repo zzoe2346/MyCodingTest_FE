@@ -47,7 +47,11 @@ function App() {
     return (
         <ThemeProvider theme={theme}>
             <AuthProvider>
-                <SnackbarProvider>
+                <SnackbarProvider anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                }}
+                >
                     <MyAppBar/>
                     <Routes>
                         <Route path="/solvedProblems" element={<SolveProblemListPage/>}/>
