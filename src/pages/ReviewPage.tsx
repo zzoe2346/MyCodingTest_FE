@@ -1,4 +1,4 @@
-import {Alert, Grid2, IconButton, Paper, Stack, Typography, useTheme} from "@mui/material";
+import {Alert, Grid2, IconButton, Paper, Stack, Typography} from "@mui/material";
 import ResultInfo from "../components/GradingResultInfo";
 import ReviewMemo from "../components/ReviewMemo.tsx";
 import {useLocation, useParams} from "react-router-dom";
@@ -44,23 +44,17 @@ const ReviewPage = () => {
 
 
     const currentJudgmentResult = judgmentResults[currentResultIndex];
-    const theme = useTheme();
-    const appBarHeight = theme.mixins.toolbar.minHeight; // AppBar의 최소 높이
-    const gridHeight = `calc(100vh - ${appBarHeight}px)`; // 뷰포트 높이에서 AppBar 높이를 뺀 값
 
     if (solvedProblemId === undefined) {
         return <div>solvedProblemId가 없습니다.</div>; // 에러 메시지 또는 다른 적절한 처리
     }
     return (
-        <Grid2 container spacing={2} style={{height: '100vh'}}>
+        <Grid2 container spacing={0} style={{height: '100vh'}}>
             <Grid2 size={8} sx={{
-                height: gridHeight,
-                pl: 2,
-                pr: 1,
-                pt: 2,
-                pb: 10,
+                height: '100%',
+                padding: 2,
                 overflowY: "auto",
-                borderRight: "1px solid #ccc"
+                borderRight: "2px solid #ccc",
             }}>
                 <Stack spacing={1}>
                     <Paper>
@@ -83,14 +77,18 @@ const ReviewPage = () => {
                                 <CodeArea judgmentResultId={currentJudgmentResult.judgmentResultId}
                                           language={currentJudgmentResult.language}/>
                             </>
-
                         )
                     }
 
                 </Stack>
             </Grid2>
 
-            <Grid2 size={4} sx={{height: gridHeight, pl: 1, pr: 2, pt: 2, pb: 10, overflowY: "auto"}}>
+            <Grid2 size={4} sx={{
+                height: '100%',
+                padding: 2,
+                borderLeft: "2px solid #ccc",
+                overflowY: "auto"
+            }}>
                 <Stack spacing={1}>
                     <Paper>
                         <Alert variant="filled" severity="info">
@@ -104,9 +102,7 @@ const ReviewPage = () => {
                 </Stack>
             </Grid2>
         </Grid2>
-    )
-        ;
-
-
+    );
 }
+
 export default ReviewPage;

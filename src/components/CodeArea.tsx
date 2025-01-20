@@ -34,10 +34,11 @@ function CodeArea({judgmentResultId, language}: CodeAreaProps) {
     return (
         <Paper
             style={{
-                height: 'auto',
-                padding: 10,
+                height: '100%',
+                padding: 5,
                 backgroundColor: '#edeaea',
                 overflow: 'auto',
+                marginBottom: 80
             }}
         >
             {loading ? (

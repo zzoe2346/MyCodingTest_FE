@@ -46,7 +46,7 @@ function ReviewMemo({reviewId}: ReviewMemoProps) {
     };
 
     return (
-        <Paper style={{minHeight: 400, padding: 20}}>
+        <Paper style={{minHeight: 400, padding: 20, marginBottom: 80}}>
             <Stack spacing={1}>
                 <Typography variant="h6" >
                     메모{"  "}
