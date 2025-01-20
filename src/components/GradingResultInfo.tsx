@@ -15,7 +15,6 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import {JudgmentResult} from "../pages/ReviewPage.tsx";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-
 const ResultInfo = ({result, problemTitle}: { result: JudgmentResult, problemTitle: string }) => {
 
     if (!result) {
@@ -24,7 +23,7 @@ const ResultInfo = ({result, problemTitle}: { result: JudgmentResult, problemTit
 
     return (
         <>
-            <Paper style={{padding: 10, marginBottom: 10}}>
+            <Paper style={{padding: 10}}>
                 <Typography variant="h6" gutterBottom>
                     <Link
                         href={`https://www.acmicpc.net/problem/${result.problemId}`}
@@ -66,7 +65,15 @@ const ResultInfo = ({result, problemTitle}: { result: JudgmentResult, problemTit
                         <TableBody>
                             <TableRow>
                                 <TableCell><b>제출 번호</b></TableCell>
-                                <TableCell>{result.submissionId}</TableCell>
+                                <TableCell>
+                                    <Link
+                                        href={`https://www.acmicpc.net/submit/${result.problemId}/${result.submissionId}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {result.submissionId}
+                                    </Link>
+                                </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell><b>백준 ID</b></TableCell>
@@ -121,10 +128,7 @@ const ResultInfo = ({result, problemTitle}: { result: JudgmentResult, problemTit
                 </AccordionDetails>
             </Accordion>
         </>
-
-
     );
 };
-
 
 export default ResultInfo;
