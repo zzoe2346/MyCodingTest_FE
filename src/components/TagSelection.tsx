@@ -3,8 +3,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useParams} from 'react-router-dom';
-import {Paper} from "@mui/material";
+import {Paper, Stack, Tooltip} from "@mui/material";
 import apiClient from "../api/apiClient.ts";
+import {useSnackbar} from "notistack";
 
 interface Tag {
     title: string;
@@ -42,16 +43,19 @@ const algorithmTags: Tag[] = [
 ];
 
 const TagUpdater = () => {
-    const {solvedProblemId} = useParams();
+    const { solvedProblemId } = useParams();
     const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+    const [isEditing, setIsEditing] = useState(false); // 편집 모드 상태 추가
+    const { enqueueSnackbar } = useSnackbar();
 
     const fetchInitialTags = async () => {
         try {
             const response = await apiClient.get(`/api/solved-problems/${solvedProblemId}/tags`);
-            const tagIds: number[] = response.data.tagIds; // tagIds 추출
+            const tagIds: number[] = response.data.tagIds;
             const initialTags = tagIds
-                .map(tagId => algorithmTags.find(tag => tag.id === tagId))
-                .filter((tag): tag is Tag => tag !== undefined); // 타입 가드로 undefined 제거
+                .sort()
+                .map((tagId) => algorithmTags.find((tag) => tag.id === tagId))
+                .filter((tag): tag is Tag => tag !== undefined);
             setSelectedTags(initialTags);
         } catch (error) {
             console.error('Error fetching initial tags:', error);
@@ -65,35 +69,76 @@ const TagUpdater = () => {
     const handleUpdateTags = async () => {
         const tagIds = selectedTags.map((tag) => tag.id);
         try {
-            await apiClient.put(`/api/solved-problems/${solvedProblemId}/tags`, {tagIds});
-            console.log('Tags updated successfully!');
+            await apiClient.put(`/api/solved-problems/${solvedProblemId}/tags`, { tagIds });
+            enqueueSnackbar('태그 저장 완료!', { variant: 'success' });
+            setIsEditing(false);
         } catch (error) {
             console.error('Error updating tags:', error);
+            enqueueSnackbar('태그 저장 실패', { variant: 'error' }); // 실패 알림
         }
     };
 
-    return (
-        <Paper sx={{padding: 2}}>
-            <Autocomplete
-                multiple
-                id="tags-outlined"
-                options={algorithmTags}
+    const handleEditClick = () => {
+        setIsEditing(true);
+    };
 
-                getOptionLabel={(option) => option.title}
-                value={selectedTags}
-                onChange={(_event, newValue) => setSelectedTags(newValue)}
-                filterSelectedOptions
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label="Algorithm Tags"
-                        placeholder="Select tags"
+    const handleCancelClick = () => {
+        setIsEditing(false); // 취소 버튼 클릭 시 편집 모드 종료
+        fetchInitialTags(); // 취소 시 기존 태그 다시 불러오기
+    };
+
+    return (
+        <Paper sx={{ padding: 2 }}>
+            <Stack spacing={2}>
+                <Tooltip
+                    title={!isEditing ? '태그를 수정하려면 "태그 수정" 버튼을 클릭하세요.' : ''} // 조건부 툴팁 메시지
+                    disableHoverListener={isEditing} // 편집 모드일 때는 툴팁 비활성화
+                    placement="top-start"
+                >
+                    <Autocomplete
+                        multiple
+                        id="tags-outlined"
+                        options={algorithmTags}
+                        getOptionLabel={(option) => option.title}
+                        value={selectedTags}
+                        onChange={(_event, newValue) => setSelectedTags(newValue)}
+                        filterSelectedOptions
+                        disabled={!isEditing} // 편집 모드에 따라 disabled 상태 변경
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="알고리즘 태그"
+                                placeholder=""
+                                sx={{
+                                    // 비활성화된 상태일 때의 스타일
+                                    ".Mui-disabled": {
+                                        opacity: 0.9, // 또는 원하는 불투명도
+                                        WebkitTextFillColor: "currentcolor", // 텍스트 색상 유지
+                                    }
+                                }}
+                            />
+                        )}
                     />
+                </Tooltip>
+
+                {!isEditing && ( // 편집 모드가 아닐 때 수정 버튼 표시
+                    <Button variant="outlined" onClick={handleEditClick}>
+                        태그 수정
+                    </Button>
                 )}
-            />
-            <Button variant="text" onClick={handleUpdateTags}>
-                태그 저장
-            </Button>
+
+                {isEditing && ( // 편집 모드일 때 저장, 취소 버튼 표시
+                    <>
+                        <Button variant="outlined" onClick={handleUpdateTags}>
+                            저장
+                        </Button>
+                        <Button variant="outlined" onClick={handleCancelClick}>
+                            취소
+                        </Button>
+                    </>
+                )}
+            </Stack>
+
         </Paper>
     );
 };
