@@ -70,7 +70,7 @@ function UserStatus() {
                             onClick={handleMenuOpen}
                             sx={{cursor: 'pointer'}}
                         />
-                        <Typography color={"black"} variant="caption">{user?.name}</Typography>
+                        {/*<Typography color={"black"} variant="caption">{user?.name}</Typography>*/}
                     </Stack>
                     <Menu
                         anchorEl={anchorEl}
