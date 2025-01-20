@@ -1,4 +1,4 @@
-import {Alert, Grid2, IconButton, Paper, Stack, Typography} from "@mui/material";
+import {Alert, Fade, Grid2, IconButton, Paper, Stack, Typography} from "@mui/material";
 import ResultInfo from "../components/GradingResultInfo";
 import ReviewMemo from "../components/ReviewMemo.tsx";
 import {useLocation, useParams} from "react-router-dom";
@@ -56,31 +56,36 @@ const ReviewPage = () => {
                 overflowY: "auto",
                 borderRight: "2px solid #ccc",
             }}>
-                <Stack spacing={1}>
-                    <Paper>
-                        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 2}}>
-                            <IconButton onClick={handlePrevious} disabled={currentResultIndex === 0}>
-                                <NavigateBeforeIcon/>
-                            </IconButton>
-                            <Typography sx={{mx: 2}}>
-                                {currentResultIndex + 1} / {judgmentResults.length}
-                            </Typography>
-                            <IconButton onClick={handleNext}
-                                        disabled={currentResultIndex === judgmentResults.length - 1}>
-                                <NavigateNextIcon/>
-                            </IconButton>
-                        </div>
-                    </Paper>
-                    {currentJudgmentResult &&
-                        (<>
+                <Fade in={true} timeout={500}>
+                    <Stack spacing={1}>
+                        <Paper>
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginBottom: 2
+                            }}>
+                                <IconButton onClick={handlePrevious} disabled={currentResultIndex === 0}>
+                                    <NavigateBeforeIcon/>
+                                </IconButton>
+                                <Typography sx={{mx: 2}}>
+                                    {currentResultIndex + 1} / {judgmentResults.length}
+                                </Typography>
+                                <IconButton onClick={handleNext}
+                                            disabled={currentResultIndex === judgmentResults.length - 1}>
+                                    <NavigateNextIcon/>
+                                </IconButton>
+                            </div>
+                        </Paper>
+                        {currentJudgmentResult && (
+                            <>
                                 <ResultInfo problemTitle={problemData.problemTitle} result={currentJudgmentResult}/>
                                 <CodeArea judgmentResultId={currentJudgmentResult.judgmentResultId}
                                           language={currentJudgmentResult.language}/>
                             </>
-                        )
-                    }
-
-                </Stack>
+                        )}
+                    </Stack>
+                </Fade>
             </Grid2>
 
             <Grid2 size={4} sx={{
@@ -89,20 +94,23 @@ const ReviewPage = () => {
                 borderLeft: "2px solid #ccc",
                 overflowY: "auto"
             }}>
-                <Stack spacing={1}>
-                    <Paper>
-                        <Alert variant="filled" severity="info">
-                            방가방가
-                        </Alert>
-                    </Paper>
-                    <ReviewStatusChangeButton reviewId={problemData.reviewId}/>
-                    <ReviewRatingForm reviewId={problemData.reviewId}></ReviewRatingForm>
-                    <TagSelection></TagSelection>
-                    <ReviewMemo reviewId={problemData.reviewId}/>
-                </Stack>
+                <Fade in={true} timeout={500} style={{transitionDelay: '0ms'}}>
+                    <Stack spacing={1}>
+                        <Paper>
+                            <Alert variant="filled" severity="info">
+                                방가방가
+                            </Alert>
+                        </Paper>
+                        <ReviewStatusChangeButton reviewId={problemData.reviewId}/>
+                        <ReviewRatingForm reviewId={problemData.reviewId}></ReviewRatingForm>
+                        <TagSelection></TagSelection>
+                        <ReviewMemo reviewId={problemData.reviewId}/>
+                    </Stack>
+                </Fade>
             </Grid2>
         </Grid2>
     );
+
 }
 
 export default ReviewPage;
