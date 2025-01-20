@@ -5,22 +5,28 @@ import {
     Box,
     Button,
     Container,
+    Drawer,
+    IconButton,
     Link,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
     Menu,
     MenuItem,
     Stack,
     Toolbar,
-    Typography
+    Typography,
 } from "@mui/material";
 import {Link as RouterLink, useLocation, useNavigate} from 'react-router-dom';
 import {UserAuth} from "../context/AuthContext.tsx";
 import React, {useState} from "react";
+import MenuIcon from '@mui/icons-material/Menu';
 
 function Logo() {
     return (
         <Box
             sx={{
-                flexGrow: 1,
                 display: 'flex',
                 alignItems: 'center',
                 paddingTop: '0px'
@@ -111,7 +117,7 @@ function NavigationButtons() {
     const location = useLocation();
 
     return (
-        <Box sx={{display: 'flex', alignItems: 'center', ml: 3, gap: 2}}>
+        <Box sx={{display: {xs: 'none', lg: 'flex'}, alignItems: 'center', ml: 3, gap: 2}}>
             <Button
                 component={RouterLink}
                 to="/"
@@ -170,14 +176,88 @@ function NavigationButtons() {
             </Button>
             <Button
                 component={RouterLink}
-                to="/favorite"
+                to="/guide"
                 color="error"
                 size="large"
-                sx={getButtonStyle(location.pathname, "/favorite")}
+                sx={getButtonStyle(location.pathname, "/guide")}
             >
                 이용가이드
             </Button>
         </Box>
+    );
+}
+
+function MobileNavigationDrawer() {
+    const {unreviewedCount} = UserAuth();
+    const location = useLocation();
+    const [open, setOpen] = useState(false);
+
+    const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+        if (
+            event.type === 'keydown' &&
+            ((event as React.KeyboardEvent).key === 'Tab' ||
+                (event as React.KeyboardEvent).key === 'Shift')
+        ) {
+            return;
+        }
+
+        setOpen(open);
+    };
+
+    const list = () => (
+        <Box
+            sx={{width: 250}}
+            role="presentation"
+            onClick={toggleDrawer(false)}
+            onKeyDown={toggleDrawer(false)}
+        >
+            <List>
+                {[
+                    {text: '홈', path: '/'},
+                    {text: '푼 문제들', path: '/solvedProblems'},
+                    {text: '복습 대기 문제들', path: '/review-unclear', badge: unreviewedCount},
+                    {text: '복습 완료 문제들', path: '/review-clear'},
+                    {text: '태그별 문제들', path: '/tag'},
+                    {text: '북마크 문제들', path: '/favorite'},
+                    {text: '이용가이드', path: '/guide', color: 'error'},
+                ].map((item) => (
+                    <ListItem key={item.text} disablePadding>
+                        <ListItemButton component={RouterLink} to={item.path}
+                                        sx={getButtonStyle(location.pathname, item.path)}>
+                            {item.badge ? (
+                                <Badge badgeContent={item.badge} color="warning" sx={{marginRight: 2}}>
+                                    <ListItemText primary={item.text} sx={{color: item.color}}/>
+                                </Badge>
+                            ) : (
+                                <ListItemText primary={item.text} sx={{color: item.color}}/>
+                            )}
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+        </Box>
+    );
+
+    return (
+        <>
+            <IconButton
+                size="large"
+                edge="start"
+                color="primary"
+                aria-label="menu"
+                onClick={toggleDrawer(true)}
+                sx={{mr: 2, display: {lg: 'none'}}}
+            >
+                <MenuIcon/>
+            </IconButton>
+            <Drawer
+                anchor="left"
+                open={open}
+                onClose={toggleDrawer(false)}
+            >
+                {list()}
+            </Drawer>
+        </>
     );
 }
 
@@ -200,15 +280,17 @@ function MyAppBar() {
                 <Container maxWidth="xl">
                     <Toolbar disableGutters
                              sx={{
-                                 height: '40px',
+                                 height: 'auto',
                                  padding: '0 0px',
-                                 margin: 0
+                                 margin: 0,
+                                 minHeight: {xs: 56, md: 64}
                              }}>
-                        <Box sx={{display: 'flex', alignItems: 'center'}}>
+                        <Box sx={{display: 'flex', alignItems: 'center', flexGrow: {xs: 1, lg: 0}}}>
+                            <MobileNavigationDrawer/>
                             <Logo/>
                             <NavigationButtons/>
                         </Box>
-                        <Box sx={{flexGrow: 1}}/>
+                        <Box sx={{flexGrow: {xs: 0, lg: 1}}}/>
                         <UserStatus/>
                     </Toolbar>
                 </Container>
