@@ -11,6 +11,7 @@ import FavoirteSolvedProblem from "./pages/FavoriteSolvedProblemPage.tsx";
 import ReviewClearSolvedProblemPage from "./pages/ReviewClearSolvedProblemPage.tsx";
 import ReviewUnClearSolvedProblemPage from "./pages/ReviewUnClearSolvedProblemPage.tsx";
 import TagPage from "./pages/TagPage.tsx";
+import {SnackbarProvider} from "notistack";
 
 const theme = createTheme({
     components: {
@@ -46,53 +47,55 @@ function App() {
     return (
         <ThemeProvider theme={theme}>
             <AuthProvider>
-                <MyAppBar/>
-                <Routes>
-                    <Route path="/solvedProblems" element={<SolveProblemListPage/>}/>
-                    <Route path="/login" element={<LoginPage/>}/>
+                <SnackbarProvider>
+                    <MyAppBar/>
+                    <Routes>
+                        <Route path="/solvedProblems" element={<SolveProblemListPage/>}/>
+                        <Route path="/login" element={<LoginPage/>}/>
 
-                    <Route
-                        path="/review/:solvedProblemId"
-                        element={
-                            <PrivateRoute>
-                                <ReviewPage/>
-                            </PrivateRoute>
-                        }
-                    />
-                    {/*<Route path="/review/:solvedProblemId" element={<ReviewPage />} />*/}
-                    <Route
-                        path="/favorite"
-                        element={
-                            <PrivateRoute>
-                                <FavoirteSolvedProblem/>
-                            </PrivateRoute>
-                        }
-                    />
-                    <Route
-                        path="/review-clear"
-                        element={
-                            <PrivateRoute>
-                                <ReviewClearSolvedProblemPage/>
-                            </PrivateRoute>
-                        }
-                    />
-                    <Route
-                        path="/review-unclear"
-                        element={
-                            <PrivateRoute>
-                                <ReviewUnClearSolvedProblemPage/>
-                            </PrivateRoute>
-                        }
-                    />
-                    <Route
-                        path="/tag"
-                        element={
-                            <PrivateRoute>
-                                <TagPage/>
-                            </PrivateRoute>
-                        }
-                    />
-                </Routes>
+                        <Route
+                            path="/review/:solvedProblemId"
+                            element={
+                                <PrivateRoute>
+                                    <ReviewPage/>
+                                </PrivateRoute>
+                            }
+                        />
+                        {/*<Route path="/review/:solvedProblemId" element={<ReviewPage />} />*/}
+                        <Route
+                            path="/favorite"
+                            element={
+                                <PrivateRoute>
+                                    <FavoirteSolvedProblem/>
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/review-clear"
+                            element={
+                                <PrivateRoute>
+                                    <ReviewClearSolvedProblemPage/>
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/review-unclear"
+                            element={
+                                <PrivateRoute>
+                                    <ReviewUnClearSolvedProblemPage/>
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/tag"
+                            element={
+                                <PrivateRoute>
+                                    <TagPage/>
+                                </PrivateRoute>
+                            }
+                        />
+                    </Routes>
+                </SnackbarProvider>
             </AuthProvider>
         </ThemeProvider>
     )
