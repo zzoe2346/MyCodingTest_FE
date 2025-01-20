@@ -18,7 +18,7 @@ function CodeArea({judgmentResultId, language}: CodeAreaProps) {
         setLoading(true);
         try {
             const response = await apiClient.get(`/api/solved-problems/judgment-results/${judgmentResultId}/submitted-code`);
-            setCode(response.data.code); // 응답 데이터에 코드 내용이 있다고 가정
+            setCode(response.data.code);
         } catch (error) {
             console.error('Error fetching data:', error);
             setError("error");
@@ -26,6 +26,7 @@ function CodeArea({judgmentResultId, language}: CodeAreaProps) {
             setLoading(false);
         }
     };
+
     useEffect(() => {
         fetchData();
     }, [judgmentResultId]);
@@ -33,10 +34,10 @@ function CodeArea({judgmentResultId, language}: CodeAreaProps) {
     return (
         <Paper
             style={{
-                height: 'calc(100vh - 60px - 50px)', // 앱바 높이와 여백 제외
+                height: 'auto',
                 padding: 10,
-                backgroundColor: '#f4f4f4',
-                overflow: 'auto', // 스크롤 가능
+                backgroundColor: '#edeaea',
+                overflow: 'auto',
             }}
         >
             {loading ? (
