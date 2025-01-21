@@ -80,7 +80,7 @@ const ReviewPage = () => {
                         {currentJudgmentResult && (
                             <>
                                 <ResultInfo problemTitle={problemData.problemTitle} result={currentJudgmentResult}/>
-                                <CodeArea judgmentResultId={currentJudgmentResult.judgmentResultId}
+                                <CodeArea submissionId={currentJudgmentResult.submissionId}
                                           language={currentJudgmentResult.language}/>
                             </>
                         )}
