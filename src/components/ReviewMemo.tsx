@@ -12,7 +12,7 @@ function ReviewMemo({reviewId}: ReviewMemoProps) {
     const [content, setContent] = useState("");
     const [isEditing, setIsEditing] = useState(false);
     const {memo, isLoading, fetchMemo, saveMemo} = useReviewMemo();
-    const { enqueueSnackbar } = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
 
     useEffect(() => {
         if (reviewId) {
@@ -22,7 +22,7 @@ function ReviewMemo({reviewId}: ReviewMemoProps) {
 
     useEffect(() => {
         if (memo) {
-            setContent(memo.content);
+            setContent(memo);
         } else {
             setContent("");
         }
@@ -30,7 +30,7 @@ function ReviewMemo({reviewId}: ReviewMemoProps) {
 
     const handleSave = async () => {
         await saveMemo(reviewId, content);
-        enqueueSnackbar('메모 저장 완료!', { variant: 'success' });
+        enqueueSnackbar('메모 저장 완료!', {variant: 'success'});
         setIsEditing(false);
     };
 
@@ -40,29 +40,36 @@ function ReviewMemo({reviewId}: ReviewMemoProps) {
 
     const handleToggleMode = () => {
         setIsEditing(!isEditing);
-        if(!isEditing){
-            enqueueSnackbar('작성 완료 후 "저장" 버튼을 클릭해야지 서버에 저장이 됩니다.', { variant: 'info' });
+        if (!isEditing) {
+            enqueueSnackbar('작성 완료 후 "저장" 버튼을 클릭해야지 서버에 저장이 됩니다.', {variant: 'info'});
         }
     };
 
     return (
         <Paper style={{minHeight: 400, padding: 20, marginBottom: 80}}>
             <Stack spacing={1}>
-                <Typography variant="h6" >
+                <Typography variant="h6">
                     메모{"  "}
                     <Typography variant="caption">
                         markdown 지원, 작성 완료 후 꼭 "저장" 버튼 눌러주세요
                     </Typography>
                 </Typography>
-
-                <Button
-                    onClick={handleToggleMode}
-                    variant="outlined"
-                    disabled={isLoading}
-                    fullWidth
-                >
-                    {isEditing ? "미리보기" : "편집하기"}
-                </Button>
+                {!isEditing ? (
+                    <Button variant="outlined" onClick={handleToggleMode}>메모 수정</Button>
+                ) : (
+                    <>
+                        <Button
+                            onClick={handleSave}
+                            variant="outlined"
+                            color="primary"
+                            disabled={isLoading || !isEditing}
+                            fullWidth
+                        >
+                            {isLoading ? "저장 중..." : "저장"}
+                        </Button>
+                        <Button variant="outlined" onClick={handleToggleMode}>취소</Button>
+                    </>)
+                }
 
                 {isEditing ? (
                     <TextField
@@ -80,15 +87,7 @@ function ReviewMemo({reviewId}: ReviewMemoProps) {
                         <ReactMarkdown>{content}</ReactMarkdown>
                     </Box>
                 )}
-                <Button
-                    onClick={handleSave}
-                    variant="contained"
-                    color="primary"
-                    disabled={isLoading || !isEditing}
-                    fullWidth
-                >
-                    {isLoading ? "저장 중..." : "저장"}
-                </Button>
+
             </Stack>
         </Paper>
     );

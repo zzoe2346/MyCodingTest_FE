@@ -19,7 +19,6 @@ export const useReview = (reviewId: number) => {
     const {unreviewedCount, setUnreviewedCount} = UserAuth();
 
     const handleStatusChange = () => {
-        setReviewed(true);
         handleStatusSave();
     };
 
@@ -29,7 +28,6 @@ export const useReview = (reviewId: number) => {
                 difficultyLevel: difficultyValue,
                 importanceLevel: importanceValue,
             });
-            console.log('Data updated successfully:', {difficultyValue, importanceValue});
         } catch (error) {
             console.error('Error updating data:', error);
         }
@@ -37,16 +35,15 @@ export const useReview = (reviewId: number) => {
 
     const handleStatusSave = async () => {
         try {
-            await apiClient.put(`/api/solved-problems/reviews/${reviewId}/status`, {
-                reviewed: true,
-                reviewedAt: new Date().toString()
+            const response = await apiClient.put(`/api/solved-problems/reviews/${reviewId}/status`, {
+                reviewed: true
             });
-            console.log('Data updated successfully:');
+            const {reviewedAt} = response.data;
+            setReviewedAt(formatDate(new Date(reviewedAt)));
+            setReviewed(true);
+            setUnreviewedCount(unreviewedCount - 1);
         } catch (error) {
             console.error('Error updating data:', error);
-        } finally {
-            setUnreviewedCount(unreviewedCount - 1);
-            setReviewedAt(formatDate(new Date()));
         }
     };
 
@@ -58,7 +55,6 @@ export const useReview = (reviewId: number) => {
             setImportance(response.data.importanceLevel);
             setReviewed(response.data.reviewed);
             setReviewedAt(formatDate(new Date(response.data.reviewedAt)));
-            console.log(response.data.reviewedAt);
         } catch (error) {
             console.error('Error updating data:', error);
         }
@@ -66,7 +62,6 @@ export const useReview = (reviewId: number) => {
 
     useEffect(() => {
         fetchData();
-        console.log('fetchDagte');
     }, [reviewId]);
 
     return {

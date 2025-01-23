@@ -1,32 +1,19 @@
 import {useCallback, useState} from 'react';
 import apiClient from "../api/apiClient.ts";
 
-interface MemoData {
-    content: string;
-    id?: number;
-}
-
-interface UseMemoApiResult {
-    memo: MemoData | null;
-    isLoading: boolean;
-    fetchMemo: (reviewId: number) => Promise<void>;
-    saveMemo: (reviewId: number, content: string) => Promise<void>;
-    resetMemo: () => void;
-}
-
-function useReviewMemo(): UseMemoApiResult {
-    const [memo, setMemo] = useState<MemoData | null>(null);
+function useReviewMemo() {
+    const [memo, setMemo] = useState("");
+    const [originalMemo, setOriginalMemo] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchMemo = useCallback(async (reviewId: number) => {
         setIsLoading(true);
         try {
-            const response = await apiClient.get(`/api/solved-problems/reviews/${reviewId}/memo`);
-            if (response.status === 404) {
-                setMemo(null);
-                return;
-            }
-            setMemo(response.data);
+            const response = await apiClient.get(`/api/solved-problems/reviews/${reviewId}/memo/read`);
+            const memoUrl = response.data.url;
+            const memoResponse = await apiClient.get(memoUrl);
+            setMemo(memoResponse.data);
+            setOriginalMemo(memoResponse.data);
         } catch (error) {
             console.error(error);
         } finally {
@@ -37,20 +24,25 @@ function useReviewMemo(): UseMemoApiResult {
     const saveMemo = useCallback(async (reviewId: number, content: string) => {
         setIsLoading(true);
         try {
-            await apiClient.post(`/api/solved-problems/reviews/${reviewId}/memo`, {
-                content: content,
+            const response = await apiClient.get(`/api/solved-problems/reviews/${reviewId}/memo/update`);
+            const s3PutUrl = response.data.url;
+
+            await apiClient.put(s3PutUrl, content, {
+                headers: {
+                    'Content-Type': 'text/plain'
+                }
             });
+
         } catch (error) {
             console.error(error)
-            setMemo({content: '저장 중에 에러가 발생하였습니다.'});
         } finally {
             setIsLoading(false);
         }
     }, []);
 
-    const resetMemo = useCallback(() => {
-        setMemo(null);
-    }, []);
+    const resetMemo = () => {
+        setMemo(originalMemo);
+    };
 
     return {
         memo,

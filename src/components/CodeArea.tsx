@@ -174,24 +174,19 @@ function CodeArea({submissionId, language}: CodeAreaProps) {
             style={{
                 height: '100%',
                 padding: 5,
-                backgroundColor: '#edeaea',
                 overflow: 'auto',
                 marginBottom: 80
             }}
         >
-            <Stack>
+            <Stack spacing={1}>
                 {!isEditing ? (
-                    <Button variant="contained" onClick={handleEdit}>수정</Button>
+                    <Button variant="outlined" onClick={handleEdit}>코드 수정</Button>
                 ) : (
                     <>
-                        <Button variant="contained" onClick={handleSave} style={{marginRight: 8}}>
-                            수정 완료
-                        </Button>
-                        <Button variant="outlined" onClick={handleCancel}>수정 취소</Button>
+                        <Button variant="outlined" onClick={handleSave}>저장</Button>
+                        <Button variant="outlined" onClick={handleCancel}>취소</Button>
                     </>
                 )}
-            </Stack>
-            <Stack>
                 {!isEditing ? (
                         <SyntaxHighlighter
                             language={mapLanguageToPrism(language)}
@@ -208,7 +203,7 @@ function CodeArea({submissionId, language}: CodeAreaProps) {
                             onChange={handleCodeChange}
                             style={{
                                 width: "100%",
-                                height: "300px",
+                                height: "600px",
                                 fontFamily: "monospace",
                                 fontSize: "14px",
                                 lineHeight: "1.5",
