@@ -43,10 +43,10 @@ const algorithmTags: Tag[] = [
 ];
 
 const TagUpdater = () => {
-    const { solvedProblemId } = useParams();
+    const {solvedProblemId} = useParams();
     const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
     const [isEditing, setIsEditing] = useState(false); // 편집 모드 상태 추가
-    const { enqueueSnackbar } = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
 
     const fetchInitialTags = async () => {
         try {
@@ -69,12 +69,12 @@ const TagUpdater = () => {
     const handleUpdateTags = async () => {
         const tagIds = selectedTags.map((tag) => tag.id);
         try {
-            await apiClient.put(`/api/solved-problems/${solvedProblemId}/tags`, { tagIds });
-            enqueueSnackbar('태그 저장 완료!', { variant: 'success' });
+            await apiClient.put(`/api/solved-problems/${solvedProblemId}/tags`, {tagIds});
+            enqueueSnackbar('태그 저장 완료!', {variant: 'success'});
             setIsEditing(false);
         } catch (error) {
             console.error('Error updating tags:', error);
-            enqueueSnackbar('태그 저장 실패', { variant: 'error' }); // 실패 알림
+            enqueueSnackbar('태그 저장 실패', {variant: 'error'}); // 실패 알림
         }
     };
 
@@ -88,7 +88,7 @@ const TagUpdater = () => {
     };
 
     return (
-        <Paper sx={{ padding: 2 }}>
+        <Paper sx={{padding: 2}}>
             <Stack spacing={2}>
                 <Tooltip
                     title={!isEditing ? '태그를 수정하려면 "태그 수정" 버튼을 클릭하세요.' : ''} // 조건부 툴팁 메시지

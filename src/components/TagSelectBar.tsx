@@ -74,7 +74,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({onTagSelect}) => {
     const handleTagChange = (tagId: number) => {
         const newSelectedTagId = selectedTagId === tagId ? null : tagId;
         setSelectedTagId(newSelectedTagId);
-        onTagSelect(newSelectedTagId); // 상위 컴포넌트로 태그 ID 전달
+        onTagSelect(newSelectedTagId);
     };
 
     const getTagName = (tagId: number): string => {
@@ -93,6 +93,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({onTagSelect}) => {
                             key={tagId}
                             variant={selectedTagId === tagId ? 'contained' : 'outlined'}
                             onClick={() => handleTagChange(tagId)}
+                            sx={{textTransform: 'none'}}
                         >
                             {getTagName(tagId)}
                         </Button>

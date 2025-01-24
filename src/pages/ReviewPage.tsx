@@ -9,7 +9,7 @@ import CodeArea from "../components/CodeArea.tsx";
 import {ReviewRatingForm} from "../components/ReviewRatingForm.tsx";
 import {ReviewStatusChangeButton} from "../components/ReviewStautsChangeButton.tsx";
 import {useJudgmentResult} from "../hooks/useJudgmentResult.ts";
-import TagSelection from "../components/TagSelection.tsx";
+import TagSelection from "../components/TagUpdater.tsx";
 
 export interface JudgmentResult {
     submissionId: number;
