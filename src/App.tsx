@@ -55,10 +55,15 @@ function App() {
                 >
                     <MyAppBar/>
                     <Routes>
-                        <Route path="/solvedProblems" element={<SolveProblemListPage/>}/>
                         <Route path="/login" element={<LoginPage/>}/>
                         <Route path="/" element={<HomePage/>}/>
-
+                        <Route
+                            path="/solved-problems"
+                            element={
+                                <PrivateRoute>
+                                    <SolveProblemListPage/>
+                                </PrivateRoute>
+                            }/>
                         <Route
                             path="/review/:solvedProblemId"
                             element={

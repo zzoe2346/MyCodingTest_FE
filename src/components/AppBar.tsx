@@ -129,10 +129,10 @@ function NavigationButtons() {
             </Button>
             <Button
                 component={RouterLink}
-                to="/solvedProblems"
+                to="/solved-problems"
                 color="primary"
                 size="large"
-                sx={getButtonStyle(location.pathname, "/solvedProblems")}
+                sx={getButtonStyle(location.pathname, "/solved-problems")}
             >
                 푼 문제들
             </Button>
