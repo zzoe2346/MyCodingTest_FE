@@ -164,7 +164,7 @@ const SolvedProblemTable = ({isReviewed, isFavorite, initSortField, isTagged, ta
 
 
     return (
-        <Box sx={{height: 600, width: '100%'}}>
+        <Box sx={{height: '78vh', width: '100%'}}>
             <TableContainer component={Paper}
                             sx={{
                                 opacity: dataLoaded ? 1 : 0, // dataLoaded에 따라 opacity 변경

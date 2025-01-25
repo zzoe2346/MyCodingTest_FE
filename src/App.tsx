@@ -37,6 +37,7 @@ const theme = createTheme({
                 root: {
                     maxWidth: 'xl',
                     marginTop: '0px',
+                    overflowY: 'auto'
                 },
             },
         }
