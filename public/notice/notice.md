@@ -5,7 +5,7 @@
 1. 간단한 소셜 로그인
 2. Chrome Web Store 에서 [My Coding Test Connector]() 설치
 3. 다음과 같이 로그인 익스텐션과 잘 연결되었는지 확인
-   - ![notice/img_2.png](img_2.png)
+> ![img_2.png](notice/img_2.png)
 
 이제 백준에서 문제를 풀면 My Coding Test에서 편하게 복습 가능!
 
