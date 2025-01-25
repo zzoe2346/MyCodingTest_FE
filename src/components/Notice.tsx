@@ -13,7 +13,7 @@ const NoticeComponent: React.FC = () => {
             <Paper
                 sx={{
                     padding: '16px',
-                    margin: '16px',
+                    margin: '16px 0',
                     opacity: 1,
                     transition: 'opacity 0.5s ease-in-out',
                 }}
