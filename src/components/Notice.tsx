@@ -6,7 +6,7 @@ const NoticeComponent: React.FC = () => {
     const [markdown, setMarkdown] = useState('');
 
     useEffect(() => {
-        fetch('public/notice.md')
+        fetch('notice/notice.md')
             .then((response) => response.text())
             .then((text) => setMarkdown(text))
             .catch((error) => console.error('Error fetching markdown:', error));
