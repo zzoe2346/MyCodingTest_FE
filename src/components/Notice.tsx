@@ -10,17 +10,19 @@ const NoticeComponent: React.FC = () => {
         setDataLoaded(false);
         fetch('notice/notice.md')
             .then((response) => response.text())
-            .then((text) =>{
+            .then((text) => {
                 setMarkdown(text);
                 setDataLoaded(true);
-            } )
+            })
             .catch((error) => console.error('Error fetching markdown:', error));
 
     }, []);
 
     return (
-        <Paper sx={{padding: '16px', margin: '16px' , opacity: dataLoaded ? 1 : 0,
-            transition: 'opacity 0.5s ease-in-out'}}>
+        <Paper sx={{
+            padding: '16px', margin: '16px', opacity: dataLoaded ? 1 : 0,
+            transition: 'opacity 0.5s ease-in-out'
+        }}>
             {/*<Typography variant="h4" gutterBottom>*/}
             {/*    공지사항*/}
             {/*</Typography>*/}

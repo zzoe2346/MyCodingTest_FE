@@ -19,7 +19,8 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({src, alt, onClick}
                 background: 'none',
                 boxShadow: 'none',
                 width: '30%', // 모든 버튼 너비 통일
-                height: 'auto', // 모든 버튼 높이 통일
+                minWidth: "300px",
+                height: '70%', // 모든 버튼 높이 통일
                 display: 'flex', // 이미지 중앙 정렬
                 justifyContent: 'center', // 이미지 중앙 정렬
                 alignItems: 'center', // 이미지 중앙 정렬
@@ -67,8 +68,8 @@ const Login = () => {
     };
 
     return (
-        <Paper sx={{padding: '16px', margin: '16px', width: 'auto'}}>
-            <Stack spacing={2} direction="column" alignItems="center">
+        <Paper sx={{padding: '16px', margin: '16px', width: 'auto', height: 'auto'}}>
+            <Stack spacing={3} direction="column" alignItems="center">
                 <Typography variant="h4" align="center">
                     Login
                 </Typography>
