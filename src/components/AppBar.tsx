@@ -81,7 +81,7 @@ function UserStatus() {
                             navigate('/my-page')
                             handleMenuClose()
                         }}>
-                            <Typography color={"black"}>마이페이지</Typography>
+                            <Typography color={"black"}>마이페이지(공사중)</Typography>
                         </MenuItem>
                         <MenuItem onClick={handleSignOut}>
                             <Typography color={"red"}>로그아웃</Typography>
@@ -214,22 +214,21 @@ function MobileNavigationDrawer() {
             <List>
                 {[
                     {text: '홈', path: '/'},
-                    {text: '푼 문제들', path: '/solvedProblems'},
+                    {text: '푼 문제들', path: '/solved-problems'},
                     {text: '복습 대기 문제들', path: '/review-unclear', badge: unreviewedCount},
                     {text: '복습 완료 문제들', path: '/review-clear'},
                     {text: '태그별 문제들', path: '/tag'},
-                    {text: '북마크 문제들', path: '/favorite'},
-                    {text: '이용가이드', path: '/guide', color: 'error'},
+                    {text: '북마크 문제들', path: '/favorite'}
                 ].map((item) => (
                     <ListItem key={item.text} disablePadding>
                         <ListItemButton component={RouterLink} to={item.path}
                                         sx={getButtonStyle(location.pathname, item.path)}>
                             {item.badge ? (
                                 <Badge badgeContent={item.badge} color="warning" sx={{marginRight: 2}}>
-                                    <ListItemText primary={item.text} sx={{color: item.color}}/>
+                                    <ListItemText primary={item.text}/>
                                 </Badge>
                             ) : (
-                                <ListItemText primary={item.text} sx={{color: item.color}}/>
+                                <ListItemText primary={item.text}/>
                             )}
                         </ListItemButton>
                     </ListItem>
