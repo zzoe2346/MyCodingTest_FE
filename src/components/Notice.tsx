@@ -1,33 +1,86 @@
 import React, {useEffect, useState} from 'react';
-import ReactMarkdown from 'react-markdown';
-import {Paper} from '@mui/material';
+import {Box, Divider, Fade, Link, Paper, Stack, Typography,} from '@mui/material';
 
 const NoticeComponent: React.FC = () => {
-    const [markdown, setMarkdown] = useState('');
-    const [dataLoaded, setDataLoaded] = useState(false);
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
-        setDataLoaded(false);
-        fetch('notice/notice.md')
-            .then((response) => response.text())
-            .then((text) => {
-                setMarkdown(text);
-                setDataLoaded(true);
-            })
-            .catch((error) => console.error('Error fetching markdown:', error));
-
+        setShow(true);
     }, []);
 
     return (
-        <Paper sx={{
-            padding: '16px', margin: '16px', opacity: dataLoaded ? 1 : 0,
-            transition: 'opacity 0.5s ease-in-out'
-        }}>
-            {/*<Typography variant="h4" gutterBottom>*/}
-            {/*    공지사항*/}
-            {/*</Typography>*/}
-            <ReactMarkdown>{markdown}</ReactMarkdown>
-        </Paper>
+        <Fade in={show} timeout={500}>
+            <Paper
+                sx={{
+                    padding: '16px',
+                    margin: '16px',
+                    opacity: 1,
+                    transition: 'opacity 0.5s ease-in-out',
+                }}
+            >
+                <Stack spacing={2}>
+                    <Typography variant="h4">🙇🏻 환영합니다!</Typography>
+
+                    <Divider/>
+
+                    <Box>
+                        <Typography variant="h5" gutterBottom>
+                            📣 서비스 이용 하려면
+                        </Typography>
+
+                        <Typography variant="body1" gutterBottom>
+                            1. 간단한 소셜 로그인
+                        </Typography>
+                        <Typography variant="body1" gutterBottom>
+                            2. Chrome Web Store 에서{' '}
+                            <Link href="#" underline="hover">
+                                My Coding Test Connector
+                            </Link>{' '}
+                            설치
+                        </Typography>
+                        <Typography variant="body1" gutterBottom>
+                            3. 다음과 같이 로그인 익스텐션과 잘 연결되었는지 확인하세요
+                        </Typography>
+                        <Box
+                            component="img"
+                            sx={{
+                                width: '20%',
+                                minWidth: 250,
+                                marginBottom: 2,
+                            }}
+                            alt="로그인 익스텐션 연결 확인 이미지"
+                            src="notice/img_2.png"
+                        />
+                        <Typography variant="body1" gutterBottom>
+                            이제 백준에서 문제를 풀고 <b>My Coding Test</b> 에서 편하게 복습
+                            가능합니다.
+                        </Typography>
+                    </Box>
+
+                    <Box>
+                        <Typography variant="h5" gutterBottom>
+                            🛠️ 업데이트
+                        </Typography>
+
+                        <Typography variant="subtitle1" gutterBottom>
+                            25.01.25
+                        </Typography>
+                        <Typography variant="body1" gutterBottom>
+                            - 서비스 런칭 🎉
+                        </Typography>
+                    </Box>
+
+                    <Box>
+                        <Typography variant="h5" gutterBottom>
+                            🌏 소통
+                        </Typography>
+                        <Typography variant="body1" gutterBottom>
+                            google@gmail.com 으로 메일 주셔요.
+                        </Typography>
+                    </Box>
+                </Stack>
+            </Paper>
+        </Fade>
     );
 };
 
