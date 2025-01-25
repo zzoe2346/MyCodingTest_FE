@@ -1,19 +1,12 @@
 import LoginForm from "../components/LoginForm.tsx";
-import {Container, Grid2} from "@mui/material";
+import {Container} from "@mui/material";
 
 const LoginPage = () => {
 
     return (
-        <Container>
-            <Grid2
-                container
-                justifyContent="center"
-                style={{minHeight: '100vh'}}
-            >
-                <LoginForm/>
-            </Grid2>
+        <Container maxWidth="xl" sx={{mt: "10px"}}>
+            <LoginForm/>
         </Container>
-
     );
 };
 
