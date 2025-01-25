@@ -29,14 +29,16 @@ const NoticeComponent: React.FC = () => {
                         </Typography>
 
                         <Typography variant="body1" gutterBottom>
-                            1. 간단한 소셜 로그인
+                            1. 회원가입 없이 간편히 <Link href="/login" underline="hover">로그인</Link>
                         </Typography>
                         <Typography variant="body1" gutterBottom>
                             2. Chrome Web Store 에서{' '}
-                            <Link href="#" underline="hover">
+                            <Link
+                                href="https://chromewebstore.google.com/detail/my-coding-test-connector/ekmnmpgdcpflanopjcopleffealdeifj"
+                                underline="hover">
                                 My Coding Test Connector
-                            </Link>{' '}
-                            설치
+                            </Link>
+                            {' '}설치
                         </Typography>
                         <Typography variant="body1" gutterBottom>
                             3. 다음과 같이 로그인 익스텐션과 잘 연결되었는지 확인하세요
@@ -66,7 +68,8 @@ const NoticeComponent: React.FC = () => {
                             25.01.25
                         </Typography>
                         <Typography variant="body1" gutterBottom>
-                            - 서비스 런칭 🎉
+                            - 크롬 익스텐션 등록 완료 🎉<br/>
+                            - 약간의 테스트 기간 거치고 홍보
                         </Typography>
                     </Box>
 
@@ -75,7 +78,7 @@ const NoticeComponent: React.FC = () => {
                             🌏 소통
                         </Typography>
                         <Typography variant="body1" gutterBottom>
-                            google@gmail.com 으로 메일 주셔요.
+                            google@gmail.com 으로 메일 주세요.
                         </Typography>
                     </Box>
                 </Stack>

@@ -63,10 +63,10 @@ const Login = () => {
         window.location.href = 'https://api.mycodingtest.com/oauth2/authorization/kakao';
     };
 
-    const handleNaverLogin = () => {
-        window.location.href = 'http://localhost:8080/oauth2/authorization/naver';
-        // window.location.href = 'https://api.mycodingtest.com/oauth2/authorization/naver';
-    };
+    // const handleNaverLogin = () => {
+    //     window.location.href = 'http://localhost:8080/oauth2/authorization/naver';
+    //     // window.location.href = 'https://api.mycodingtest.com/oauth2/authorization/naver';
+    // };
     useEffect(() => {
         setLoaded(true);
     }, []);
@@ -87,7 +87,7 @@ const Login = () => {
                     {/* 컴포넌트화된 소셜 로그인 버튼 사용 */}
                     <SocialLoginButton src="images/my-google.png" alt="Google Icon" onClick={handleGoogleLogin}/>
                     <SocialLoginButton src="images/my-kakao.png" alt="Kakao Icon" onClick={handleKakaoLogin}/>
-                    <SocialLoginButton src="images/my-naver.png" alt="Naver Icon" onClick={handleNaverLogin}/>
+                    {/*<SocialLoginButton src="images/my-naver.png" alt="Naver Icon" onClick={handleNaverLogin}/>*/}
                 </Stack>
             </Paper>
         </Fade>
