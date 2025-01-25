@@ -12,6 +12,7 @@ import ReviewClearSolvedProblemPage from "./pages/ReviewClearSolvedProblemPage.t
 import ReviewUnClearSolvedProblemPage from "./pages/ReviewUnClearSolvedProblemPage.tsx";
 import TagPage from "./pages/TagPage.tsx";
 import {SnackbarProvider} from "notistack";
+import HomePage from "./pages/HomePage.tsx";
 
 const theme = createTheme({
     components: {
@@ -56,6 +57,7 @@ function App() {
                     <Routes>
                         <Route path="/solvedProblems" element={<SolveProblemListPage/>}/>
                         <Route path="/login" element={<LoginPage/>}/>
+                        <Route path="/" element={<HomePage/>}/>
 
                         <Route
                             path="/review/:solvedProblemId"

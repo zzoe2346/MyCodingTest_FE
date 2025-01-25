@@ -174,15 +174,15 @@ function NavigationButtons() {
             >
                 북마크 문제들
             </Button>
-            <Button
-                component={RouterLink}
-                to="/guide"
-                color="error"
-                size="large"
-                sx={getButtonStyle(location.pathname, "/guide")}
-            >
-                이용가이드
-            </Button>
+            {/*<Button*/}
+            {/*    component={RouterLink}*/}
+            {/*    to="/guide"*/}
+            {/*    color="error"*/}
+            {/*    size="large"*/}
+            {/*    sx={getButtonStyle(location.pathname, "/guide")}*/}
+            {/*>*/}
+            {/*    이용가이드*/}
+            {/*</Button>*/}
         </Box>
     );
 }
