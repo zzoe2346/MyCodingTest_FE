@@ -84,7 +84,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({onTagSelect}) => {
 
     return (
         <Box>
-            <Box sx={{display: 'flex', gap: 1, mb: 2}}>
+            <Box maxWidth='xl' sx={{display: 'flex', flexWrap: 'wrap', gap: 1, mb: 0}}>
                 {isLoading ? (
                     <CircularProgress/>
                 ) : (

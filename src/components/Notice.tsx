@@ -15,7 +15,7 @@ const NoticeComponent: React.FC = () => {
                 sx={{
                     overflowY: 'auto',
                     padding: '16px',
-                    margin: '16px 0',
+                    // margin: '16px 0',
                     opacity: 1,
                     transition: 'opacity 0.5s ease-in-out',
                 }}

@@ -2,6 +2,7 @@ import {
     Box,
     Button,
     IconButton,
+    Link,
     Paper,
     Rating,
     Table,
@@ -17,7 +18,6 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import useSolvedProblem, {Order} from "../hooks/useSolvedProblem.ts";
 import {SolvedProblemWithReview} from "../hooks/types.ts";
-import {Link} from 'react-router-dom'
 import React from "react";
 
 interface SolvedProblemTableProps {
@@ -95,7 +95,14 @@ const TableBodyComponent: React.FC<TableBodyProps> = ({rows, handleFavorite}) =>
                     <TableCell component="th" scope="row" width='auto'>
                         {row.problemNumber}
                     </TableCell>
-                    <TableCell width='auto'>{row.problemTitle}</TableCell>
+                    <TableCell width='auto'>
+                        <Link
+                            underline='none'
+                            href={`/review/${row.reviewId}?problemTitle=${row.problemTitle}&sp=${row.solvedProblemId}`}
+                        >
+                            {row.problemTitle}
+                        </Link>
+                    </TableCell>
                     <TableCell>
                         {new Date(row.recentSubmitAt).toLocaleDateString()}
                     </TableCell>
@@ -107,7 +114,8 @@ const TableBodyComponent: React.FC<TableBodyProps> = ({rows, handleFavorite}) =>
                         <Rating name="half-rating-read" value={row.importanceLevel} size="small" readOnly/>
                     </TableCell>
                     <TableCell>
-                        <Link to={`/review/${row.reviewId}?problemTitle=${row.problemTitle}&sp=${row.solvedProblemId}`}>
+                        <Link
+                            href={`/review/${row.reviewId}?problemTitle=${row.problemTitle}&sp=${row.solvedProblemId}`}>
                             <Button>
                                 {row.isReviewed ? (
                                     <div style={{

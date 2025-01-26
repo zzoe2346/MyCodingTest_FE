@@ -46,6 +46,7 @@ function App() {
                         // height: `calc(98vh - ${appBarHeight}px)`, // 동적으로 가져온 AppBar 높이 사용
                         // width: '100%',
                         // marginTop: '0px',
+                        paddingTop: '10px',
                         paddingBottom: '20px',
                         // overflowY: 'auto',
                     },
