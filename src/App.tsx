@@ -50,8 +50,7 @@ function App() {
                 },
                 styleOverrides: {
                     root: {
-                        height: `calc(90vh - ${appBarHeight}px)`, // 동적으로 가져온 AppBar 높이 사용
-                        // height: '90vh',
+                        height: `calc(98vh - ${appBarHeight}px)`, // 동적으로 가져온 AppBar 높이 사용
                         width: '100%',
                         marginTop: '0px',
                         paddingBottom: '20px',
