@@ -36,20 +36,13 @@ const ReviewPage = () => {
         handleNext,
     } = useJudgmentResult(solvedProblemId);
 
-
-    // const [judgmentResults, setJudgmentResults] = useState<JudgmentResult[]>([]);
-    // const [currentResultIndex, setCurrentResultIndex] = useState(0); // 현재 선택된 채점 결과 인덱스
-    // const [loading, setLoading] = useState(false);
-    // const [error, setError] = useState<string | null>(null);
-
-
     const currentJudgmentResult = judgmentResults[currentResultIndex];
 
     if (solvedProblemId === undefined) {
         return <div>solvedProblemId가 없습니다.</div>; // 에러 메시지 또는 다른 적절한 처리
     }
     return (
-        <Grid2 container spacing={0} style={{height: '100vh'}}>
+        <Grid2 container spacing={0} style={{height: '90vh'}}>
             <Grid2 size={8} sx={{
                 height: '100%',
                 padding: 2,

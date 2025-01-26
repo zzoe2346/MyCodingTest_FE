@@ -39,8 +39,8 @@ const headCells: HeadCell[] = [
     {id: 'problemTitle', label: '문제 제목'},
     {id: 'recentSubmitAt', label: '최근 제출 시간'},
     {id: 'recentResultText', label: '최근 결과'},
-    {id: 'review.difficultyLevel', label: '난이도'},
-    {id: 'review.importanceLevel', label: '중요도'},
+    {id: 'review.difficultyLevel', label: '체감 난이도'},
+    {id: 'review.importanceLevel', label: '재복습 필요도'},
     {id: 'review.reviewedAt', label: '복습'},
     {id: 'isFavorite', label: '북마크', disableSorting: true},
 ];
@@ -164,7 +164,7 @@ const SolvedProblemTable = ({isReviewed, isFavorite, initSortField, isTagged, ta
 
 
     return (
-        <Box sx={{height: '78vh', width: '100%'}}>
+        <Box sx={{height: '100%', width: '100%'}}>
             <TableContainer component={Paper}
                             sx={{
                                 opacity: dataLoaded ? 1 : 0, // dataLoaded에 따라 opacity 변경

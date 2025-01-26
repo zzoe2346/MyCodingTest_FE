@@ -14,7 +14,6 @@ const NoticeComponent: React.FC = () => {
             <Paper
                 sx={{
                     overflowY: 'auto',
-                    height: '82vh',
                     padding: '16px',
                     margin: '16px 0',
                     opacity: 1,
@@ -101,7 +100,7 @@ const NoticeComponent: React.FC = () => {
                             - 약간의 테스트 기간 거치고 홍보
                         </Typography>
                     </Box>
-<Divider/>
+                    <Divider/>
                     <Box>
                         <Typography variant="h5" fontWeight={'bold'} gutterBottom>
                             🌏 소통

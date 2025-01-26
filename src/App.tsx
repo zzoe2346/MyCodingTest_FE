@@ -33,11 +33,16 @@ const theme = createTheme({
             },
         },
         MuiContainer: {
+            defaultProps: {
+                maxWidth: 'xl',
+            },
             styleOverrides: {
                 root: {
-                    maxWidth: 'xl',
+                    height: '90vh',
+                    width: '100%',
                     marginTop: '0px',
-                    overflowY: 'auto'
+                    paddingBottom: '20px',
+                    overflowY: 'auto',
                 },
             },
         }

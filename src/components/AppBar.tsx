@@ -174,19 +174,11 @@ function NavigationButtons() {
             >
                 북마크 문제들
             </Button>
-            {/*<Button*/}
-            {/*    component={RouterLink}*/}
-            {/*    to="/guide"*/}
-            {/*    color="error"*/}
-            {/*    size="large"*/}
-            {/*    sx={getButtonStyle(location.pathname, "/guide")}*/}
-            {/*>*/}
-            {/*    이용가이드*/}
-            {/*</Button>*/}
         </Box>
     );
 }
 
+//mobile bar
 function MobileNavigationDrawer() {
     const {unreviewedCount} = UserAuth();
     const location = useLocation();
@@ -265,24 +257,24 @@ function MyAppBar() {
         <>
             <AppBar
                 sx={{
-                    height: 'auto',
+                    height: '9vh',
                     backgroundColor: 'white',
                     boxShadow: 'none',
                     borderBottom: '2px solid #bdbdbd',
-                    top: 'auto',
+                    // top: 'auto',
                     paddingTop: 0,
-                    paddingBottom: 1,
-                    margin: 0,
+                    paddingBottom: 0,
+                    marginBottom: 0,
                 }}
-                position="static"
+                position="sticky"
             >
-                <Container maxWidth="xl">
+                <Container>
                     <Toolbar disableGutters
                              sx={{
                                  height: 'auto',
                                  padding: '0 0px',
                                  margin: 0,
-                                 minHeight: {xs: 56, md: 64}
+                                 // minHeight: {xs: 56, md: 64}
                              }}>
                         <Box sx={{display: 'flex', alignItems: 'center', flexGrow: {xs: 1, lg: 0}}}>
                             <MobileNavigationDrawer/>

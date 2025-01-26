@@ -11,7 +11,7 @@ export default () => {
     };
 
     return (
-        <Container maxWidth="xl" sx={{mt: "10px"}}>
+        <Container>
             <Stack spacing={2}>
                 <TagSelector onTagSelect={handleTagSelect}></TagSelector>
                 {selectedTagId ?
