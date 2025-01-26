@@ -20,13 +20,14 @@ import {
 } from "@mui/material";
 import {Link as RouterLink, useLocation, useNavigate} from 'react-router-dom';
 import {UserAuth} from "../context/AuthContext.tsx";
-import React, {useState} from "react";
+import React, {forwardRef, useState} from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 
 function Logo() {
     return (
         <Box
             sx={{
+                height: '100%',
                 display: 'flex',
                 alignItems: 'center',
                 paddingTop: '0px'
@@ -35,7 +36,11 @@ function Logo() {
             <img
                 src="/images/logo.svg"
                 alt="My Coding Test Logo"
-                style={{height: '65px'}}
+                style={{
+                    height: '80%', // 부모 컴포넌트 높이의 80% (조절 가능)
+                    width: 'auto', // 가로 세로 비율 유지를 위해 반드시 추가
+                    maxHeight: '60px', // 최대 높이 제한 (필요에 따라 조절)
+                }}
             />
         </Box>
     );
@@ -252,42 +257,41 @@ function MobileNavigationDrawer() {
     );
 }
 
-function MyAppBar() {
+const MyAppBar = forwardRef<HTMLDivElement>((_props, ref) => {
     return (
-        <>
-            <AppBar
-                sx={{
-                    height: '9vh',
-                    backgroundColor: 'white',
-                    boxShadow: 'none',
-                    borderBottom: '2px solid #bdbdbd',
-                    // top: 'auto',
-                    paddingTop: 0,
-                    paddingBottom: 0,
-                    marginBottom: 0,
-                }}
-                position="sticky"
-            >
-                <Container>
-                    <Toolbar disableGutters
-                             sx={{
-                                 height: 'auto',
-                                 padding: '0 0px',
-                                 margin: 0,
-                                 // minHeight: {xs: 56, md: 64}
-                             }}>
-                        <Box sx={{display: 'flex', alignItems: 'center', flexGrow: {xs: 1, lg: 0}}}>
-                            <MobileNavigationDrawer/>
-                            <Logo/>
-                            <NavigationButtons/>
-                        </Box>
-                        <Box sx={{flexGrow: {xs: 0, lg: 1}}}/>
-                        <UserStatus/>
-                    </Toolbar>
-                </Container>
-            </AppBar>
-        </>
+        <AppBar
+            ref={ref}
+            sx={{
+                height: 'auto',
+                backgroundColor: 'white',
+                boxShadow: 'none',
+                borderBottom: '2px solid #bdbdbd',
+                // top: 'auto',
+                paddingTop: 0,
+                paddingBottom: '1px',
+                marginBottom: 0,
+            }}
+            position="static"
+        >
+            <Container maxWidth={'xl'} sx={{overflowY: 'visible', height: 'auto', paddingBottom: '10px'}}>
+                <Toolbar disableGutters
+                         sx={{
+                             height: 'auto',
+                             // padding: '0 0px',
+                             // margin: 0,
+                             // minHeight: {xs: 56, md: 64}
+                         }}>
+                    <Box sx={{display: 'flex', alignItems: 'center', flexGrow: {xs: 1, lg: 0}}}>
+                        <MobileNavigationDrawer/>
+                        <Logo/>
+                        <NavigationButtons/>
+                    </Box>
+                    <Box sx={{flexGrow: {xs: 0, lg: 1}}}/>
+                    <UserStatus/>
+                </Toolbar>
+            </Container>
+        </AppBar>
     );
-}
+});
 
 export default MyAppBar;

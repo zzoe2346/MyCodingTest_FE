@@ -15,44 +15,54 @@ import {SnackbarProvider} from "notistack";
 import HomePage from "./pages/HomePage.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
 import {NavigateSetter} from "./api/apiClient.ts";
-
-const theme = createTheme({
-    components: {
-        MuiTableCell: {
-            styleOverrides: {
-                root: {
-                    textAlign: 'center',
-                },
-            },
-        },
-        MuiButton: {
-            styleOverrides: {
-                root: {
-                    padding: '4px 8px', // 기본 패딩 조정
-                    minWidth: 'auto', // 기본 최소 너비 제거
-                    fontSize: '1.0rem', // 텍스트 크기
-                },
-            },
-        },
-        MuiContainer: {
-            defaultProps: {
-                maxWidth: 'xl',
-            },
-            styleOverrides: {
-                root: {
-                    height: '90vh',
-                    width: '100%',
-                    marginTop: '0px',
-                    paddingBottom: '20px',
-                    overflowY: 'auto',
-                },
-            },
-        }
-    },
-});
+import {useEffect, useRef, useState} from "react";
 
 
 function App() {
+    const appBarRef = useRef<HTMLDivElement>(null);
+    const [appBarHeight, setAppBarHeight] = useState(0);
+    useEffect(() => {
+        if (appBarRef.current) {
+            setAppBarHeight(appBarRef.current.offsetHeight);
+        }
+    }, []);
+    const theme = createTheme({
+        components: {
+            MuiTableCell: {
+                styleOverrides: {
+                    root: {
+                        textAlign: 'center',
+                    },
+                },
+            },
+            MuiButton: {
+                styleOverrides: {
+                    root: {
+                        padding: '4px 8px', // 기본 패딩 조정
+                        minWidth: 'auto', // 기본 최소 너비 제거
+                        fontSize: '1.0rem', // 텍스트 크기
+                    },
+                },
+            },
+            MuiContainer: {
+                defaultProps: {
+                    maxWidth: 'xl',
+                },
+                styleOverrides: {
+                    root: {
+                        height: `calc(90vh - ${appBarHeight}px)`, // 동적으로 가져온 AppBar 높이 사용
+                        // height: '90vh',
+                        width: '100%',
+                        marginTop: '0px',
+                        paddingBottom: '20px',
+                        overflowY: 'auto',
+                    },
+                },
+            }
+        },
+    });
+
+
     return (
         <ThemeProvider theme={theme}>
             <AuthProvider>
@@ -61,7 +71,7 @@ function App() {
                     horizontal: 'center',
                 }}
                 >
-                    <MyAppBar/>
+                    <MyAppBar ref={appBarRef}/>
                     <NavigateSetter/>
                     <Routes>
                         <Route path="/review/:reviewId" element={<ReviewPage/>}/>
