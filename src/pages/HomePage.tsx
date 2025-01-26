@@ -3,7 +3,7 @@ import NoticeComponent from "../components/Notice.tsx";
 
 const HomePage = () => {
     return (
-        <Container maxWidth="xl" sx={{mt: "0px"}}>
+        <Container maxWidth="xl">
             <NoticeComponent></NoticeComponent>
         </Container>
     );

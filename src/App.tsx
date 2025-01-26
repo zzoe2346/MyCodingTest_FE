@@ -15,17 +15,9 @@ import {SnackbarProvider} from "notistack";
 import HomePage from "./pages/HomePage.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
 import {NavigateSetter} from "./api/apiClient.ts";
-import {useEffect, useRef, useState} from "react";
 
 
 function App() {
-    const appBarRef = useRef<HTMLDivElement>(null);
-    const [appBarHeight, setAppBarHeight] = useState(0);
-    useEffect(() => {
-        if (appBarRef.current) {
-            setAppBarHeight(appBarRef.current.offsetHeight);
-        }
-    }, []);
     const theme = createTheme({
         components: {
             MuiTableCell: {
@@ -50,11 +42,11 @@ function App() {
                 },
                 styleOverrides: {
                     root: {
-                        height: `calc(98vh - ${appBarHeight}px)`, // 동적으로 가져온 AppBar 높이 사용
-                        width: '100%',
-                        marginTop: '0px',
+                        // height: `calc(98vh - ${appBarHeight}px)`, // 동적으로 가져온 AppBar 높이 사용
+                        // width: '100%',
+                        // marginTop: '0px',
                         paddingBottom: '20px',
-                        overflowY: 'auto',
+                        // overflowY: 'auto',
                     },
                 },
             }
@@ -70,7 +62,7 @@ function App() {
                     horizontal: 'center',
                 }}
                 >
-                    <MyAppBar ref={appBarRef}/>
+                    <MyAppBar/>
                     <NavigateSetter/>
                     <Routes>
                         <Route path="/review/:reviewId" element={<ReviewPage/>}/>

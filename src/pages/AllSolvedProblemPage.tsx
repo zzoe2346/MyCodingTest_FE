@@ -4,7 +4,7 @@ import SolvedProblemTable from "../components/SolvedProblemTable.tsx";
 const SolveProblemListPage = () => {
     return (
         <Container>
-            <Grid2 container justifyContent='center' spacing={2}>
+            <Grid2 justifyContent='center' spacing={2}>
                 <Grid2 size={12}>
                     <Typography variant="subtitle1"> 풀이한 문제들 입니다. </Typography>
                     <Divider></Divider>

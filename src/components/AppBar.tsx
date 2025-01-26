@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import {Link as RouterLink, useLocation, useNavigate} from 'react-router-dom';
 import {UserAuth} from "../context/AuthContext.tsx";
-import React, {forwardRef, useState} from "react";
+import React, {useState} from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 
 function Logo() {
@@ -257,30 +257,25 @@ function MobileNavigationDrawer() {
     );
 }
 
-const MyAppBar = forwardRef<HTMLDivElement>((_props, ref) => {
+const MyAppBar = () => {
     return (
-        <AppBar
-            ref={ref}
-            sx={{
-                height: 'auto',
-                backgroundColor: 'white',
-                boxShadow: 'none',
-                borderBottom: '2px solid #bdbdbd',
-                // top: 'auto',
-                paddingTop: 0,
-                paddingBottom: '1px',
-                marginBottom: 0,
-            }}
-            position="static"
-        >
-            <Container maxWidth={'xl'} sx={{overflowY: 'visible', height: 'auto', paddingBottom: '10px'}}>
-                <Toolbar disableGutters
-                         sx={{
-                             height: 'auto',
-                             // padding: '0 0px',
-                             // margin: 0,
-                             // minHeight: {xs: 56, md: 64}
-                         }}>
+        <Container sx={{minHeight: 70}} maxWidth='xl'>
+            <AppBar
+                sx={{
+                    maxWidth: 'xl',
+                    height: 'auto',
+                    backgroundColor: 'white',
+                    boxShadow: 'none',
+                    borderBottom: '2px solid #bdbdbd',
+                    top: '0',
+                    paddingLeft: '10px',
+                    paddingRight: '10px',
+                    paddingTop: '5px',
+                    paddingBottom: '5px',
+                    marginBottom: 0,
+                }}
+            >
+                <Toolbar>
                     <Box sx={{display: 'flex', alignItems: 'center', flexGrow: {xs: 1, lg: 0}}}>
                         <MobileNavigationDrawer/>
                         <Logo/>
@@ -289,9 +284,9 @@ const MyAppBar = forwardRef<HTMLDivElement>((_props, ref) => {
                     <Box sx={{flexGrow: {xs: 0, lg: 1}}}/>
                     <UserStatus/>
                 </Toolbar>
-            </Container>
-        </AppBar>
+            </AppBar>
+        </Container>
     );
-});
+};
 
 export default MyAppBar;
