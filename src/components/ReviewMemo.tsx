@@ -10,6 +10,7 @@ interface ReviewMemoProps {
 
 function ReviewMemo({reviewId}: ReviewMemoProps) {
     const [content, setContent] = useState("");
+    const [originalContent, setOriginalContent] = useState(""); // 원본 내용 저장
     const [isEditing, setIsEditing] = useState(false);
     const {memo, isLoading, fetchMemo, saveMemo} = useReviewMemo();
     const {enqueueSnackbar} = useSnackbar();
@@ -23,8 +24,10 @@ function ReviewMemo({reviewId}: ReviewMemoProps) {
     useEffect(() => {
         if (memo) {
             setContent(memo);
+            setOriginalContent(memo); // 처음 로드될 때 원본 내용 설정
         } else {
             setContent("");
+            setOriginalContent("");
         }
     }, [memo]);
 
@@ -32,6 +35,7 @@ function ReviewMemo({reviewId}: ReviewMemoProps) {
         await saveMemo(reviewId, content);
         enqueueSnackbar('메모 저장 완료!', {variant: 'success'});
         setIsEditing(false);
+        setOriginalContent(content); // 저장 후 원본 내용 업데이트
     };
 
     const handleInputChange = (event: { target: { value: SetStateAction<string>; }; }) => {
@@ -43,6 +47,11 @@ function ReviewMemo({reviewId}: ReviewMemoProps) {
         if (!isEditing) {
             enqueueSnackbar('작성 완료 후 "저장" 버튼을 클릭해야지 서버에 저장이 됩니다.', {variant: 'info'});
         }
+    };
+
+    const handleCancel = () => {
+        setContent(originalContent);
+        setIsEditing(false);
     };
 
     return (
@@ -67,9 +76,9 @@ function ReviewMemo({reviewId}: ReviewMemoProps) {
                         >
                             {isLoading ? "저장 중..." : "저장"}
                         </Button>
-                        <Button variant="outlined" onClick={handleToggleMode}>취소</Button>
-                    </>)
-                }
+                        <Button variant="outlined" onClick={handleCancel}>취소</Button>
+                    </>
+                )}
 
                 {isEditing ? (
                     <TextField
