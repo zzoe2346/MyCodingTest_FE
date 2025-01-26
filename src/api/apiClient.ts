@@ -31,7 +31,7 @@ apiClient.interceptors.response.use(
                 navigate("/login");
             } else {
                 // alert(response.status);
-                navigate(`/error?status=${encodeURIComponent(response.status)}&title=${encodeURIComponent(response.title)}&detail=${encodeURIComponent(response.data.detail)}`);
+                navigate(`/error?status=${encodeURIComponent(response.status)}&title=${encodeURIComponent(response.data.title)}&detail=${encodeURIComponent(response.data.detail)}`);
             }
         }
         return Promise.reject(error);
