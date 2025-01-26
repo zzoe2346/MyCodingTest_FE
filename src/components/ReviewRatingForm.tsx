@@ -5,9 +5,10 @@ import {useSnackbar} from "notistack";
 
 interface ReviewRatingFormProps {
     reviewId: number;
+    isMobile: boolean;
 }
 
-export const ReviewRatingForm = ({reviewId}: ReviewRatingFormProps) => {
+export const ReviewRatingForm = ({reviewId, isMobile}: ReviewRatingFormProps) => {
     const {
         difficulty,
         importance,
@@ -21,19 +22,18 @@ export const ReviewRatingForm = ({reviewId}: ReviewRatingFormProps) => {
     const handleDifficultyChange = (_event: SyntheticEvent<Element, Event>, newValue: number | null) => {
         setDifficulty(newValue);
         handleSave(newValue, importance);
-        enqueueSnackbar('체감 난이도 저장 완료!', { variant: 'success' });
+        enqueueSnackbar('체감 난이도 저장 완료!', {variant: 'success'});
     };
 
     const handleImportanceChange = (_event: SyntheticEvent<Element, Event>, newValue: number | null) => {
         setImportance(newValue);
         handleSave(difficulty, newValue);
-        enqueueSnackbar('재복습 필요도 저장 완료!', { variant: 'success' });
+        enqueueSnackbar('재복습 필요도 저장 완료!', {variant: 'success'});
 
     };
 
-
     return (
-        <Stack direction="row" spacing={1}>
+        <Stack direction={isMobile ? "column" : "row"} spacing={1}>
             <Paper style={{padding: 10, flexGrow: 1, alignItems: "center", display: "flex", flexDirection: "column"}}>
                 <Typography variant="body1">체감 난이도</Typography>
                 <Rating
@@ -53,7 +53,6 @@ export const ReviewRatingForm = ({reviewId}: ReviewRatingFormProps) => {
                     onChange={handleImportanceChange}
                 />
             </Paper>
-
         </Stack>
     )
 }

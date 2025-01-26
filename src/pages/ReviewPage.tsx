@@ -1,4 +1,4 @@
-import {Alert, Fade, Grid2, IconButton, Paper, Stack, Typography} from "@mui/material";
+import {Alert, Fade, Grid2, IconButton, Paper, Stack, Typography, useMediaQuery, useTheme} from "@mui/material";
 import ResultInfo from "../components/GradingResultInfo";
 import ReviewMemo from "../components/ReviewMemo.tsx";
 import {useParams, useSearchParams} from "react-router-dom";
@@ -29,6 +29,9 @@ const ReviewPage = () => {
     const [searchParams] = useSearchParams();
     const solvedProblemId = searchParams.get("sp");
     const problemTitle = searchParams.get("problemTitle") || "";
+    const theme = useTheme();
+    const isMobile = useMediaQuery('(max-width:600px)');
+
     const {
         judgmentResults,
         currentResultIndex,
@@ -42,68 +45,107 @@ const ReviewPage = () => {
 
     const currentJudgmentResult = judgmentResults[currentResultIndex];
 
-    return (
-        <Grid2 container spacing={0} style={{height: '90vh'}}>
-            <Grid2 size={8} sx={{
-                height: '100%',
-                padding: 2,
-                overflowY: "auto",
-                borderRight: "2px solid #ccc",
-            }}>
-                <Fade in={true} timeout={500}>
-                    <Stack spacing={1}>
-                        <Paper>
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                marginBottom: 2
-                            }}>
-                                <IconButton onClick={handlePrevious} disabled={currentResultIndex === 0}>
-                                    <NavigateBeforeIcon/>
-                                </IconButton>
-                                <Typography sx={{mx: 2}}>
-                                    {currentResultIndex + 1} / {judgmentResults.length}
-                                </Typography>
-                                <IconButton onClick={handleNext}
-                                            disabled={currentResultIndex === judgmentResults.length - 1}>
-                                    <NavigateNextIcon/>
-                                </IconButton>
-                            </div>
-                        </Paper>
-                        {currentJudgmentResult && (
-                            <>
-                                <ResultInfo problemTitle={problemTitle}
-                                            result={currentJudgmentResult}/>
-                                <CodeArea submissionId={currentJudgmentResult.submissionId}
-                                          language={currentJudgmentResult.language}/>
-                            </>
-                        )}
-                    </Stack>
-                </Fade>
-            </Grid2>
+    const appBarHeight = theme.mixins.toolbar.minHeight;
 
-            <Grid2 size={4} sx={{
-                height: '100%',
-                padding: 2,
-                borderLeft: "2px solid #ccc",
-                overflowY: "auto"
-            }}>
-                <Fade in={true} timeout={500} style={{transitionDelay: '0ms'}}>
-                    <Stack spacing={1}>
-                        <Paper>
-                            <Alert variant="filled" severity="info">
-                                방가방가
-                            </Alert>
-                        </Paper>
-                        <ReviewStatusChangeButton reviewId={parseInt(reviewId)}/>
-                        <ReviewRatingForm reviewId={parseInt(reviewId)}></ReviewRatingForm>
-                        <TagSelection solvedProblemId={solvedProblemId}></TagSelection>
-                        <ReviewMemo reviewId={parseInt(reviewId)}/>
-                    </Stack>
-                </Fade>
-            </Grid2>
-        </Grid2>
+    return (
+        <>
+            {!isMobile ? (
+                <Grid2 container spacing={0}>
+                    <Grid2 size={8} sx={{
+                        height: `calc(95vh - ${appBarHeight}px)`, // 수정: AppBar 높이 고려
+                        padding: 2,
+                        overflowY: "auto",
+                        borderRight: "2px solid #ccc",
+                    }}>
+                        <Fade in={true} timeout={500}>
+                            <Stack spacing={1}>
+                                <Paper>
+                                    <div style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        marginBottom: 2
+                                    }}>
+                                        <IconButton onClick={handlePrevious} disabled={currentResultIndex === 0}>
+                                            <NavigateBeforeIcon/>
+                                        </IconButton>
+                                        <Typography sx={{mx: 2}}>
+                                            {currentResultIndex + 1} / {judgmentResults.length}
+                                        </Typography>
+                                        <IconButton onClick={handleNext}
+                                                    disabled={currentResultIndex === judgmentResults.length - 1}>
+                                            <NavigateNextIcon/>
+                                        </IconButton>
+                                    </div>
+                                </Paper>
+                                {currentJudgmentResult && (
+                                    <>
+                                        <ResultInfo problemTitle={problemTitle}
+                                                    result={currentJudgmentResult}/>
+                                        <CodeArea submissionId={currentJudgmentResult.submissionId}
+                                                  language={currentJudgmentResult.language}/>
+                                    </>
+                                )}
+                            </Stack>
+                        </Fade>
+                    </Grid2>
+
+                    <Grid2 size={4} sx={{
+                        height: `calc(95vh - ${appBarHeight}px)`, // 수정: AppBar 높이 고려
+                        padding: 2,
+                        borderLeft: "2px solid #ccc",
+                        overflowY: "auto"
+                    }}>
+                        <Fade in={true} timeout={500} style={{transitionDelay: '0ms'}}>
+                            <Stack spacing={1}>
+                                <Paper>
+                                    <Alert variant="filled" severity="info">
+                                        방가방가
+                                    </Alert>
+                                </Paper>
+                                <ReviewStatusChangeButton reviewId={parseInt(reviewId)}/>
+                                <ReviewRatingForm isMobile={false} reviewId={parseInt(reviewId)}></ReviewRatingForm>
+                                <TagSelection solvedProblemId={solvedProblemId}></TagSelection>
+                                <ReviewMemo reviewId={parseInt(reviewId)}/>
+                            </Stack>
+                        </Fade>
+                    </Grid2>
+                </Grid2>
+            ) : (
+                <Stack spacing={2} padding={1}>
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginBottom: 2
+                    }}>
+                        <IconButton onClick={handlePrevious} disabled={currentResultIndex === 0}>
+                            <NavigateBeforeIcon/>
+                        </IconButton>
+                        <Typography sx={{mx: 2}}>
+                            {currentResultIndex + 1} / {judgmentResults.length}
+                        </Typography>
+                        <IconButton onClick={handleNext}
+                                    disabled={currentResultIndex === judgmentResults.length - 1}>
+                            <NavigateNextIcon/>
+                        </IconButton>
+                    </div>
+                    {currentJudgmentResult && (
+                        <>
+                            <ResultInfo problemTitle={problemTitle}
+                                        result={currentJudgmentResult}/>
+                            <CodeArea submissionId={currentJudgmentResult.submissionId}
+                                      language={currentJudgmentResult.language}/>
+                        </>
+                    )}
+                    <ReviewStatusChangeButton reviewId={parseInt(reviewId)}/>
+                    <ReviewRatingForm isMobile={true} reviewId={parseInt(reviewId)}></ReviewRatingForm>
+                    <TagSelection solvedProblemId={solvedProblemId}></TagSelection>
+                    <ReviewMemo reviewId={parseInt(reviewId)}/>
+                </Stack>
+            )}
+        </>
+
     );
 
 }
