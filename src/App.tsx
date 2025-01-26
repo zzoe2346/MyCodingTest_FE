@@ -13,6 +13,8 @@ import ReviewUnClearSolvedProblemPage from "./pages/ReviewUnClearSolvedProblemPa
 import TagPage from "./pages/TagPage.tsx";
 import {SnackbarProvider} from "notistack";
 import HomePage from "./pages/HomePage.tsx";
+import ErrorPage from "./pages/ErrorPage.tsx";
+import {NavigateSetter} from "./api/apiClient.ts";
 
 const theme = createTheme({
     components: {
@@ -60,7 +62,10 @@ function App() {
                 }}
                 >
                     <MyAppBar/>
+                    <NavigateSetter/>
                     <Routes>
+                        <Route path="/review/:reviewId" element={<ReviewPage/>}/>
+                        <Route path="/error" element={<ErrorPage/>}/>
                         <Route path="/login" element={<LoginPage/>}/>
                         <Route path="/" element={<HomePage/>}/>
                         <Route

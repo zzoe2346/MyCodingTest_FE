@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {useNavigate} from "react-router-dom";
 
 axios.defaults.withCredentials = true
 
@@ -12,5 +13,30 @@ const apiClient = axios.create({
 
     withCredentials: true
 });
+
+let navigate: (path: string) => void;
+export const NavigateSetter = () => {
+    navigate = useNavigate();
+    return null;
+};
+
+
+apiClient.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response) {
+            const {response} = error;
+
+            if (response.status === 401) {
+                navigate("/login");
+            } else {
+                // alert(response.status);
+                navigate(`/error?status=${encodeURIComponent(response.status)}&title=${encodeURIComponent(response.title)}&detail=${encodeURIComponent(response.data.detail)}`);
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
 
 export default apiClient;
