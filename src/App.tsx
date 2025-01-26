@@ -14,7 +14,8 @@ import TagPage from "./pages/TagPage.tsx";
 import {SnackbarProvider} from "notistack";
 import HomePage from "./pages/HomePage.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
-import {NavigateSetter} from "./api/apiClient.ts";
+
+// import {NavigateSetter} from "./api/apiClient.ts";
 
 
 function App() {
@@ -63,7 +64,7 @@ function App() {
                 }}
                 >
                     <MyAppBar/>
-                    <NavigateSetter/>
+                    {/*<NavigateSetter/>*/}
                     <Routes>
                         <Route path="/review/:reviewId" element={<ReviewPage/>}/>
                         <Route path="/error" element={<ErrorPage/>}/>
