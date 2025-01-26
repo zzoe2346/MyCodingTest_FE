@@ -15,7 +15,7 @@ export interface JudgmentResult {
     judgmentResultId: number;
 }
 
-export const useJudgmentResult = (solvedProblemId: string | undefined) => {
+export const useJudgmentResult = (solvedProblemId: string | undefined | null) => {
     const [judgmentResults, setJudgmentResults] = useState<JudgmentResult[]>([]);
     const [currentResultIndex, setCurrentResultIndex] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(false);

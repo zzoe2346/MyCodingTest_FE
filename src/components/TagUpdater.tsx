@@ -2,7 +2,6 @@ import {useEffect, useState} from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import {useParams} from 'react-router-dom';
 import {Paper, Stack, Tooltip} from "@mui/material";
 import apiClient from "../api/apiClient.ts";
 import {useSnackbar} from "notistack";
@@ -42,8 +41,7 @@ const algorithmTags: Tag[] = [
     {title: "Tree", id: 27},
 ];
 
-const TagUpdater = () => {
-    const {solvedProblemId} = useParams();
+const TagUpdater: React.FC<{ solvedProblemId: string }> = ({solvedProblemId}) => {
     const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
     const [isEditing, setIsEditing] = useState(false); // 편집 모드 상태 추가
     const {enqueueSnackbar} = useSnackbar();

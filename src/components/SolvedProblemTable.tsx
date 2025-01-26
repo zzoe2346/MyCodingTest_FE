@@ -107,8 +107,7 @@ const TableBodyComponent: React.FC<TableBodyProps> = ({rows, handleFavorite}) =>
                         <Rating name="half-rating-read" value={row.importanceLevel} size="small" readOnly/>
                     </TableCell>
                     <TableCell>
-                        <Link to={`/review/${row.solvedProblemId}`}
-                              state={{problemData: row as SolvedProblemWithReview}}>
+                        <Link to={`/review/${row.reviewId}?problemTitle=${row.problemTitle}&sp=${row.solvedProblemId}`}>
                             <Button>
                                 {row.isReviewed ? (
                                     <div style={{

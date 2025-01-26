@@ -1,8 +1,7 @@
 import {Alert, Fade, Grid2, IconButton, Paper, Stack, Typography} from "@mui/material";
 import ResultInfo from "../components/GradingResultInfo";
 import ReviewMemo from "../components/ReviewMemo.tsx";
-import {useLocation, useParams} from "react-router-dom";
-import {SolvedProblemWithReview} from "../hooks/types.ts";
+import {useParams, useSearchParams} from "react-router-dom";
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import CodeArea from "../components/CodeArea.tsx";
@@ -26,9 +25,10 @@ export interface JudgmentResult {
 }
 
 const ReviewPage = () => {
-    const location = useLocation();
-    const {solvedProblemId} = useParams<{ solvedProblemId: string }>();
-    const {problemData} = (location.state as { problemData: SolvedProblemWithReview }) || {};
+    const {reviewId} = useParams();
+    const [searchParams] = useSearchParams();
+    const solvedProblemId = searchParams.get("sp");
+    const problemTitle = searchParams.get("problemTitle") || "";
     const {
         judgmentResults,
         currentResultIndex,
@@ -36,11 +36,12 @@ const ReviewPage = () => {
         handleNext,
     } = useJudgmentResult(solvedProblemId);
 
+    if (solvedProblemId === null || reviewId === undefined) {
+        return <div>solvedProblemId가 없습니다.</div>;
+    }
+
     const currentJudgmentResult = judgmentResults[currentResultIndex];
 
-    if (solvedProblemId === undefined) {
-        return <div>solvedProblemId가 없습니다.</div>; // 에러 메시지 또는 다른 적절한 처리
-    }
     return (
         <Grid2 container spacing={0} style={{height: '90vh'}}>
             <Grid2 size={8} sx={{
@@ -72,7 +73,8 @@ const ReviewPage = () => {
                         </Paper>
                         {currentJudgmentResult && (
                             <>
-                                <ResultInfo problemTitle={problemData.problemTitle} result={currentJudgmentResult}/>
+                                <ResultInfo problemTitle={problemTitle}
+                                            result={currentJudgmentResult}/>
                                 <CodeArea submissionId={currentJudgmentResult.submissionId}
                                           language={currentJudgmentResult.language}/>
                             </>
@@ -94,10 +96,10 @@ const ReviewPage = () => {
                                 방가방가
                             </Alert>
                         </Paper>
-                        <ReviewStatusChangeButton reviewId={problemData.reviewId}/>
-                        <ReviewRatingForm reviewId={problemData.reviewId}></ReviewRatingForm>
-                        <TagSelection></TagSelection>
-                        <ReviewMemo reviewId={problemData.reviewId}/>
+                        <ReviewStatusChangeButton reviewId={parseInt(reviewId)}/>
+                        <ReviewRatingForm reviewId={parseInt(reviewId)}></ReviewRatingForm>
+                        <TagSelection solvedProblemId={solvedProblemId}></TagSelection>
+                        <ReviewMemo reviewId={parseInt(reviewId)}/>
                     </Stack>
                 </Fade>
             </Grid2>
