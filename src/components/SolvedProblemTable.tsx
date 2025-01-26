@@ -60,6 +60,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({handleRequestSort, order, orde
             <TableRow>
                 {headCells.map((headCell) => (
                     <TableCell
+                        sx={{whiteSpace: 'nowrap'}}
                         key={headCell.id}
                         sortDirection={orderBy === headCell.id ? order : undefined}
                     >
@@ -89,7 +90,7 @@ interface TableBodyProps {
 
 const TableBodyComponent: React.FC<TableBodyProps> = ({rows, handleFavorite}) => {
     return (
-        <TableBody>
+        <TableBody sx={{whiteSpace: 'nowrap'}}>
             {rows.map((row) => (
                 <TableRow key={row.solvedProblemId}>
                     <TableCell component="th" scope="row" width='auto'>
