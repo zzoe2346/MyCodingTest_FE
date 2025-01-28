@@ -1,4 +1,4 @@
-import {Button, CircularProgress, Paper, Stack, Typography} from '@mui/material';
+import {Button, CircularProgress, Paper, Stack, TextField, Typography} from '@mui/material';
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
 import apiClient from "../api/apiClient.ts";
 import {useEffect, useState} from "react";
@@ -191,16 +191,11 @@ function CodeArea({submissionId, language}: CodeAreaProps) {
                         </SyntaxHighlighter>
                     )
                     : (
-                        <textarea
+                        <TextField
                             value={code}
                             onChange={handleCodeChange}
-                            style={{
-                                width: "100%",
-                                minHeight: "700px",
-                                fontFamily: "monospace",
-                                fontSize: "14px",
-                                lineHeight: "1.5",
-                            }}
+                            multiline={true}
+                            sx={{fontFamily: 'monospace'}}
                         />
                     )}
             </Stack>
