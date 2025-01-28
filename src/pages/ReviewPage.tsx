@@ -1,4 +1,4 @@
-import {Button, Fade, Grid2, IconButton, Paper, Stack, Typography, useMediaQuery, useTheme} from "@mui/material";
+import {Button, Fade, Grid2, Paper, Stack, Typography, useMediaQuery, useTheme} from "@mui/material";
 import ResultInfo from "../components/GradingResultInfo";
 import ReviewMemo from "../components/ReviewMemo.tsx";
 import {useParams, useSearchParams} from "react-router-dom";
@@ -132,23 +132,35 @@ const ReviewPage = () => {
                 </Grid2>
             ) : (
                 <Stack spacing={2} padding={1}>
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginBottom: 2
-                    }}>
-                        <IconButton onClick={handlePrevious} disabled={currentResultIndex === 0}>
-                            <NavigateBeforeIcon/>
-                        </IconButton>
-                        <Typography sx={{mx: 2}}>
-                            {currentResultIndex + 1} / {judgmentResults.length}
-                        </Typography>
-                        <IconButton onClick={handleNext}
-                                    disabled={currentResultIndex === judgmentResults.length - 1}>
-                            <NavigateNextIcon/>
-                        </IconButton>
-                    </div>
+                    <Paper>
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}>
+                            <Button
+                                variant="text"
+                                onClick={handlePrevious}
+                                disabled={currentResultIndex === 0}
+                                startIcon={<NavigateBeforeIcon/>}
+                            >
+                                최신 제출
+                            </Button>
+
+                            <Typography sx={{mx: 2}}>
+                                {currentResultIndex + 1} / {judgmentResults.length}
+                            </Typography>
+
+                            <Button
+                                variant="text"
+                                onClick={handleNext}
+                                disabled={currentResultIndex === judgmentResults.length - 1}
+                                endIcon={<NavigateNextIcon/>}
+                            >
+                                과거 제출
+                            </Button>
+                        </div>
+                    </Paper>
                     {currentJudgmentResult && (
                         <>
                             <ResultInfo problemTitle={problemTitle}
