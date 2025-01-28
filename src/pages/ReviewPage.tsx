@@ -30,7 +30,7 @@ const ReviewPage = () => {
     const solvedProblemId = searchParams.get("sp");
     const problemTitle = searchParams.get("problemTitle") || "";
     const theme = useTheme();
-    const isMobile = useMediaQuery('(max-width:600px)');
+    const isMobile = useMediaQuery('(max-width:1200px)');
 
     const {
         judgmentResults,
