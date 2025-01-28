@@ -55,13 +55,13 @@ function ReviewMemo({reviewId}: ReviewMemoProps) {
     };
 
     return (
-        <Paper style={{minHeight: 400, padding: 20, marginBottom: 80}}>
-            <Stack spacing={1}>
+        <Paper style={{minHeight: 400}}>
+            <Stack spacing={0.5}>
                 <Typography variant="h6">
-                    메모{"  "}
-                    <Typography variant="caption">
-                        markdown 지원, 작성 완료 후 꼭 "저장" 버튼 눌러주세요
-                    </Typography>
+                    메모
+                </Typography>
+                <Typography variant="caption" gutterBottom sx={{marginTop: 0}}>
+                    markdown 지원, 작성 완료 후 꼭 "저장" 버튼 눌러주세요
                 </Typography>
                 {!isEditing ? (
                     <Button variant="outlined" onClick={handleToggleMode}>메모 수정</Button>
@@ -82,7 +82,7 @@ function ReviewMemo({reviewId}: ReviewMemoProps) {
 
                 {isEditing ? (
                     <TextField
-                        label="내용을 작성하세요"
+                        // label="내용을 작성하세요"
                         multiline
                         rows={15}
                         variant="outlined"

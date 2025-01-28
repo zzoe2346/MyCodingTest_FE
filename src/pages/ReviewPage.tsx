@@ -1,4 +1,4 @@
-import {Alert, Fade, Grid2, IconButton, Paper, Stack, Typography, useMediaQuery, useTheme} from "@mui/material";
+import {Fade, Grid2, IconButton, Paper, Stack, Typography, useMediaQuery, useTheme} from "@mui/material";
 import ResultInfo from "../components/GradingResultInfo";
 import ReviewMemo from "../components/ReviewMemo.tsx";
 import {useParams, useSearchParams} from "react-router-dom";
@@ -98,11 +98,6 @@ const ReviewPage = () => {
                     }}>
                         <Fade in={true} timeout={500} style={{transitionDelay: '0ms'}}>
                             <Stack spacing={1}>
-                                <Paper>
-                                    <Alert variant="filled" severity="info">
-                                        방가방가
-                                    </Alert>
-                                </Paper>
                                 <ReviewStatusChangeButton reviewId={parseInt(reviewId)}/>
                                 <ReviewRatingForm isMobile={false} reviewId={parseInt(reviewId)}></ReviewRatingForm>
                                 <TagSelection solvedProblemId={solvedProblemId}></TagSelection>

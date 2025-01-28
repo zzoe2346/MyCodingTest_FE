@@ -170,14 +170,7 @@ function CodeArea({submissionId, language}: CodeAreaProps) {
     }
 
     return (
-        <Paper
-            style={{
-                height: '100%',
-                padding: 5,
-                overflow: 'auto',
-                marginBottom: 80
-            }}
-        >
+        <Paper>
             <Stack spacing={1}>
                 {!isEditing ? (
                     <Button variant="outlined" onClick={handleEdit}>코드 수정</Button>
@@ -203,7 +196,6 @@ function CodeArea({submissionId, language}: CodeAreaProps) {
                             onChange={handleCodeChange}
                             style={{
                                 width: "100%",
-                                height: "600px",
                                 fontFamily: "monospace",
                                 fontSize: "14px",
                                 lineHeight: "1.5",

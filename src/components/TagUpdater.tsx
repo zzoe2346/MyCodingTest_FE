@@ -86,8 +86,8 @@ const TagUpdater: React.FC<{ solvedProblemId: string }> = ({solvedProblemId}) =>
     };
 
     return (
-        <Paper sx={{padding: 2}}>
-            <Stack spacing={2}>
+        <Paper>
+            <Stack spacing={0.5}>
                 <Tooltip
                     title={!isEditing ? '태그를 수정하려면 "태그 수정" 버튼을 클릭하세요.' : ''} // 조건부 툴팁 메시지
                     disableHoverListener={isEditing} // 편집 모드일 때는 툴팁 비활성화

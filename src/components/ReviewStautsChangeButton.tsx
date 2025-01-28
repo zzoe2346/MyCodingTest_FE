@@ -11,8 +11,9 @@ export const ReviewStatusChangeButton: React.FC<ReviewStatusChangeButtonProps> =
 
     return (
         <Button
+            sx={{minHeight: 55}}
             variant="contained"
-            color={reviewed ? "success" : "primary"}
+            color={reviewed ? "success" : "info"}
             onClick={reviewed ? undefined : handleStatusChange}
         >
             {reviewed ? `${reviewedAt} 복습 완료!` : "복습 완료 하기"}

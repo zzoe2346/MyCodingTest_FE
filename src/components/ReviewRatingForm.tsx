@@ -34,7 +34,7 @@ export const ReviewRatingForm = ({reviewId, isMobile}: ReviewRatingFormProps) =>
 
     return (
         <Stack direction={isMobile ? "column" : "row"} spacing={1}>
-            <Paper style={{padding: 10, flexGrow: 1, alignItems: "center", display: "flex", flexDirection: "column"}}>
+            <Paper style={{flexGrow: 1, alignItems: "center", display: "flex", flexDirection: "column"}}>
                 <Typography variant="body1">체감 난이도</Typography>
                 <Rating
                     size={"large"}
@@ -44,7 +44,7 @@ export const ReviewRatingForm = ({reviewId, isMobile}: ReviewRatingFormProps) =>
                 />
             </Paper>
             <Divider/>
-            <Paper style={{padding: 10, flexGrow: 1, alignItems: "center", display: "flex", flexDirection: "column"}}>
+            <Paper style={{flexGrow: 1, alignItems: "center", display: "flex", flexDirection: "column"}}>
                 <Typography variant="body1">재복습 필요도</Typography>
                 <Rating
                     size={"large"}

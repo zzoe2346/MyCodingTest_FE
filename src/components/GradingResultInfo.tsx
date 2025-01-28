@@ -23,8 +23,8 @@ const ResultInfo = ({result, problemTitle}: { result: JudgmentResult, problemTit
 
     return (
         <>
-            <Paper style={{padding: 10}}>
-                <Typography variant="h6" gutterBottom>
+            <Paper>
+                <Typography variant="h5" gutterBottom>
                     <Link
                         href={`https://www.acmicpc.net/problem/${result.problemId}`}
                         target="_blank"
@@ -34,23 +34,17 @@ const ResultInfo = ({result, problemTitle}: { result: JudgmentResult, problemTit
                         {problemTitle}
                         <OpenInNewIcon
                             fontSize="small"
-                            // sx={{
-                            //     position: 'absolute', // 아이콘을 절대 위치로 설정
-                            //     top: 0, // 부모 요소의 상단에 위치
-                            //     right: 0, // 부모 요소의 우측에 위치
-                            // }}
+                            sx={{marginBottom: -0.2, paddingBottom: 0}}
                         />
                     </Link>
                 </Typography>
                 <Chip
                     label={result.resultText}
                     color={result.resultText === '맞았습니다!!' ? 'success' : 'error'}
-                    style={{marginTop: 5}}
                 />
-
             </Paper>
 
-            <Accordion>
+            <Accordion sx={{padding: 0}}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon/>}
                     aria-controls="panel1a-content"

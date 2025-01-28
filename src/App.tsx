@@ -15,9 +15,6 @@ import {SnackbarProvider} from "notistack";
 import HomePage from "./pages/HomePage.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
 
-// import {NavigateSetter} from "./api/apiClient.ts";
-
-
 function App() {
     const theme = createTheme({
         components: {
@@ -51,8 +48,15 @@ function App() {
                         // overflowY: 'auto',
                     },
                 },
+            },
+            MuiPaper: {
+                styleOverrides: {
+                    root: {
+                        padding: 10,
+                    }
+                }
             }
-        },
+        }
     });
 
 
