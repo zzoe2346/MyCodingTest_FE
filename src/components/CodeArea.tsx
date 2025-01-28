@@ -1,4 +1,4 @@
-import {Button, CircularProgress, Paper, Stack, TextField, Typography} from '@mui/material';
+import {Button, CircularProgress, Fade, Paper, Stack, TextField, Typography} from '@mui/material';
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
 import apiClient from "../api/apiClient.ts";
 import {useEffect, useState} from "react";
@@ -157,6 +157,7 @@ function CodeArea({submissionId, language}: CodeAreaProps) {
 
     if (loading) {
         return (
+            // <Skeleton  height={'500px'}/>
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
                 <CircularProgress/>
             </div>
@@ -171,34 +172,36 @@ function CodeArea({submissionId, language}: CodeAreaProps) {
 
     return (
         <Paper>
-            <Stack spacing={1}>
-                {!isEditing ? (
-                    <Button variant="outlined" onClick={handleEdit}>코드 수정</Button>
-                ) : (
-                    <>
-                        <Button variant="outlined" onClick={handleSave}>저장</Button>
-                        <Button variant="outlined" onClick={handleCancel}>취소</Button>
-                    </>
-                )}
-                {!isEditing ? (
-                        <SyntaxHighlighter
-                            language={mapLanguageToPrism(language)}
-                            style={oneLight}
-                            showLineNumbers
-                            lineNumberStyle={{minWidth: '25px', padding: '0 2', textAlign: 'right'}}
-                        >
-                            {code}
-                        </SyntaxHighlighter>
-                    )
-                    : (
-                        <TextField
-                            value={code}
-                            onChange={handleCodeChange}
-                            multiline={true}
-                            sx={{fontFamily: 'monospace'}}
-                        />
+            <Fade in={true} timeout={500}>
+                <Stack spacing={1}>
+                    {!isEditing ? (
+                        <Button variant="outlined" onClick={handleEdit}>코드 수정</Button>
+                    ) : (
+                        <>
+                            <Button variant="outlined" onClick={handleSave}>저장</Button>
+                            <Button variant="outlined" onClick={handleCancel}>취소</Button>
+                        </>
                     )}
-            </Stack>
+                    {!isEditing ? (
+                            <SyntaxHighlighter
+                                language={mapLanguageToPrism(language)}
+                                style={oneLight}
+                                showLineNumbers
+                                lineNumberStyle={{minWidth: '25px', padding: '0 2', textAlign: 'right'}}
+                            >
+                                {code}
+                            </SyntaxHighlighter>
+                        )
+                        : (
+                            <TextField
+                                value={code}
+                                onChange={handleCodeChange}
+                                multiline={true}
+                                sx={{fontFamily: 'monospace'}}
+                            />
+                        )}
+                </Stack>
+            </Fade>
         </Paper>
     );
 }
