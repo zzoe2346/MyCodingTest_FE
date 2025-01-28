@@ -196,6 +196,7 @@ function CodeArea({submissionId, language}: CodeAreaProps) {
                             onChange={handleCodeChange}
                             style={{
                                 width: "100%",
+                                minHeight: "700px",
                                 fontFamily: "monospace",
                                 fontSize: "14px",
                                 lineHeight: "1.5",
