@@ -9,6 +9,7 @@ import {ReviewRatingForm} from "../components/ReviewRatingForm.tsx";
 import {ReviewStatusChangeButton} from "../components/ReviewStautsChangeButton.tsx";
 import {useJudgmentResult} from "../hooks/useJudgmentResult.ts";
 import TagSelection from "../components/TagUpdater.tsx";
+import DeleteButton from "../components/DeleteButton.tsx";
 
 export interface JudgmentResult {
     submissionId: number;
@@ -122,7 +123,14 @@ const ReviewPage = () => {
                     }}>
                         <Fade in={true} timeout={500} style={{transitionDelay: '0ms'}}>
                             <Stack spacing={1}>
-                                <ReviewStatusChangeButton reviewId={parseInt(reviewId)}/>
+                                <Grid2 container spacing={1}>
+                                    <Grid2 size={10.5}>
+                                        <ReviewStatusChangeButton reviewId={parseInt(reviewId)}/>
+                                    </Grid2>
+                                    <Grid2 size={1.5}>
+                                        <DeleteButton solvedProblemId={solvedProblemId}/>
+                                    </Grid2>
+                                </Grid2>
                                 <ReviewRatingForm isMobile={false} reviewId={parseInt(reviewId)}></ReviewRatingForm>
                                 <TagSelection solvedProblemId={solvedProblemId}></TagSelection>
                                 <ReviewMemo reviewId={parseInt(reviewId)}/>
@@ -169,7 +177,14 @@ const ReviewPage = () => {
                                       language={currentJudgmentResult.language}/>
                         </>
                     )}
-                    <ReviewStatusChangeButton reviewId={parseInt(reviewId)}/>
+                    <Grid2 container spacing={1}>
+                        <Grid2 size={10.5}>
+                            <ReviewStatusChangeButton reviewId={parseInt(reviewId)}/>
+                        </Grid2>
+                        <Grid2 size={1.5}>
+                            <DeleteButton solvedProblemId={solvedProblemId}/>
+                        </Grid2>
+                    </Grid2>
                     <ReviewRatingForm isMobile={true} reviewId={parseInt(reviewId)}></ReviewRatingForm>
                     <TagSelection solvedProblemId={solvedProblemId}></TagSelection>
                     <ReviewMemo reviewId={parseInt(reviewId)}/>

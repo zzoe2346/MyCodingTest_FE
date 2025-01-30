@@ -11,7 +11,7 @@ export const ReviewStatusChangeButton: React.FC<ReviewStatusChangeButtonProps> =
 
     return (
         <Button
-            sx={{minHeight: 55}}
+            sx={{minHeight: 55, width: '100%'}}
             variant="contained"
             color={reviewed ? "success" : "info"}
             onClick={reviewed ? undefined : handleStatusChange}
