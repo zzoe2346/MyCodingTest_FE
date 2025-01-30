@@ -262,7 +262,6 @@ const MyAppBar = () => {
         <Container sx={{minHeight: 70}} maxWidth='xl'>
             <AppBar
                 sx={{
-                    maxWidth: 'xl',
                     height: 'auto',
                     backgroundColor: 'white',
                     boxShadow: '1',

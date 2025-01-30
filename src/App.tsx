@@ -69,7 +69,6 @@ function App() {
                 }}
                 >
                     <MyAppBar/>
-                    {/*<NavigateSetter/>*/}
                     <Routes>
                         <Route path="/review/:reviewId" element={<ReviewPage/>}/>
                         <Route path="/error" element={<ErrorPage/>}/>
