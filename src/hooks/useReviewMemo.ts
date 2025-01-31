@@ -11,9 +11,14 @@ function useReviewMemo() {
         try {
             const response = await apiClient.get(`/api/solved-problems/reviews/${reviewId}/memo/read`);
             const memoUrl = response.data.url;
-            const memoResponse = await apiClient.get(memoUrl);
-            setMemo(memoResponse.data);
-            setOriginalMemo(memoResponse.data);
+            if (memoUrl === 'noMemo') {
+                setMemo("");
+                setOriginalMemo("");
+            } else {
+                const memoResponse = await apiClient.get(memoUrl);
+                setMemo(memoResponse.data);
+                setOriginalMemo(memoResponse.data);
+            }
         } catch (error) {
             console.error(error);
         } finally {
