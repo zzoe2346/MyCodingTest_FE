@@ -1,6 +1,8 @@
-import { ImageList, ImageListItem } from "@mui/material";
+import {ImageList, ImageListItem, useMediaQuery} from "@mui/material";
 
 const MCTShowImageList = () => {
+    const isMobile = useMediaQuery('(max-width:1200px)');
+
     const imageData = [
         {
             img: "mctshow/1.png", // 이미지 URL
@@ -27,16 +29,26 @@ const MCTShowImageList = () => {
             title: "Image 6",
         },
     ];
+
     return (
-        <ImageList sx={{ width: "100%", maxHeight: "400px", overflowY: "scroll" }} cols={2} rowHeight={350}>
+        <ImageList
+            sx={{width: "100%", maxHeight: isMobile ? "auto" : "400px", overflowY: "scroll"}}
+            cols={isMobile ? 1 : 2} // 모바일에서는 1열, 아니면 2열
+            rowHeight={isMobile ? "auto" : 350} // 모바일에서는 자동, 아니면 350px
+        >
             {imageData.map((item) => (
-                <ImageListItem key={item.img} sx={{ border: "1px solid black" }}>
+                <ImageListItem key={item.img} sx={{border: "0.5px solid black"}}>
                     <img
                         src={`${item.img}?w=248&fit=crop&auto=format`}
                         srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
                         alt={item.title}
                         loading="lazy"
-                        style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                        style={{
+                            width: "100%",
+                            height: isMobile ? "auto" : "100%",
+                            objectFit: "contain",
+                            aspectRatio: isMobile ? "auto" : "auto" // 모바일에서 이미지 비율을 1:1로 조정
+                        }}
                     />
                 </ImageListItem>
             ))}
