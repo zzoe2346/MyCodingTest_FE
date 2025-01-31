@@ -3,17 +3,17 @@ import {ImageList, ImageListItem} from "@mui/material";
 const BojImageList = () => {
     const imageData = [
         {
-            img: "boj/3채점진행1.png", // 이미지 URL
-            title: "Image 3",
+            img: "boj/1.png", // 이미지 URL
+            title: "boj1",
         },
         {
-            img: "boj/4채점완료1.png", // 이미지 URL
-            title: "Image 4",
+            img: "boj/2.png", // 이미지 URL
+            title: "boj2",
         },
     ];
 
     return (
-        <ImageList sx={{width: "100%"}} cols={3} rowHeight={350}>
+        <ImageList sx={{width: "100%"}} cols={2} rowHeight={350}>
             {imageData.map((item) => (
                 <ImageListItem key={item.img}>
                     <img
