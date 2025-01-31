@@ -16,7 +16,7 @@ const algorithmTags: Tag[] = [
     {title: "BFS", id: 2},
     {title: "BinarySearch", id: 3},
     {title: "Bitmask", id: 4},
-    {title: "Bruteforce", id: 5},
+    {title: "BruteForce", id: 5},
     {title: "DFS", id: 6},
     {title: "DP", id: 7},
     {title: "DataStructure", id: 8},
@@ -37,9 +37,34 @@ const algorithmTags: Tag[] = [
     {title: "ShortestPath", id: 23},
     {title: "SlidingWindow", id: 24},
     {title: "Sorting", id: 25},
-    {title: "TowPointer", id: 26},
+    {title: "TwoPointer", id: 26},
     {title: "Tree", id: 27},
-];
+    {title: "✏️ 다시 풀기", id: 28},
+    {title: "⭐️ 중요", id: 29},
+    {title: "🎯 취약", id: 30},
+    {title: "🔁 자주 복습", id: 31},
+    {title: "🔥 어려운 문제", id: 32},
+    {title: "💡 아이디어", id: 33},
+    {title: "📚 개념 복습", id: 34},
+    {title: "🛠️ 구현 연습", id: 35},
+    {title: "🧐 헷갈림", id: 36},
+    {title: "📝 암기", id: 37},
+    {title: "🤔 다양한 풀이", id: 38},
+    {title: "👍 좋은 문제", id: 39},
+    {title: "👀 나중에 풀기", id: 40},
+    {title: "🤯 실수", id: 41},
+    {title: "⏰ 시간 초과", id: 42},
+    {title: "Ad-hoc", id: 43},
+    {title: "Geometry", id: 44},
+    {title: "Simulation", id: 45},
+    {title: "Hashing", id: 46},
+    {title: "GameTheory", id: 47},
+    {title: "Stack", id: 48},
+    {title: "LIS", id: 49},
+    {title: "Queue", id: 50},
+    {title: "0-1 BFS", id: 51},
+    {title: "String", id: 52}
+].sort((a, b) => a.title.localeCompare(b.title));
 
 const TagUpdater: React.FC<{ solvedProblemId: string }> = ({solvedProblemId}) => {
     const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
@@ -53,7 +78,8 @@ const TagUpdater: React.FC<{ solvedProblemId: string }> = ({solvedProblemId}) =>
             const initialTags = tagIds
                 .sort()
                 .map((tagId) => algorithmTags.find((tag) => tag.id === tagId))
-                .filter((tag): tag is Tag => tag !== undefined);
+                .filter((tag): tag is Tag => tag !== undefined)
+                .sort((a, b) => a.title.localeCompare(b.title));
             setSelectedTags(initialTags);
         } catch (error) {
             console.error('Error fetching initial tags:', error);
@@ -84,6 +110,13 @@ const TagUpdater: React.FC<{ solvedProblemId: string }> = ({solvedProblemId}) =>
         setIsEditing(false); // 취소 버튼 클릭 시 편집 모드 종료
         fetchInitialTags(); // 취소 시 기존 태그 다시 불러오기
     };
+    const handleTagChange = (_event: any, newValue: Tag[]) => {
+        if (newValue.length <= 7) {
+            setSelectedTags(newValue);
+        } else {
+            enqueueSnackbar('태그는 7개까지만 추가할 수 있습니다.', {variant: 'warning'});
+        }
+    };
 
     return (
         <Paper>
@@ -99,13 +132,14 @@ const TagUpdater: React.FC<{ solvedProblemId: string }> = ({solvedProblemId}) =>
                         options={algorithmTags}
                         getOptionLabel={(option) => option.title}
                         value={selectedTags}
-                        onChange={(_event, newValue) => setSelectedTags(newValue)}
+                        // onChange={(_event, newValue) => setSelectedTags(newValue)}
+                        onChange={handleTagChange}
                         filterSelectedOptions
                         disabled={!isEditing} // 편집 모드에 따라 disabled 상태 변경
                         renderInput={(params) => (
                             <TextField
                                 {...params}
-                                label="알고리즘 태그"
+                                label="태그(최대 7개)"
                                 placeholder=""
                                 sx={{
                                     // 비활성화된 상태일 때의 스타일
