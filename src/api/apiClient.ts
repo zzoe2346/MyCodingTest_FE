@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {useNavigate} from "react-router-dom";
 
 axios.defaults.withCredentials = true
 
@@ -14,28 +13,28 @@ const apiClient = axios.create({
     withCredentials: true
 });
 
-let navigate: (path: string) => void;
-export const NavigateSetter = () => {
-    navigate = useNavigate();
-    return null;
-};
+// let navigate: (path: string) => void;
+// export const NavigateSetter = () => {
+//     navigate = useNavigate();
+//     return null;
+// };
 
 
-apiClient.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        if (error.response) {
-            const {response} = error;
-            console.log(response);
-
-            if (response.status === 401) {
-                navigate("/login");
-            } else {
-                navigate(`/error?status=${encodeURIComponent(response.status)}&title=${encodeURIComponent(response.data.title)}&detail=${encodeURIComponent(response.data.detail)}`);
-            }
-        }
-        return Promise.reject(error);
-    }
-);
+// apiClient.interceptors.response.use(
+//     (response) => response,
+//     (error) => {
+//         if (error.response) {
+//             const {response} = error;
+//             console.log(response);
+//
+//             if (response.status === 401) {
+//                 navigate("/login");
+//             } else {
+//                 navigate(`/error?status=${encodeURIComponent(response.status)}&title=${encodeURIComponent(response.data.title)}&detail=${encodeURIComponent(response.data.detail)}`);
+//             }
+//         }
+//         return Promise.reject(error);
+//     }
+// );
 
 export default apiClient;
