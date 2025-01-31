@@ -41,16 +41,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
             if (userResponse.status === 200) {
                 setUser(userResponse.data);
                 setIsLoggedIn(true);
-                console.log("lingsucee");
                 return true;
-            }else{
+            } else {
                 setUser(null);
                 setLoading(false);
                 return false;
             }
-
-        } catch (err) {
-            console.error('Failed to fetch user authentication information:', err);
+        } catch {
             setUser(null);
             setIsLoggedIn(false);
             setLoading(false);
