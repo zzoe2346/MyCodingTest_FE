@@ -12,7 +12,7 @@ import {
     TableHead,
     TablePagination,
     TableRow,
-    TableSortLabel
+    TableSortLabel, Typography
 } from '@mui/material';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -107,7 +107,11 @@ const TableBodyComponent: React.FC<TableBodyProps> = ({rows, handleFavorite}) =>
                     <TableCell>
                         {new Date(row.recentSubmitAt).toLocaleDateString()}
                     </TableCell>
-                    <TableCell>{row.recentResultText}</TableCell>
+                    <TableCell>
+                        <Typography variant="body2" fontWeight={'bold'} color={row.recentResultText === '맞았습니다!!' ? 'success' : 'error'}>
+                            {row.recentResultText}
+                        </Typography>
+                    </TableCell>
                     <TableCell>
                         <Rating name="half-rating-read" value={row.difficultyLevel} size="small" readOnly/>
                     </TableCell>
