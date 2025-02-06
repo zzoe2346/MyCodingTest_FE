@@ -5,6 +5,10 @@ const MCTShowImageList = () => {
 
     const imageData = [
         {
+            img: "mctshow/0.gif", // 이미지 URL
+            title: "Image 0",
+        },
+        {
             img: "mctshow/1.png", // 이미지 URL
             title: "Image 1",
         },
