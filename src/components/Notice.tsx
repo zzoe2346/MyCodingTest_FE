@@ -44,10 +44,10 @@ const NoticeComponent: React.FC = () => {
                         <Typography variant="h5" fontWeight={'bold'} gutterBottom>
                             🚀 왜 My Coding Test를 사용해야 할까요?
                         </Typography>
-                        <Typography variant="body1" gutterBottom>
-                            - 더 이상 코드와 문제 주소를 복붙하지 마세요! 문제 풀이 기록을 자동으로 저장하여 편한 복습을 지원합니다.<br/>
-                            - 난이도 매기기, 중요도 매기기, 태그, 북마크, 정렬 등의 기능을 활용해 풀이한 문제를 체계적으로 관리하고, 취약한 부분을 집중적으로 학습할 수
-                            있습니다.<br/>
+                        <Typography variant="body1" gutterBottom sx={{lineHeight: 1.8}}>
+                            - 더 이상 코드와 문제 주소를 복붙하지 마세요!<b> 문제 풀이 기록을 자동으로 저장하여 편한 복습을 지원합니다.</b><br/>
+                            - 난이도 매기기, 중요도 매기기, 태그, 북마크, 정렬 등의 기능을 활용해 <b>풀이한 문제를 체계적으로 관리하고, 취약한 부분을 집중적으로 학습할 수
+                            있습니다.</b><br/>
                             - 제출한 코드를 바로 수정 가능하고, 마크다운이 지원되는 메모기능을 지원합니다.<br/>
                             - 별도의 복잡한 설정 없이, 크롬 익스텐션 한 번만 설치하면 이 모든 기능을 간편하게 사용할 수 있습니다.<br/>
                             - 모바일 UI를 지원합니다. 자기 전, 대중교통에서 등 자투리 시간에 틈틈이 코딩테스트를 준비해 보세요.
@@ -99,12 +99,7 @@ const NoticeComponent: React.FC = () => {
                         />
                     </Box>
                     <Divider/>
-                    <Box>
-                        <Typography variant="h5" fontWeight={'bold'} gutterBottom>
-                            ✅ 제공되는 기능
-                        </Typography>
-                    </Box>
-                    <Divider/>
+
                     <Box>
                         <Typography variant="h5" fontWeight={'bold'} gutterBottom>
                             🛠️ 업데이트
@@ -121,6 +116,13 @@ const NoticeComponent: React.FC = () => {
                         <Typography variant="body1" gutterBottom>
                             - 공지 페이지 완성<br/>
                             - 핵심 기능 정상 작동 확인
+                        </Typography>
+                        <Typography variant="subtitle1" gutterBottom>
+                            25.02.06
+                        </Typography>
+                        <Typography variant="body1" gutterBottom>
+                            - 풀이 결과 '맞았습니다!!' 인 경우와 그 외의 경우의 표현 색상을 구분하였습니다.<br/>
+                            - 스크린샷에 움직이는 GIF를 추가하였습니다.
                         </Typography>
                     </Box>
                     <Divider/>
