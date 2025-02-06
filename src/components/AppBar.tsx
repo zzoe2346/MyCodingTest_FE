@@ -113,7 +113,8 @@ function UserStatus() {
 function getButtonStyle(currentPath: string, targetPath: string) {
     const isActive = currentPath === targetPath || currentPath.startsWith(targetPath + '/');
     return {
-        fontWeight: isActive ? '800' : 'normal',
+        fontWeight: isActive ? '700' : 'normal',
+        color: isActive ? 'primary' : 'black',
     };
 }
 
@@ -126,7 +127,6 @@ function NavigationButtons() {
             <Button
                 component={RouterLink}
                 to="/"
-                color="primary"
                 size="large"
                 sx={getButtonStyle(location.pathname, "/")}
             >
@@ -135,7 +135,6 @@ function NavigationButtons() {
             <Button
                 component={RouterLink}
                 to="/solved-problems"
-                color="primary"
                 size="large"
                 sx={getButtonStyle(location.pathname, "/solved-problems")}
             >
@@ -145,7 +144,6 @@ function NavigationButtons() {
                 <Button
                     component={RouterLink}
                     to="/review-unclear"
-                    color="primary"
                     size="large"
                     sx={getButtonStyle(location.pathname, "/review-unclear")}
                 >
@@ -155,7 +153,6 @@ function NavigationButtons() {
             <Button
                 component={RouterLink}
                 to="/review-clear"
-                color="primary"
                 size="large"
                 sx={getButtonStyle(location.pathname, "/review-clear")}
             >
@@ -164,7 +161,6 @@ function NavigationButtons() {
             <Button
                 component={RouterLink}
                 to="/tag"
-                color="primary"
                 size="large"
                 sx={getButtonStyle(location.pathname, "/tag")}
             >
@@ -173,7 +169,6 @@ function NavigationButtons() {
             <Button
                 component={RouterLink}
                 to="/favorite"
-                color="primary"
                 size="large"
                 sx={getButtonStyle(location.pathname, "/favorite")}
             >
