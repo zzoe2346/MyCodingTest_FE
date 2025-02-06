@@ -13,7 +13,7 @@ const NoticeComponent: React.FC = () => {
 
     return (
         <Fade in={show} timeout={500}>
-            <Paper>
+            <Paper elevation={3}>
                 <Stack spacing={2}>
                     <Typography variant="h4">🙇🏻 환영합니다!</Typography>
                     <Divider/>
