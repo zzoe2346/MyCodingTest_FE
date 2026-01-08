@@ -173,10 +173,10 @@ const NavigationButtons = () => {
         { text: '홈', path: '/', icon: <HomeRoundedIcon /> },
         { text: '데모', path: '/demo/solved-problems', icon: <PlayCircleFilledRoundedIcon />, isDemo: true },
         { text: '푼 문제들', path: '/solved-problems', icon: <ListAltRoundedIcon /> },
-        { text: '복습 대기', path: '/review-unclear', icon: <PendingActionsRoundedIcon />, badge: unreviewedCount },
-        { text: '복습 완료', path: '/review-clear', icon: <CheckCircleRoundedIcon /> },
-        { text: '태그별', path: '/tag', icon: <LocalOfferRoundedIcon /> },
-        { text: '북마크', path: '/favorite', icon: <BookmarkRoundedIcon /> },
+        { text: '복습 대기 문제들', path: '/review-unclear', icon: <PendingActionsRoundedIcon />, badge: unreviewedCount },
+        { text: '복습 완료 문제들', path: '/review-clear', icon: <CheckCircleRoundedIcon /> },
+        { text: '태그별 문제들', path: '/tag', icon: <LocalOfferRoundedIcon /> },
+        { text: '북마크 문제들', path: '/favorite', icon: <BookmarkRoundedIcon /> },
     ];
 
     const isActive = (path: string) => {
@@ -225,6 +225,7 @@ const NavigationButtons = () => {
                         key={item.path}
                         component={RouterLink}
                         to={item.path}
+                        startIcon={item.icon}
                         sx={{
                             px: 2,
                             py: 1,
