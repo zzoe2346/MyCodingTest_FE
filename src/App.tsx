@@ -1,20 +1,22 @@
 import './App.css'
 import MyAppBar from './components/AppBar'
-import {Route, Routes} from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import ReviewPage from './pages/ReviewPage.tsx'
 import LoginPage from './pages/LoginPage.tsx'
-import {AuthProvider} from "./context/AuthContext.tsx";
+import { AuthProvider } from "./context/AuthContext.tsx";
 import PrivateRoute from "./components/PrivateRoute.tsx";
 import SolveProblemListPage from "./pages/AllSolvedProblemPage.tsx";
-import {createTheme, ThemeProvider} from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material";
 import FavoirteSolvedProblem from "./pages/FavoriteSolvedProblemPage.tsx";
 import ReviewClearSolvedProblemPage from "./pages/ReviewClearSolvedProblemPage.tsx";
 import ReviewUnClearSolvedProblemPage from "./pages/ReviewUnClearSolvedProblemPage.tsx";
 import TagPage from "./pages/TagPage.tsx";
-import {SnackbarProvider} from "notistack";
+import { SnackbarProvider } from "notistack";
 import HomePage from "./pages/HomePage.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
-import {NavigateSetter} from "./api/apiClient.ts";
+import DemoSolvedProblemPage from "./pages/DemoSolvedProblemPage.tsx";
+import DemoReviewPage from "./pages/DemoReviewPage.tsx";
+import { NavigateSetter } from "./api/apiClient.ts";
 
 function App() {
     const theme = createTheme({
@@ -69,25 +71,25 @@ function App() {
                     horizontal: 'center',
                 }}
                 >
-                    <MyAppBar/>
+                    <MyAppBar />
                     <NavigateSetter />
                     <Routes>
-                        <Route path="/review/:reviewId" element={<ReviewPage/>}/>
-                        <Route path="/error" element={<ErrorPage/>}/>
-                        <Route path="/login" element={<LoginPage/>}/>
-                        <Route path="/" element={<HomePage/>}/>
+                        <Route path="/review/:reviewId" element={<ReviewPage />} />
+                        <Route path="/error" element={<ErrorPage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/" element={<HomePage />} />
                         <Route
                             path="/solved-problems"
                             element={
                                 <PrivateRoute>
-                                    <SolveProblemListPage/>
+                                    <SolveProblemListPage />
                                 </PrivateRoute>
-                            }/>
+                            } />
                         <Route
                             path="/review/:solvedProblemId"
                             element={
                                 <PrivateRoute>
-                                    <ReviewPage/>
+                                    <ReviewPage />
                                 </PrivateRoute>
                             }
                         />
@@ -96,7 +98,7 @@ function App() {
                             path="/favorite"
                             element={
                                 <PrivateRoute>
-                                    <FavoirteSolvedProblem/>
+                                    <FavoirteSolvedProblem />
                                 </PrivateRoute>
                             }
                         />
@@ -104,7 +106,7 @@ function App() {
                             path="/review-clear"
                             element={
                                 <PrivateRoute>
-                                    <ReviewClearSolvedProblemPage/>
+                                    <ReviewClearSolvedProblemPage />
                                 </PrivateRoute>
                             }
                         />
@@ -112,7 +114,7 @@ function App() {
                             path="/review-unclear"
                             element={
                                 <PrivateRoute>
-                                    <ReviewUnClearSolvedProblemPage/>
+                                    <ReviewUnClearSolvedProblemPage />
                                 </PrivateRoute>
                             }
                         />
@@ -120,10 +122,13 @@ function App() {
                             path="/tag"
                             element={
                                 <PrivateRoute>
-                                    <TagPage/>
+                                    <TagPage />
                                 </PrivateRoute>
                             }
                         />
+                        {/* Demo Routes */}
+                        <Route path="/demo/solved-problems" element={<DemoSolvedProblemPage />} />
+                        <Route path="/demo/review/:reviewId" element={<DemoReviewPage />} />
                     </Routes>
                 </SnackbarProvider>
             </AuthProvider>
