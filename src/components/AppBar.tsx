@@ -203,16 +203,15 @@ const NavigationButtons = () => {
                                 fontWeight: 600,
                                 textTransform: 'none',
                                 background: active
-                                    ? 'linear-gradient(135deg, #f59e0b 0%, #f97316 100%)'
+                                    ? 'linear-gradient(135deg, #f59f0bb1 0%, #f97416a9 100%)'
                                     : 'transparent',
                                 color: active ? 'white' : '#f59e0b',
-                                border: active ? 'none' : '1.5px solid #f59e0b',
-                                boxShadow: active ? '0 4px 14px rgba(245, 158, 11, 0.35)' : 'none',
+                                // border: active ? 'none' : '1.5px solid #f59e0b',
+                                // boxShadow: active ? '0 4px 14px rgba(245, 158, 11, 0.35)' : 'none',
                                 '&:hover': {
-                                    background: 'linear-gradient(135deg, #f59e0b 0%, #f97316 100%)',
+                                    background: 'linear-gradient(135deg, #f59f0bb1 0%, #f97416a9 100%)',
                                     color: 'white',
-                                    transform: 'translateY(-1px)',
-                                    boxShadow: '0 4px 14px rgba(245, 158, 11, 0.35)',
+                                    // boxShadow: '0 4px 14px rgba(245, 158, 11, 0.35)',
                                 }
                             }}
                         >
