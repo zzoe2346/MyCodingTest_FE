@@ -142,11 +142,10 @@ const UserStatus = () => {
                         py: 1,
                         fontWeight: 600,
                         textTransform: 'none',
-                        boxShadow: '0 4px 14px rgba(99, 102, 241, 0.35)',
+                        boxShadow: 'none',
                         '&:hover': {
                             background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
-                            boxShadow: '0 6px 20px rgba(99, 102, 241, 0.45)',
-                            transform: 'translateY(-1px)',
+                            boxShadow: 'none',
                         }
                     }}
                 >
