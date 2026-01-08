@@ -2,6 +2,7 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
+    Box,
     Chip,
     Link,
     Paper,
@@ -11,11 +12,11 @@ import {
     TableRow,
     Typography
 } from '@mui/material';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import {JudgmentResult} from "../pages/ReviewPage.tsx";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
+import { JudgmentResult } from "../pages/ReviewPage.tsx";
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 
-const ResultInfo = ({result, problemTitle}: { result: JudgmentResult, problemTitle: string }) => {
+const ResultInfo = ({ result, problemTitle }: { result: JudgmentResult, problemTitle: string }) => {
 
     if (!result) {
         return null;
@@ -23,100 +24,107 @@ const ResultInfo = ({result, problemTitle}: { result: JudgmentResult, problemTit
 
     return (
         <>
-            <Paper>
-                <Typography variant="h5" gutterBottom>
-                    <Link
-                        href={`https://www.acmicpc.net/problem/${result.problemId}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{textDecoration: 'none', color: 'inherit'}}
-                    >
-                        {problemTitle}
-                        <OpenInNewIcon
-                            fontSize="small"
-                            sx={{marginBottom: -0.2, paddingBottom: 0}}
-                        />
-                    </Link>
-                </Typography>
-                <Chip
-                    label={result.resultText}
-                    color={result.resultText === '맞았습니다!!' ? 'success' : 'error'}
-                />
+            <Paper
+                elevation={0}
+                sx={{
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    borderRadius: '12px',
+                }}
+            >
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}>
+                    <Typography variant="h5" fontWeight={600}>
+                        <Link
+                            href={`https://www.acmicpc.net/problem/${result.problemId}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            sx={{
+                                textDecoration: 'none',
+                                color: 'inherit',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 0.5,
+                                '&:hover': {
+                                    color: 'primary.main',
+                                }
+                            }}
+                        >
+                            {problemTitle}
+                            <OpenInNewRoundedIcon fontSize="small" sx={{ opacity: 0.6 }} />
+                        </Link>
+                    </Typography>
+                    <Chip
+                        label={result.resultText}
+                        color={result.resultText === '맞았습니다!!' ? 'success' : 'error'}
+                        sx={{
+                            fontWeight: 600,
+                            borderRadius: '8px',
+                            px: 1,
+                        }}
+                    />
+                </Box>
             </Paper>
 
-            <Accordion sx={{padding: 0}}>
+            <Accordion
+                elevation={0}
+                sx={{
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    borderRadius: '12px !important',
+                    '&:before': { display: 'none' },
+                    overflow: 'hidden',
+                }}
+            >
                 <AccordionSummary
-                    expandIcon={<ExpandMoreIcon/>}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
+                    expandIcon={<ExpandMoreRoundedIcon />}
+                    sx={{
+                        backgroundColor: 'background.default',
+                        '&:hover': {
+                            backgroundColor: 'action.hover',
+                        }
+                    }}
                 >
-                    <Typography variant="subtitle1">
+                    <Typography variant="subtitle1" fontWeight={500} color="text.secondary">
                         채점 결과 자세히 보기
                     </Typography>
                 </AccordionSummary>
-                <AccordionDetails>
+                <AccordionDetails sx={{ p: 0 }}>
                     <Table size="small">
                         <TableBody>
-                            <TableRow>
-                                <TableCell><b>제출 번호</b></TableCell>
-                                <TableCell>
-                                    <Link
-                                        href={`https://www.acmicpc.net/submit/${result.problemId}/${result.submissionId}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {result.submissionId}
-                                    </Link>
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell><b>백준 ID</b></TableCell>
-                                <TableCell>
-                                    <Link
-                                        href={`https://www.acmicpc.net/user/${result.baekjoonId}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {result.baekjoonId}
-                                    </Link>
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell><b>문제 번호</b></TableCell>
-                                <TableCell>
-                                    <Link
-                                        href={`https://www.acmicpc.net/problem/${result.problemId}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {result.problemId}
-                                    </Link>
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell><b>결과</b></TableCell>
-                                <TableCell>{result.resultText}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell><b>메모리</b></TableCell>
-                                <TableCell>{result.memory} KB</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell><b>시간</b></TableCell>
-                                <TableCell>{result.time} ms</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell><b>언어</b></TableCell>
-                                <TableCell>{result.language}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell><b>코드 길이</b></TableCell>
-                                <TableCell>{result.codeLength} B</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell><b>제출 시간</b></TableCell>
-                                <TableCell>{result.submittedAt}</TableCell>
-                            </TableRow>
+                            {[
+                                { label: '제출 번호', value: result.submissionId, link: `https://www.acmicpc.net/submit/${result.problemId}/${result.submissionId}` },
+                                { label: '백준 ID', value: result.baekjoonId, link: `https://www.acmicpc.net/user/${result.baekjoonId}` },
+                                { label: '문제 번호', value: result.problemId, link: `https://www.acmicpc.net/problem/${result.problemId}` },
+                                { label: '결과', value: result.resultText },
+                                { label: '메모리', value: `${result.memory} KB` },
+                                { label: '시간', value: `${result.time} ms` },
+                                { label: '언어', value: result.language },
+                                { label: '코드 길이', value: `${result.codeLength} B` },
+                                { label: '제출 시간', value: result.submittedAt },
+                            ].map((row, index) => (
+                                <TableRow
+                                    key={row.label}
+                                    sx={{
+                                        '&:last-child td': { borderBottom: 0 },
+                                        backgroundColor: index % 2 === 0 ? 'transparent' : 'action.hover',
+                                    }}
+                                >
+                                    <TableCell sx={{ fontWeight: 600, color: 'text.secondary', width: '40%' }}>
+                                        {row.label}
+                                    </TableCell>
+                                    <TableCell>
+                                        {row.link ? (
+                                            <Link
+                                                href={row.link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                {row.value}
+                                            </Link>
+                                        ) : row.value}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                     </Table>
                 </AccordionDetails>

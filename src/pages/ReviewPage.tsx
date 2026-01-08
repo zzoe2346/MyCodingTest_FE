@@ -1,9 +1,9 @@
-import { Box, Button, Fade, Grid2, Paper, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Button, Container, Fade, Grid2, Paper, Stack, Typography, useMediaQuery, useTheme, alpha } from "@mui/material";
 import ResultInfo from "../components/GradingResultInfo";
 import ReviewMemo from "../components/ReviewMemo.tsx";
 import { useParams, useSearchParams } from "react-router-dom";
-import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import NavigateBeforeRoundedIcon from '@mui/icons-material/NavigateBeforeRounded';
+import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
 import CodeArea from "../components/CodeArea.tsx";
 import { ReviewRatingForm } from "../components/ReviewRatingForm.tsx";
 import { ReviewStatusChangeButton } from "../components/ReviewStautsChangeButton.tsx";
@@ -45,155 +45,179 @@ const ReviewPage = () => {
     }
 
     const currentJudgmentResult = judgmentResults[currentResultIndex];
-
     const appBarHeight = theme.mixins.toolbar.minHeight;
 
+    // Navigation Header Component
+    const NavigationHeader = () => (
+        <Paper
+            elevation={0}
+            sx={{
+                p: 1.5,
+                background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
+                border: '1px solid',
+                borderColor: 'divider',
+                borderRadius: '12px',
+            }}
+        >
+            <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 1,
+            }}>
+                <Button
+                    variant="text"
+                    onClick={handlePrevious}
+                    disabled={currentResultIndex === 0}
+                    startIcon={<NavigateBeforeRoundedIcon />}
+                    sx={{
+                        color: 'text.secondary',
+                        fontWeight: 500,
+                        '&:hover': {
+                            backgroundColor: alpha('#6366f1', 0.08),
+                        },
+                        '&.Mui-disabled': {
+                            color: 'text.disabled',
+                        }
+                    }}
+                >
+                    최신
+                </Button>
+
+                <Box sx={{
+                    px: 2,
+                    py: 0.5,
+                    borderRadius: '8px',
+                    backgroundColor: alpha('#6366f1', 0.1),
+                }}>
+                    <Typography fontWeight={600} color="primary" sx={{ fontSize: '0.9rem' }}>
+                        {currentResultIndex + 1} / {judgmentResults.length}
+                    </Typography>
+                </Box>
+
+                <Button
+                    variant="text"
+                    onClick={handleNext}
+                    disabled={currentResultIndex === judgmentResults.length - 1}
+                    endIcon={<NavigateNextRoundedIcon />}
+                    sx={{
+                        color: 'text.secondary',
+                        fontWeight: 500,
+                        '&:hover': {
+                            backgroundColor: alpha('#6366f1', 0.08),
+                        },
+                        '&.Mui-disabled': {
+                            color: 'text.disabled',
+                        }
+                    }}
+                >
+                    과거
+                </Button>
+            </Box>
+        </Paper>
+    );
+
+    // Sidebar Component
+    const Sidebar = () => (
+        <Stack spacing={2}>
+            {/* Status & Delete */}
+            <Box sx={{ display: 'flex', gap: 1 }}>
+                <Box sx={{ flex: 1 }}>
+                    <ReviewStatusChangeButton reviewId={parseInt(reviewId)} />
+                </Box>
+                <DeleteButton solvedProblemId={solvedProblemId} />
+            </Box>
+
+            {/* Rating Form */}
+            <ReviewRatingForm isMobile={false} reviewId={parseInt(reviewId)} />
+
+            {/* Tags */}
+            <TagSelection solvedProblemId={solvedProblemId} />
+
+            {/* Memo */}
+            <ReviewMemo reviewId={parseInt(reviewId)} />
+        </Stack>
+    );
+
     return (
-        <>
+        <Container maxWidth="xl" sx={{ py: 2 }}>
             {!isMobile ? (
-                <Grid2 container spacing={0}>
-                    <Grid2 size={8} sx={{
-                        height: `calc(95vh - ${appBarHeight}px)`, // 수정: AppBar 높이 고려
-                        padding: 2,
-                        overflowY: "auto",
-                        borderRight: "2px solid #ccc",
-                    }}>
-                        <Fade in={true} timeout={500}>
-                            <Stack spacing={1}>
-                                <Paper>
-                                    <Box sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}>
-
-                                        {/*<Typography variant="body2">최신 제출 결과</Typography>*/}
-                                        {/*<IconButton onClick={handlePrevious} disabled={currentResultIndex === 0}>*/}
-                                        {/*    <NavigateBeforeIcon/>*/}
-                                        {/*</IconButton>*/}
-                                        {/*<Typography sx={{mx: 2}}>*/}
-                                        {/*    {currentResultIndex + 1} / {judgmentResults.length}*/}
-                                        {/*</Typography>*/}
-                                        {/*<IconButton onClick={handleNext}*/}
-                                        {/*            disabled={currentResultIndex === judgmentResults.length - 1}>*/}
-                                        {/*    <NavigateNextIcon/>*/}
-                                        {/*</IconButton>*/}
-                                        {/*<Typography variant="body2">과거 제출 결과</Typography>*/}
-                                        <Button
-                                            variant="text"
-                                            onClick={handlePrevious}
-                                            disabled={currentResultIndex === 0}
-                                            startIcon={<NavigateBeforeIcon />}
-                                        >
-                                            최신 제출 결과
-                                        </Button>
-
-                                        <Typography sx={{ mx: 2 }}>
-                                            {currentResultIndex + 1} / {judgmentResults.length}
-                                        </Typography>
-
-                                        <Button
-                                            variant="text"
-                                            onClick={handleNext}
-                                            disabled={currentResultIndex === judgmentResults.length - 1}
-                                            endIcon={<NavigateNextIcon />}
-                                        >
-                                            과거 제출 결과
-                                        </Button>
-
-                                    </Box>
-                                </Paper>
-                                {currentJudgmentResult && (
-                                    <>
-                                        <ResultInfo problemTitle={problemTitle}
-                                            result={currentJudgmentResult} />
-                                        <CodeArea submissionId={currentJudgmentResult.submissionId}
-                                            language={currentJudgmentResult.language} />
-                                    </>
-                                )}
-                            </Stack>
-                        </Fade>
+                <Grid2 container spacing={3}>
+                    {/* Left Column - Code Area */}
+                    <Grid2 size={8}>
+                        <Box sx={{
+                            height: `calc(90vh - ${appBarHeight}px)`,
+                            overflowY: 'auto',
+                            pr: 1,
+                        }}>
+                            <Fade in={true} timeout={400}>
+                                <Stack spacing={2}>
+                                    <NavigationHeader />
+                                    {currentJudgmentResult && (
+                                        <>
+                                            <ResultInfo
+                                                problemTitle={problemTitle}
+                                                result={currentJudgmentResult}
+                                            />
+                                            <CodeArea
+                                                submissionId={currentJudgmentResult.submissionId}
+                                                language={currentJudgmentResult.language}
+                                            />
+                                        </>
+                                    )}
+                                </Stack>
+                            </Fade>
+                        </Box>
                     </Grid2>
 
-                    <Grid2 size={4} sx={{
-                        height: `calc(95vh - ${appBarHeight}px)`, // 수정: AppBar 높이 고려
-                        padding: 2,
-                        borderLeft: "2px solid #ccc",
-                        overflowY: "auto"
-                    }}>
-                        <Fade in={true} timeout={500} style={{ transitionDelay: '0ms' }}>
-                            <Stack spacing={1}>
-                                <Grid2 container spacing={1}>
-                                    <Grid2 size={10.5}>
-                                        <ReviewStatusChangeButton reviewId={parseInt(reviewId)} />
-                                    </Grid2>
-                                    <Grid2 size={1.5}>
-                                        <DeleteButton solvedProblemId={solvedProblemId} />
-                                    </Grid2>
-                                </Grid2>
-                                <ReviewRatingForm isMobile={false} reviewId={parseInt(reviewId)}></ReviewRatingForm>
-                                <TagSelection solvedProblemId={solvedProblemId}></TagSelection>
-                                <ReviewMemo reviewId={parseInt(reviewId)} />
-                            </Stack>
-                        </Fade>
+                    {/* Right Column - Sidebar */}
+                    <Grid2 size={4}>
+                        <Box sx={{
+                            height: `calc(90vh - ${appBarHeight}px)`,
+                            overflowY: 'auto',
+                            pl: 2,
+                            borderLeft: '1px solid',
+                            borderColor: 'divider',
+                        }}>
+                            <Fade in={true} timeout={400} style={{ transitionDelay: '100ms' }}>
+                                <Box>
+                                    <Sidebar />
+                                </Box>
+                            </Fade>
+                        </Box>
                     </Grid2>
                 </Grid2>
             ) : (
-                <Stack spacing={2} padding={1}>
-                    <Paper>
-                        <Box sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}>
-                            <Button
-                                variant="text"
-                                onClick={handlePrevious}
-                                disabled={currentResultIndex === 0}
-                                startIcon={<NavigateBeforeIcon />}
-                            >
-                                최신 제출
-                            </Button>
-
-                            <Typography sx={{ mx: 2 }}>
-                                {currentResultIndex + 1} / {judgmentResults.length}
-                            </Typography>
-
-                            <Button
-                                variant="text"
-                                onClick={handleNext}
-                                disabled={currentResultIndex === judgmentResults.length - 1}
-                                endIcon={<NavigateNextIcon />}
-                            >
-                                과거 제출
-                            </Button>
-                        </Box>
-                    </Paper>
-                    {currentJudgmentResult && (
-                        <>
-                            <ResultInfo problemTitle={problemTitle}
-                                result={currentJudgmentResult} />
-                            <CodeArea submissionId={currentJudgmentResult.submissionId}
-                                language={currentJudgmentResult.language} />
-                        </>
-                    )}
-                    <Grid2 container spacing={1}>
-                        <Grid2 size={10.5}>
-                            <ReviewStatusChangeButton reviewId={parseInt(reviewId)} />
-                        </Grid2>
-                        <Grid2 size={1.5}>
+                /* Mobile Layout */
+                <Fade in={true} timeout={400}>
+                    <Stack spacing={2}>
+                        <NavigationHeader />
+                        {currentJudgmentResult && (
+                            <>
+                                <ResultInfo
+                                    problemTitle={problemTitle}
+                                    result={currentJudgmentResult}
+                                />
+                                <CodeArea
+                                    submissionId={currentJudgmentResult.submissionId}
+                                    language={currentJudgmentResult.language}
+                                />
+                            </>
+                        )}
+                        <Box sx={{ display: 'flex', gap: 1 }}>
+                            <Box sx={{ flex: 1 }}>
+                                <ReviewStatusChangeButton reviewId={parseInt(reviewId)} />
+                            </Box>
                             <DeleteButton solvedProblemId={solvedProblemId} />
-                        </Grid2>
-                    </Grid2>
-                    <ReviewRatingForm isMobile={true} reviewId={parseInt(reviewId)}></ReviewRatingForm>
-                    <TagSelection solvedProblemId={solvedProblemId}></TagSelection>
-                    <ReviewMemo reviewId={parseInt(reviewId)} />
-                </Stack>
+                        </Box>
+                        <ReviewRatingForm isMobile={true} reviewId={parseInt(reviewId)} />
+                        <TagSelection solvedProblemId={solvedProblemId} />
+                        <ReviewMemo reviewId={parseInt(reviewId)} />
+                    </Stack>
+                </Fade>
             )}
-        </>
-
+        </Container>
     );
-
 }
 
 export default ReviewPage;
