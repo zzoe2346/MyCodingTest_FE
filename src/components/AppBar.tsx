@@ -23,7 +23,7 @@ import {UserAuth} from "../context/AuthContext.tsx";
 import React, {useState} from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 
-function Logo() {
+const Logo = () => {
     return (
         <Box
             sx={{
@@ -33,10 +33,11 @@ function Logo() {
                 paddingTop: '0px'
             }}
         >
-            <img
+            <Box
+                component="img"
                 src="/images/logo.svg"
                 alt="My Coding Test Logo"
-                style={{
+                sx={{
                     height: '80%', // 부모 컴포넌트 높이의 80% (조절 가능)
                     width: 'auto', // 가로 세로 비율 유지를 위해 반드시 추가
                     maxHeight: '60px', // 최대 높이 제한 (필요에 따라 조절)
@@ -44,9 +45,9 @@ function Logo() {
             />
         </Box>
     );
-}
+};
 
-function UserStatus() {
+const UserStatus = () => {
     const {isLoggedIn, user, signOut} = UserAuth();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const navigate = useNavigate();
@@ -108,17 +109,17 @@ function UserStatus() {
             )}
         </Box>
     );
-}
+};
 
-function getButtonStyle(currentPath: string, targetPath: string) {
+const getButtonStyle = (currentPath: string, targetPath: string) => {
     const isActive = currentPath === targetPath || currentPath.startsWith(targetPath + '/');
     return {
         fontWeight: isActive ? '700' : 'normal',
         color: isActive ? 'primary' : 'black',
     };
-}
+};
 
-function NavigationButtons() {
+const NavigationButtons = () => {
     const {unreviewedCount} = UserAuth();
     const location = useLocation();
 
@@ -176,10 +177,10 @@ function NavigationButtons() {
             </Button>
         </Box>
     );
-}
+};
 
 //mobile bar
-function MobileNavigationDrawer() {
+const MobileNavigationDrawer = () => {
     const {unreviewedCount} = UserAuth();
     const location = useLocation();
     const [open, setOpen] = useState(false);
@@ -196,7 +197,7 @@ function MobileNavigationDrawer() {
         setOpen(open);
     };
 
-    const list = () => (
+    const ListComponent = () => (
         <Box
             sx={{width: 250}}
             role="presentation"
@@ -246,11 +247,11 @@ function MobileNavigationDrawer() {
                 open={open}
                 onClose={toggleDrawer(false)}
             >
-                {list()}
+                <ListComponent />
             </Drawer>
         </>
     );
-}
+};
 
 const MyAppBar = () => {
     return (
