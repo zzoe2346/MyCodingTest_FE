@@ -20,20 +20,73 @@ import { NavigateSetter } from "./api/apiClient.ts";
 
 function App() {
     const theme = createTheme({
+        palette: {
+            primary: {
+                main: '#6366f1',
+                light: '#818cf8',
+                dark: '#4f46e5',
+            },
+            secondary: {
+                main: '#8b5cf6',
+                light: '#a78bfa',
+                dark: '#7c3aed',
+            },
+            success: {
+                main: '#10b981',
+                light: '#d1fae5',
+            },
+            error: {
+                main: '#ef4444',
+                light: '#fee2e2',
+            },
+            warning: {
+                main: '#f59e0b',
+                light: '#fef3c7',
+            },
+            background: {
+                default: '#f8fafc',
+                paper: '#ffffff',
+            },
+            text: {
+                primary: '#0f172a',
+                secondary: '#475569',
+            },
+            divider: '#e2e8f0',
+        },
+        typography: {
+            fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            h1: { fontWeight: 700 },
+            h2: { fontWeight: 700 },
+            h3: { fontWeight: 600 },
+            h4: { fontWeight: 600 },
+            h5: { fontWeight: 600 },
+            h6: { fontWeight: 600 },
+            button: { fontWeight: 500, textTransform: 'none' as const },
+        },
+        shape: {
+            borderRadius: 12,
+        },
         components: {
             MuiTableCell: {
                 styleOverrides: {
                     root: {
                         textAlign: 'center',
+                        borderColor: '#e2e8f0',
+                        padding: '14px 16px',
                     },
+                    head: {
+                        fontWeight: 600,
+                        backgroundColor: '#f8fafc',
+                        color: '#475569',
+                    }
                 },
             },
             MuiButton: {
                 styleOverrides: {
                     root: {
-                        padding: '4px 8px', // 기본 패딩 조정
-                        minWidth: 'auto', // 기본 최소 너비 제거
-                        fontSize: '1.0rem', // 텍스트 크기
+                        borderRadius: 10,
+                        fontWeight: 500,
+                        textTransform: 'none',
                     },
                 },
             },
@@ -43,19 +96,53 @@ function App() {
                 },
                 styleOverrides: {
                     root: {
-                        // height: `calc(98vh - ${appBarHeight}px)`, // 동적으로 가져온 AppBar 높이 사용
-                        // width: '100%',
-                        // marginTop: '0px',
-                        paddingTop: '10px',
-                        paddingBottom: '20px',
-                        // overflowY: 'auto',
+                        paddingTop: '16px',
+                        paddingBottom: '24px',
                     },
                 },
             },
             MuiPaper: {
                 styleOverrides: {
                     root: {
-                        padding: 10,
+                        padding: 16,
+                        borderRadius: 16,
+                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)',
+                        border: '1px solid #e2e8f0',
+                    }
+                }
+            },
+            MuiTableContainer: {
+                styleOverrides: {
+                    root: {
+                        borderRadius: 16,
+                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)',
+                        border: '1px solid #e2e8f0',
+                    }
+                }
+            },
+            MuiRating: {
+                styleOverrides: {
+                    iconFilled: {
+                        color: '#f59e0b',
+                    }
+                }
+            },
+            MuiChip: {
+                styleOverrides: {
+                    root: {
+                        borderRadius: 8,
+                        fontWeight: 500,
+                    }
+                }
+            },
+            MuiAlert: {
+                styleOverrides: {
+                    root: {
+                        borderRadius: 12,
+                    },
+                    standardInfo: {
+                        backgroundColor: '#eff6ff',
+                        border: '1px solid #bfdbfe',
                     }
                 }
             }
