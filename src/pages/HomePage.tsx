@@ -78,7 +78,7 @@ const steps = [
     {
         step: 1,
         title: "로그인",
-        description: "회원가입 없이 구글 계정으로 간편하게 시작하세요.",
+        description: "회원가입 없이 소셜(구글, 카카오) 계정으로 간편하게 시작하세요.",
     },
     {
         step: 2,
@@ -104,7 +104,9 @@ const HomePage = () => {
                 {/* Hero Section */}
                 <Box
                     sx={{
-                        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%)',
+                        // background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%)',
+                        // background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%)',
+                        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)',
                         py: { xs: 5, md: 8 },
                         px: { xs: 3, md: 5 },
                         position: 'relative',
@@ -149,6 +151,7 @@ const HomePage = () => {
                                         }}
                                     >
                                         백준 문제 풀이 기록을 자동으로 저장하고,
+                                        <br />
                                         언제 어디서나 효율적으로 복습하세요.
                                     </Typography>
                                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
@@ -167,9 +170,8 @@ const HomePage = () => {
                                                 borderRadius: '12px',
                                                 boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
                                                 '&:hover': {
-                                                    backgroundColor: 'white',
-                                                    transform: 'translateY(-2px)',
-                                                    boxShadow: '0 12px 32px rgba(0,0,0,0.2)',
+                                                    backgroundColor: 'rgba(219, 218, 222, 0.92)',
+                                                    // boxShadow: '0 12px 32px rgba(0,0,0,0.2)',
                                                 }
                                             }}
                                         >
@@ -258,13 +260,13 @@ const HomePage = () => {
                 <Box sx={{ py: 6 }}>
                     <Box sx={{ textAlign: 'center', mb: 6 }}>
                         <Chip
-                            icon={<RocketLaunchRoundedIcon />}
+                            icon={<RocketLaunchRoundedIcon style={{ color: 'white' }} />}
                             label="주요 기능"
                             sx={{
                                 mb: 2,
                                 background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                                 color: 'white',
-                                fontWeight: 600,
+                                fontWeight: 800,
                             }}
                         />
                         <Typography variant="h4" fontWeight={700} gutterBottom>
