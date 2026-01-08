@@ -1,6 +1,15 @@
-import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import apiClient from "../api/apiClient.ts";
-import {User} from "../hooks/types.ts";
+import { User } from "../hooks/types.ts";
+
+// Development mode check
+const isDevelopment = import.meta.env.DEV;
+
+// Mock user for development
+const mockUser: User = {
+    picture: 'https://api.dicebear.com/7.x/avataaars/svg?seed=DevUser',
+    name: '개발자',
+};
 
 interface AuthContextType {
     isLoggedIn: boolean;
@@ -11,6 +20,7 @@ interface AuthContextType {
     unreviewedCount: number
     setUnreviewedCount: (count: number) => void;
     checkAuth: () => Promise<boolean>;
+    isDevMode: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -27,14 +37,23 @@ interface AuthProviderProps {
     children: ReactNode;
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [user, setUser] = useState<User | null>(null);
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+    // In development mode, start as logged in with mock data
+    const [isLoggedIn, setIsLoggedIn] = useState(isDevelopment);
+    const [user, setUser] = useState<User | null>(isDevelopment ? mockUser : null);
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(true);
-    const [unreviewedCount, setUnreviewedCount] = useState(0);
+    const [loading, setLoading] = useState(!isDevelopment); // Skip loading in dev mode
+    const [unreviewedCount, setUnreviewedCount] = useState(isDevelopment ? 3 : 0);
 
     const checkAuth = async () => {
+        // In development mode, always return true with mock user
+        if (isDevelopment) {
+            setUser(mockUser);
+            setIsLoggedIn(true);
+            setLoading(false);
+            return true;
+        }
+
         setLoading(true);
         try {
             const userResponse = await apiClient.get<User>('/api/me');
@@ -56,6 +75,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     };
 
     const checkUnReviewCount = async () => {
+        // In development mode, use mock count
+        if (isDevelopment) {
+            setUnreviewedCount(3);
+            return;
+        }
+
         try {
             const unreviewedResponse = await apiClient.get('/api/solved-problems/unreviewed-count');
             setUnreviewedCount(unreviewedResponse.data.count);
@@ -64,82 +89,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
         }
     }
 
-    //이걸로 바꾸니 ㄱㅊ음
     useEffect(() => {
         const initializeAuth = async () => {
-            const isLogined = await checkAuth(); // checkAuth는 Promise<boolean>을 반환
-            if (isLogined) {
-                await checkUnReviewCount(); // checkUnReviewCount도 비동기 함수
+            // In development mode, skip API calls
+            if (isDevelopment) {
+                console.log('🚀 Development mode: Using mock authentication');
+                setLoading(false);
+                return;
             }
-            setLoading(false); // 모든 비동기 작업 완료 후 loading을 false로 설정
+
+            const isLogined = await checkAuth();
+            if (isLogined) {
+                await checkUnReviewCount();
+            }
+            setLoading(false);
         };
 
         initializeAuth();
     }, []);
 
-    // useEffect(() => {
-    //     checkAuth()
-    //         .then((isLogined) => {
-    //             console.log("islogin" + isLogined);
-    //             if (isLogined) {
-    //                 checkUnReviewCount();
-    //             }
-    //         });
-    // }, []);
-
-
-    // useEffect(() => {
-    //     const checkAuth = async () => {
-    //         try {
-    //             console.log('체크 인증')
-    //             // 두 API 요청을 병렬로 보냅니다.
-    //             const [userResponse, unreviewedResponse] = await Promise.all([
-    //                 apiClient.get<User>('/api/me'),
-    //                 apiClient.get('/api/solved-problems/unreviewed-count'),
-    //             ]);
-    //
-    //             // 각각의 응답을 상태에 저장합니다.
-    //             setUser(userResponse.data);
-    //             setIsLoggedIn(true);
-    //             setUnreviewedCount(unreviewedResponse.data.count);
-    //         } catch (err) {
-    //             // 요청 실패 시 오류를 처리합니다.
-    //             console.error('Failed to fetch user authentication information:', err);
-    //             setUser(null);
-    //             setIsLoggedIn(false);
-    //         } finally {
-    //             // 로딩 상태를 false로 설정합니다.
-    //             setLoading(false);
-    //         }
-    //     };
-    //
-    //     checkAuth();
-    // }, []);
-
-    // useEffect(() => {
-    //     const checkAuth = async () => {
-    //         try {
-    //             const [userResponse, unreviewedResponse] = await Promise.all([
-    //                 apiClient.get<User>('/api/me'),
-    //                 apiClient.get('/api/solved-problems/unreviewed-count'),
-    //             ]);
-    //             setUser(userResponse.data);
-    //             setIsLoggedIn(true);
-    //             setUnreviewedCount(unreviewedResponse.data.count);
-    //         } catch (err) {
-    //             console.error('Failed to fetch user authentication information:', err);
-    //             setUser(null);
-    //             setIsLoggedIn(false);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-    //
-    //     checkAuth();
-    // }, []);
-
-
     const signOut = async () => {
+        // In development mode, just toggle state
+        if (isDevelopment) {
+            setIsLoggedIn(false);
+            setUser(null);
+            return;
+        }
+
         setLoading(true);
         try {
             await apiClient.get('/api/sign-out');
@@ -155,7 +131,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 
     return (
         <AuthContext.Provider
-            value={{isLoggedIn, user, error, loading, signOut, unreviewedCount, setUnreviewedCount, checkAuth}}>
+            value={{
+                isLoggedIn,
+                user,
+                error,
+                loading,
+                signOut,
+                unreviewedCount,
+                setUnreviewedCount,
+                checkAuth,
+                isDevMode: isDevelopment
+            }}>
             {children}
         </AuthContext.Provider>
     );

@@ -1,8 +1,12 @@
-import {Button, CircularProgress, Fade, Paper, Stack, TextField, Typography} from '@mui/material';
-import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
+import { Button, CircularProgress, Fade, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import apiClient from "../api/apiClient.ts";
-import {useEffect, useState} from "react";
-import {oneLight} from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { useEffect, useState } from "react";
+import { oneLight } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { demoCodeSnippets } from "../demo/demoData.ts";
+
+// Development mode check
+const isDevelopment = import.meta.env.DEV;
 
 function mapLanguageToPrism(language: string): string {
     const languageMap: { [key: string]: string } = {
@@ -92,7 +96,7 @@ interface CodeAreaProps {
     language: string
 }
 
-function CodeArea({submissionId, language}: CodeAreaProps) {
+function CodeArea({ submissionId, language }: CodeAreaProps) {
     const [originalCode, setOriginalCode] = useState("");
     const [code, setCode] = useState("");
     const [loading, setLoading] = useState(false);
@@ -101,6 +105,18 @@ function CodeArea({submissionId, language}: CodeAreaProps) {
 
     const fetchData = async () => {
         setLoading(true);
+
+        // Use mock data in development mode
+        if (isDevelopment) {
+            setTimeout(() => {
+                const mockCode = demoCodeSnippets[submissionId] || "// 코드를 찾을 수 없습니다";
+                setOriginalCode(mockCode);
+                setCode(mockCode);
+                setLoading(false);
+            }, 200);
+            return;
+        }
+
         try {
             const urlResponse = await apiClient.get(`/api/solved-problems/judgment-results/submission-code/read/${submissionId}`);
             const codeUrl = urlResponse.data.url;
@@ -134,6 +150,14 @@ function CodeArea({submissionId, language}: CodeAreaProps) {
 
 
     const handleSave = async () => {
+        // In development mode, just save locally
+        if (isDevelopment) {
+            setOriginalCode(code);
+            setIsEditing(false);
+            console.log('🚀 Dev mode: Code saved locally');
+            return;
+        }
+
         setLoading(true);
         try {
             const putUrlResponse = await apiClient.get(`/api/solved-problems/judgment-results/submission-code/update/${submissionId}`);
@@ -157,9 +181,8 @@ function CodeArea({submissionId, language}: CodeAreaProps) {
 
     if (loading) {
         return (
-            // <Skeleton  height={'500px'}/>
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
-                <CircularProgress/>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <CircularProgress />
             </div>
         );
     }
@@ -183,21 +206,21 @@ function CodeArea({submissionId, language}: CodeAreaProps) {
                         </>
                     )}
                     {!isEditing ? (
-                            <SyntaxHighlighter
-                                language={mapLanguageToPrism(language)}
-                                style={oneLight}
-                                showLineNumbers
-                                lineNumberStyle={{minWidth: '25px', padding: '0 2', textAlign: 'right'}}
-                            >
-                                {code}
-                            </SyntaxHighlighter>
-                        )
+                        <SyntaxHighlighter
+                            language={mapLanguageToPrism(language)}
+                            style={oneLight}
+                            showLineNumbers
+                            lineNumberStyle={{ minWidth: '25px', padding: '0 2', textAlign: 'right' }}
+                        >
+                            {code}
+                        </SyntaxHighlighter>
+                    )
                         : (
                             <TextField
                                 value={code}
                                 onChange={handleCodeChange}
                                 multiline={true}
-                                sx={{fontFamily: 'monospace'}}
+                                sx={{ fontFamily: 'monospace' }}
                             />
                         )}
                 </Stack>
