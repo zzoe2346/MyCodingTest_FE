@@ -1,7 +1,5 @@
-import { Button, CircularProgress, Fade, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Paper, Stack, Typography } from '@mui/material';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import apiClient from "../api/apiClient.ts";
-import { useEffect, useState } from "react";
 import { oneLight } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 function mapLanguageToPrism(language: string): string {
@@ -83,125 +81,40 @@ function mapLanguageToPrism(language: string): string {
         return languageMap[language];
     } else {
         console.warn(`Language not found in map: ${language}`);
-        return "";
+        return "text";
     }
 }
 
 interface CodeAreaProps {
-    submissionId: number;
-    language: string
+    sourceCode: string;
+    language: string;
 }
 
-function CodeArea({ submissionId, language }: CodeAreaProps) {
-    const [originalCode, setOriginalCode] = useState("");
-    const [code, setCode] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [isEditing, setIsEditing] = useState(false);
-
-    const fetchData = async () => {
-        setLoading(true);
-
-        try {
-            const urlResponse = await apiClient.get(`/api/solved-problems/judgment-results/submission-code/read/${submissionId}`);
-            const codeUrl = urlResponse.data.url;
-            const codeResponse = await apiClient.get(codeUrl);
-            setOriginalCode(codeResponse.data);
-            setCode(codeResponse.data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            setError("Error fetching code. Please check the console for more details.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, [submissionId]);
-
-    const handleEdit = () => {
-        setIsEditing(true);
-    };
-
-    const handleCancel = () => {
-        setCode(originalCode);
-        setIsEditing(false);
-    };
-
-    const handleCodeChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setCode(event.target.value);
-    };
-
-
-    const handleSave = async () => {
-        setLoading(true);
-        try {
-            const putUrlResponse = await apiClient.get(`/api/solved-problems/judgment-results/submission-code/update/${submissionId}`);
-            const s3PutUrl = putUrlResponse.data.url;
-
-            await apiClient.put(s3PutUrl, code, {
-                headers: {
-                    'Content-Type': 'text/plain'
-                }
-            });
-
-            setOriginalCode(code);
-            setIsEditing(false);
-        } catch (error) {
-            console.error('Error saving code:', error);
-            setError("Error saving code. Please check the console for more details.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    if (loading) {
+function CodeArea({ sourceCode, language }: CodeAreaProps) {
+    if (!sourceCode) {
         return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                <CircularProgress />
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <Typography color="error">{error}</Typography>
+            <Paper>
+                <Stack spacing={1}>
+                    <Typography color="text.secondary" sx={{ fontStyle: 'italic', p: 2 }}>
+                        소스 코드가 없습니다
+                    </Typography>
+                </Stack>
+            </Paper>
         );
     }
 
     return (
         <Paper>
-            <Fade in={true} timeout={500}>
-                <Stack spacing={1}>
-                    {!isEditing ? (
-                        <Button variant="outlined" onClick={handleEdit}>코드 수정</Button>
-                    ) : (
-                        <>
-                            <Button variant="outlined" onClick={handleSave}>저장</Button>
-                            <Button variant="outlined" onClick={handleCancel}>취소</Button>
-                        </>
-                    )}
-                    {!isEditing ? (
-                        <SyntaxHighlighter
-                            language={mapLanguageToPrism(language)}
-                            style={oneLight}
-                            showLineNumbers
-                            lineNumberStyle={{ minWidth: '25px', padding: '0 2', textAlign: 'right' }}
-                        >
-                            {code}
-                        </SyntaxHighlighter>
-                    )
-                        : (
-                            <TextField
-                                value={code}
-                                onChange={handleCodeChange}
-                                multiline={true}
-                                sx={{ fontFamily: 'monospace' }}
-                            />
-                        )}
-                </Stack>
-            </Fade>
+            <Stack spacing={1}>
+                <SyntaxHighlighter
+                    language={mapLanguageToPrism(language)}
+                    style={oneLight}
+                    showLineNumbers
+                    lineNumberStyle={{ minWidth: '25px', padding: '0 2', textAlign: 'right' }}
+                >
+                    {sourceCode}
+                </SyntaxHighlighter>
+            </Stack>
         </Paper>
     );
 }

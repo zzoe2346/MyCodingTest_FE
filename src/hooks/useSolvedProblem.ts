@@ -27,12 +27,29 @@ const useSolvedProblem = (filterOptions: FilterOptions) => {
         setDataLoaded(false);
 
         try {
-            let apiPath = '/api/solved-problems';
-            if (options.isTagged) apiPath += `/tags/${options.tagId}`
-            if (options.isFavorite) apiPath += '/favorites';
-            if (options.isReviewed !== null) apiPath += `/review/${options.isReviewed}`;
+            // Build API path according to new spec
+            let apiPath: string;
+            const queryParams = new URLSearchParams();
+
+            queryParams.append('page', page.toString());
+            queryParams.append('size', rowsPerPage.toString());
+            queryParams.append('sort', `${options.field},${options.order}`);
+
+            if (options.isFavorite) {
+                // GET /api/solved-problems/favorite?isFavorite=true
+                apiPath = '/api/solved-problems/favorite';
+                queryParams.append('isFavorite', 'true');
+            } else if (options.isReviewed !== null && options.isReviewed !== undefined) {
+                // GET /api/solved-problems?isReviewed=true/false
+                apiPath = '/api/solved-problems';
+                queryParams.append('isReviewed', options.isReviewed.toString());
+            } else {
+                // GET /api/solved-problems/all
+                apiPath = '/api/solved-problems/all';
+            }
+
             const response = await apiClient.get<PageResponse<SolvedProblemWithReview>>(
-                apiPath + `?page=${page}&size=${rowsPerPage}&sort=${options.field},${options.order}`
+                `${apiPath}?${queryParams.toString()}`
             );
             setRows(response.data.content);
             setCount(response.data.totalElements);
@@ -63,12 +80,13 @@ const useSolvedProblem = (filterOptions: FilterOptions) => {
         fetchData(0, newRowsPerPage);
     };
 
-    const handleFavorite = async (solvedProblemId: number) => {
+    const handleFavorite = async (reviewId: number) => {
         try {
-            await apiClient.put(`/api/reviews/${solvedProblemId}/favorite`);
+            // PUT /api/reviews/{reviewId}/favorite
+            await apiClient.put(`/api/reviews/${reviewId}/favorite`);
             setRows(prevRows =>
                 prevRows.map(row =>
-                    row.solvedProblemId === solvedProblemId ? { ...row, isFavorite: !row.isFavorite } : row
+                    row.reviewId === reviewId ? { ...row, isFavorite: !row.isFavorite } : row
                 )
             );
         } catch (error) {
@@ -93,7 +111,7 @@ const useSolvedProblem = (filterOptions: FilterOptions) => {
         count,
         handleChangePage,
         handleChangeRowsPerPage,
-        handleFavorite, //여기좀
+        handleFavorite,
         handleRequestSort,
         order: options.order,
         orderBy: options.field,

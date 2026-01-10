@@ -85,7 +85,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({ handleRequestSort, order, ord
 
 interface TableBodyProps {
     rows: SolvedProblemWithReview[]
-    handleFavorite: (solvedProblemId: number) => void;
+    handleFavorite: (reviewId: number) => void;
 }
 
 const TableBodyComponent: React.FC<TableBodyProps> = ({ rows, handleFavorite }) => {
@@ -149,11 +149,11 @@ const TableBodyComponent: React.FC<TableBodyProps> = ({ rows, handleFavorite }) 
                     </TableCell>
                     <TableCell>
                         {row.isFavorite ?
-                            <IconButton onClick={() => handleFavorite(row.solvedProblemId)}>
+                            <IconButton onClick={() => handleFavorite(row.reviewId)}>
                                 <BookmarkIcon />
                             </IconButton>
                             :
-                            <IconButton onClick={() => handleFavorite(row.solvedProblemId)}
+                            <IconButton onClick={() => handleFavorite(row.reviewId)}
                                 color="success">
                                 <BookmarkBorderIcon />
                             </IconButton>

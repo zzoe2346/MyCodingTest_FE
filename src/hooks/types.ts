@@ -9,6 +9,7 @@ export interface LoginForm {
     error: string;
 }
 
+// ReviewSummaryResponse 스펙에 맞게 수정
 export interface SolvedProblemWithReview {
     solvedProblemId: number;
     problemNumber: number;
@@ -19,7 +20,6 @@ export interface SolvedProblemWithReview {
     reviewId: number;
     difficultyLevel: number;
     importanceLevel: number;
-    tags: string | null;
     isReviewed: boolean;
     reviewedAt: string;
 }

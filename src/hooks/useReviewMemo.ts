@@ -5,6 +5,7 @@ function useReviewMemo() {
     const [memo, setMemo] = useState("");
     const [originalMemo, setOriginalMemo] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [isAvailable, setIsAvailable] = useState(true); // API 사용 가능 여부
 
     const fetchMemo = useCallback(async (reviewId: number) => {
         setIsLoading(true);
@@ -19,14 +20,23 @@ function useReviewMemo() {
                 setMemo(memoResponse.data);
                 setOriginalMemo(memoResponse.data);
             }
+            setIsAvailable(true);
         } catch (error) {
-            console.error(error);
+            console.warn('메모 API 아직 미구현:', error);
+            setMemo("");
+            setOriginalMemo("");
+            setIsAvailable(false); // API 미구현 표시
         } finally {
             setIsLoading(false);
         }
     }, []);
 
     const saveMemo = useCallback(async (reviewId: number, content: string) => {
+        if (!isAvailable) {
+            console.warn('메모 API 아직 미구현 - 저장 스킵');
+            return;
+        }
+
         setIsLoading(true);
         try {
             const response = await apiClient.get(`/api/reviews/${reviewId}/memo/update`);
@@ -37,13 +47,13 @@ function useReviewMemo() {
                     'Content-Type': 'text/plain'
                 }
             });
-
         } catch (error) {
-            console.error(error)
+            console.warn('메모 저장 API 아직 미구현:', error);
+            setIsAvailable(false);
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [isAvailable]);
 
     const resetMemo = () => {
         setMemo(originalMemo);
@@ -55,6 +65,7 @@ function useReviewMemo() {
         fetchMemo,
         saveMemo,
         resetMemo,
+        isAvailable, // API 사용 가능 여부 반환
     };
 }
 

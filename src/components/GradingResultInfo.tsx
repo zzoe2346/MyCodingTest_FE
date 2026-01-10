@@ -13,14 +13,17 @@ import {
     Typography
 } from '@mui/material';
 import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
-import { JudgmentResult } from "../pages/ReviewPage.tsx";
+import { Judgment } from "../hooks/useJudgmentResult";
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 
-const ResultInfo = ({ result, problemTitle }: { result: JudgmentResult, problemTitle: string }) => {
+const ResultInfo = ({ result, problemTitle }: { result: Judgment, problemTitle: string }) => {
 
     if (!result) {
         return null;
     }
+
+    const meta = result.metaData;
+    const resultText = meta?.resultText || (result.status === 'SUCCESS' ? '맞았습니다!!' : result.status === 'FAIL' ? '틀렸습니다' : '컴파일 에러');
 
     return (
         <>
@@ -54,8 +57,8 @@ const ResultInfo = ({ result, problemTitle }: { result: JudgmentResult, problemT
                         </Link>
                     </Typography>
                     <Chip
-                        label={result.resultText}
-                        color={result.resultText === '맞았습니다!!' ? 'success' : 'error'}
+                        label={resultText}
+                        color={result.status === 'SUCCESS' ? 'success' : 'error'}
                         sx={{
                             fontWeight: 600,
                             borderRadius: '8px',
@@ -93,14 +96,16 @@ const ResultInfo = ({ result, problemTitle }: { result: JudgmentResult, problemT
                         <TableBody>
                             {[
                                 { label: '제출 번호', value: result.submissionId, link: `https://www.acmicpc.net/submit/${result.problemId}/${result.submissionId}` },
-                                { label: '백준 ID', value: result.baekjoonId, link: `https://www.acmicpc.net/user/${result.baekjoonId}` },
+                                ...(meta?.baekjoonId ? [{ label: '백준 ID', value: meta.baekjoonId, link: `https://www.acmicpc.net/user/${meta.baekjoonId}` }] : []),
                                 { label: '문제 번호', value: result.problemId, link: `https://www.acmicpc.net/problem/${result.problemId}` },
-                                { label: '결과', value: result.resultText },
-                                { label: '메모리', value: `${result.memory} KB` },
-                                { label: '시간', value: `${result.time} ms` },
-                                { label: '언어', value: result.language },
-                                { label: '코드 길이', value: `${result.codeLength} B` },
-                                { label: '제출 시간', value: result.submittedAt },
+                                { label: '결과', value: resultText },
+                                { label: '상태', value: result.status },
+                                { label: '플랫폼', value: result.platform },
+                                ...(meta?.memory !== undefined ? [{ label: '메모리', value: `${meta.memory} KB` }] : []),
+                                ...(meta?.time !== undefined ? [{ label: '시간', value: `${meta.time} ms` }] : []),
+                                ...(meta?.language ? [{ label: '언어', value: meta.language }] : []),
+                                ...(meta?.codeLength !== undefined ? [{ label: '코드 길이', value: `${meta.codeLength} B` }] : []),
+                                ...(meta?.submittedAt ? [{ label: '제출 시간', value: new Date(meta.submittedAt).toLocaleString() }] : []),
                             ].map((row, index) => (
                                 <TableRow
                                     key={row.label}
@@ -113,7 +118,7 @@ const ResultInfo = ({ result, problemTitle }: { result: JudgmentResult, problemT
                                         {row.label}
                                     </TableCell>
                                     <TableCell>
-                                        {row.link ? (
+                                        {'link' in row && row.link ? (
                                             <Link
                                                 href={row.link}
                                                 target="_blank"

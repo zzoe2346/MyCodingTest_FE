@@ -1,5 +1,4 @@
-import { Box, Button, Container, Fade, Grid2, Paper, Stack, Typography, useMediaQuery, useTheme, alpha } from "@mui/material";
-import ResultInfo from "../components/GradingResultInfo";
+import { Box, Button, CircularProgress, Container, Fade, Grid2, Paper, Stack, Typography, useMediaQuery, useTheme, alpha } from "@mui/material";
 import ReviewMemo from "../components/ReviewMemo.tsx";
 import { useParams, useSearchParams } from "react-router-dom";
 import NavigateBeforeRoundedIcon from '@mui/icons-material/NavigateBeforeRounded';
@@ -7,23 +6,10 @@ import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
 import CodeArea from "../components/CodeArea.tsx";
 import { ReviewRatingForm } from "../components/ReviewRatingForm.tsx";
 import { ReviewStatusChangeButton } from "../components/ReviewStautsChangeButton.tsx";
+import { useReview } from "../hooks/useReview.ts";
 import { useJudgmentResult } from "../hooks/useJudgmentResult.ts";
 import TagSelection from "../components/TagUpdater.tsx";
-import DeleteButton from "../components/DeleteButton.tsx";
-
-export interface JudgmentResult {
-    submissionId: number;
-    baekjoonId: string;
-    problemId: number;
-    resultText: string;
-    memory: number;
-    time: number;
-    language: string;
-    codeLength: number;
-    submittedAt: string;
-    problemTitle: string;
-    judgmentResultId: number;
-}
+import ResultInfo from "../components/GradingResultInfo.tsx";
 
 const ReviewPage = () => {
     const { reviewId } = useParams();
@@ -33,18 +19,35 @@ const ReviewPage = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery('(max-width:1200px)');
 
+    // Review 데이터 가져오기
+    const {
+        reviewData,
+        content,
+        loading: reviewLoading,
+    } = useReview(reviewId ? parseInt(reviewId) : 0);
+
+    // Judgment 데이터 가져오기 (problemId 사용)
     const {
         judgmentResults,
+        currentJudgment,
         currentResultIndex,
+        loading: judgmentLoading,
         handlePrevious,
         handleNext,
-    } = useJudgmentResult(solvedProblemId);
+    } = useJudgmentResult(reviewData?.problemId);
 
-    if (solvedProblemId === null || reviewId === undefined) {
-        return <Typography>solvedProblemId가 없습니다.</Typography>;
+    if (!reviewId) {
+        return <Typography>reviewId가 없습니다.</Typography>;
     }
 
-    const currentJudgmentResult = judgmentResults[currentResultIndex];
+    if (reviewLoading) {
+        return (
+            <Container maxWidth="xl" sx={{ py: 4, display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress />
+            </Container>
+        );
+    }
+
     const appBarHeight = theme.mixins.toolbar.minHeight;
 
     // Navigation Header Component
@@ -91,14 +94,14 @@ const ReviewPage = () => {
                     backgroundColor: alpha('#6366f1', 0.1),
                 }}>
                     <Typography fontWeight={600} color="primary" sx={{ fontSize: '0.9rem' }}>
-                        {currentResultIndex + 1} / {judgmentResults.length}
+                        {judgmentResults.length > 0 ? `${currentResultIndex + 1} / ${judgmentResults.length}` : '0 / 0'}
                     </Typography>
                 </Box>
 
                 <Button
                     variant="text"
                     onClick={handleNext}
-                    disabled={currentResultIndex === judgmentResults.length - 1}
+                    disabled={currentResultIndex === judgmentResults.length - 1 || judgmentResults.length === 0}
                     endIcon={<NavigateNextRoundedIcon />}
                     sx={{
                         color: 'text.secondary',
@@ -120,22 +123,21 @@ const ReviewPage = () => {
     // Sidebar Component
     const Sidebar = () => (
         <Stack spacing={2}>
-            {/* Status & Delete */}
+            {/* Status */}
             <Box sx={{ display: 'flex', gap: 1 }}>
                 <Box sx={{ flex: 1 }}>
                     <ReviewStatusChangeButton reviewId={parseInt(reviewId)} />
                 </Box>
-                <DeleteButton solvedProblemId={solvedProblemId} />
             </Box>
 
             {/* Rating Form */}
             <ReviewRatingForm isMobile={false} reviewId={parseInt(reviewId)} />
 
             {/* Tags */}
-            <TagSelection solvedProblemId={solvedProblemId} />
+            {solvedProblemId && <TagSelection solvedProblemId={solvedProblemId} />}
 
-            {/* Memo */}
-            <ReviewMemo reviewId={parseInt(reviewId)} />
+            {/* Memo - 읽기 전용 (review.content) */}
+            <ReviewMemo content={content} />
         </Stack>
     );
 
@@ -153,17 +155,25 @@ const ReviewPage = () => {
                             <Fade in={true} timeout={400}>
                                 <Stack spacing={2}>
                                     <NavigationHeader />
-                                    {currentJudgmentResult && (
+                                    {judgmentLoading ? (
+                                        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                                            <CircularProgress />
+                                        </Box>
+                                    ) : currentJudgment ? (
                                         <>
                                             <ResultInfo
                                                 problemTitle={problemTitle}
-                                                result={currentJudgmentResult}
+                                                result={currentJudgment}
                                             />
                                             <CodeArea
-                                                submissionId={currentJudgmentResult.submissionId}
-                                                language={currentJudgmentResult.language}
+                                                sourceCode={currentJudgment.sourceCode}
+                                                language={currentJudgment.metaData?.language || ''}
                                             />
                                         </>
+                                    ) : (
+                                        <Typography color="text.secondary" sx={{ textAlign: 'center', py: 4 }}>
+                                            채점 결과가 없습니다
+                                        </Typography>
                                     )}
                                 </Stack>
                             </Fade>
@@ -192,27 +202,34 @@ const ReviewPage = () => {
                 <Fade in={true} timeout={400}>
                     <Stack spacing={2}>
                         <NavigationHeader />
-                        {currentJudgmentResult && (
+                        {judgmentLoading ? (
+                            <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                                <CircularProgress />
+                            </Box>
+                        ) : currentJudgment ? (
                             <>
                                 <ResultInfo
                                     problemTitle={problemTitle}
-                                    result={currentJudgmentResult}
+                                    result={currentJudgment}
                                 />
                                 <CodeArea
-                                    submissionId={currentJudgmentResult.submissionId}
-                                    language={currentJudgmentResult.language}
+                                    sourceCode={currentJudgment.sourceCode}
+                                    language={currentJudgment.metaData?.language || ''}
                                 />
                             </>
+                        ) : (
+                            <Typography color="text.secondary" sx={{ textAlign: 'center', py: 4 }}>
+                                채점 결과가 없습니다
+                            </Typography>
                         )}
                         <Box sx={{ display: 'flex', gap: 1 }}>
                             <Box sx={{ flex: 1 }}>
                                 <ReviewStatusChangeButton reviewId={parseInt(reviewId)} />
                             </Box>
-                            <DeleteButton solvedProblemId={solvedProblemId} />
                         </Box>
                         <ReviewRatingForm isMobile={true} reviewId={parseInt(reviewId)} />
-                        <TagSelection solvedProblemId={solvedProblemId} />
-                        <ReviewMemo reviewId={parseInt(reviewId)} />
+                        {solvedProblemId && <TagSelection solvedProblemId={solvedProblemId} />}
+                        <ReviewMemo content={content} />
                     </Stack>
                 </Fade>
             )}
