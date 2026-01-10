@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react';
 import apiClient from '../api/apiClient.ts';
-import { demoJudgmentResults } from '../demo/demoData.ts';
-
-// Development mode check
-const isDevelopment = import.meta.env.DEV;
 
 export interface JudgmentResult {
     submissionId: number;
@@ -28,18 +24,6 @@ export const useJudgmentResult = (solvedProblemId: string | undefined | null) =>
     useEffect(() => {
         const fetchJudgmentResults = async () => {
             if (!solvedProblemId) return;
-
-            // Use mock data in development mode
-            if (isDevelopment) {
-                setLoading(true);
-                setTimeout(() => {
-                    const mockResults = demoJudgmentResults[solvedProblemId] || [];
-                    setJudgmentResults(mockResults);
-                    setCurrentResultIndex(0);
-                    setLoading(false);
-                }, 200);
-                return;
-            }
 
             setLoading(true);
             setError(null);

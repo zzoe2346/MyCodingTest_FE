@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import { useCallback, useState } from 'react';
 import apiClient from "../api/apiClient.ts";
 
 function useReviewMemo() {
@@ -9,7 +9,7 @@ function useReviewMemo() {
     const fetchMemo = useCallback(async (reviewId: number) => {
         setIsLoading(true);
         try {
-            const response = await apiClient.get(`/api/solved-problems/reviews/${reviewId}/memo/read`);
+            const response = await apiClient.get(`/api/reviews/${reviewId}/memo/read`);
             const memoUrl = response.data.url;
             if (memoUrl === 'noMemo') {
                 setMemo("");
@@ -29,7 +29,7 @@ function useReviewMemo() {
     const saveMemo = useCallback(async (reviewId: number, content: string) => {
         setIsLoading(true);
         try {
-            const response = await apiClient.get(`/api/solved-problems/reviews/${reviewId}/memo/update`);
+            const response = await apiClient.get(`/api/reviews/${reviewId}/memo/update`);
             const s3PutUrl = response.data.url;
 
             await apiClient.put(s3PutUrl, content, {

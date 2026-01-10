@@ -5,13 +5,13 @@ const Login = () => {
     const [loaded, setLoaded] = useState(false);
 
     const handleGoogleLogin = () => {
-        // window.location.href = 'http://localhost:8080/oauth2/authorization/google';
-        window.location.href = 'https://api.mycodingtest.com/oauth2/authorization/google';
+        window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+        // window.location.href = 'https://api.mycodingtest.com/oauth2/authorization/google';
     };
 
     const handleKakaoLogin = () => {
-        // window.location.href = 'http://localhost:8080/oauth2/authorization/kakao';
-        window.location.href = 'https://api.mycodingtest.com/oauth2/authorization/kakao';
+        window.location.href = 'http://localhost:8080/oauth2/authorization/kakao';
+        // window.location.href = 'https://api.mycodingtest.com/oauth2/authorization/kakao';
     };
 
     useEffect(() => {

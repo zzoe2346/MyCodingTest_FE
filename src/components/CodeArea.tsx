@@ -3,10 +3,6 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import apiClient from "../api/apiClient.ts";
 import { useEffect, useState } from "react";
 import { oneLight } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import { demoCodeSnippets } from "../demo/demoData.ts";
-
-// Development mode check
-const isDevelopment = import.meta.env.DEV;
 
 function mapLanguageToPrism(language: string): string {
     const languageMap: { [key: string]: string } = {
@@ -106,17 +102,6 @@ function CodeArea({ submissionId, language }: CodeAreaProps) {
     const fetchData = async () => {
         setLoading(true);
 
-        // Use mock data in development mode
-        if (isDevelopment) {
-            setTimeout(() => {
-                const mockCode = demoCodeSnippets[submissionId] || "// 코드를 찾을 수 없습니다";
-                setOriginalCode(mockCode);
-                setCode(mockCode);
-                setLoading(false);
-            }, 200);
-            return;
-        }
-
         try {
             const urlResponse = await apiClient.get(`/api/solved-problems/judgment-results/submission-code/read/${submissionId}`);
             const codeUrl = urlResponse.data.url;
@@ -150,14 +135,6 @@ function CodeArea({ submissionId, language }: CodeAreaProps) {
 
 
     const handleSave = async () => {
-        // In development mode, just save locally
-        if (isDevelopment) {
-            setOriginalCode(code);
-            setIsEditing(false);
-            console.log('🚀 Dev mode: Code saved locally');
-            return;
-        }
-
         setLoading(true);
         try {
             const putUrlResponse = await apiClient.get(`/api/solved-problems/judgment-results/submission-code/update/${submissionId}`);
