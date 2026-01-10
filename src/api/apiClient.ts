@@ -1,15 +1,15 @@
 import axios from 'axios';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 axios.defaults.withCredentials = true
 
 const apiClient = axios.create({
     // for DEV
     // baseURL: 'https://localhost:8443',
-    // baseURL: 'http://localhost:8080',
+    baseURL: 'http://localhost:8080',
 
     // for OPERATION
-    baseURL: 'https://api.mycodingtest.com',
+    // baseURL: 'https://api.mycodingtest.com',
 
     withCredentials: true
 });
@@ -25,7 +25,7 @@ apiClient.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response) {
-            const {response} = error;
+            const { response } = error;
 
             if (response.status === 401) {
                 console.log('not login');
