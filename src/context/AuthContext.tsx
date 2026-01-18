@@ -37,7 +37,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const checkAuth = async () => {
         setLoading(true);
         try {
-            const userResponse = await apiClient.get<User>('/api/me');
+            const userResponse = await apiClient.get<User>('/api/me', { timeout: 1000 });
             if (userResponse.status === 200) {
                 console.log(userResponse.data);
                 setUser(userResponse.data);
