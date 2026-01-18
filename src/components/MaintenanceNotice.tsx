@@ -1,18 +1,16 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import BuildRoundedIcon from '@mui/icons-material/BuildRounded';
-import { useState } from "react";
 
-const MaintenanceNotice = () => {
-    const [open, setOpen] = useState(true);
+interface MaintenanceNoticeProps {
+    open: boolean;
+    onClose: () => void;
+}
 
-    const handleClose = () => {
-        setOpen(false);
-    };
-
+const MaintenanceNotice = ({ open, onClose }: MaintenanceNoticeProps) => {
     return (
         <Dialog
             open={open}
-            onClose={handleClose}
+            onClose={onClose}
             aria-labelledby="maintenance-dialog-title"
             aria-describedby="maintenance-dialog-description"
         >
@@ -27,7 +25,7 @@ const MaintenanceNotice = () => {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} autoFocus>
+                <Button onClick={onClose} autoFocus>
                     닫기
                 </Button>
             </DialogActions>

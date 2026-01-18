@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Box, Divider, Fade, Paper, Stack, Typography } from '@mui/material';
+import MaintenanceNotice from "./MaintenanceNotice.tsx";
 
 const Login = () => {
     const [loaded, setLoaded] = useState(false);
+    const [maintenanceOpen, setMaintenanceOpen] = useState(false);
 
     const handleGoogleLogin = () => {
-        window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+        setMaintenanceOpen(true);
+        // window.location.href = 'http://localhost:8080/oauth2/authorization/google';
         // window.location.href = 'https://api.mycodingtest.com/oauth2/authorization/google';
     };
 
     const handleKakaoLogin = () => {
-        window.location.href = 'http://localhost:8080/oauth2/authorization/kakao';
+        setMaintenanceOpen(true);
+        // window.location.href = 'http://localhost:8080/oauth2/authorization/kakao';
         // window.location.href = 'https://api.mycodingtest.com/oauth2/authorization/kakao';
     };
 
@@ -19,6 +23,7 @@ const Login = () => {
     }, []);
 
     return (
+        <>
         <Fade in={loaded} timeout={500}>
             <Paper
                 elevation={0}
@@ -134,6 +139,8 @@ const Login = () => {
                 </Stack>
             </Paper>
         </Fade>
+        <MaintenanceNotice open={maintenanceOpen} onClose={() => setMaintenanceOpen(false)} />
+        </>
     );
 };
 
