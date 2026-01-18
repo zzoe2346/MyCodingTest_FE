@@ -27,6 +27,8 @@ export interface Judgment {
     sourceCode: string;
 }
 
+export type JudgmentResult = Judgment;
+
 export const useJudgmentResult = (problemId: number | undefined | null) => {
     const [judgmentResults, setJudgmentResults] = useState<Judgment[]>([]);
     const [currentResultIndex, setCurrentResultIndex] = useState<number>(0);

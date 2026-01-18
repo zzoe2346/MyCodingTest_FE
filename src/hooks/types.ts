@@ -22,6 +22,7 @@ export interface SolvedProblemWithReview {
     importanceLevel: number;
     isReviewed: boolean;
     reviewedAt: string;
+    tags?: string;
 }
 
 export interface PageResponse<T> {

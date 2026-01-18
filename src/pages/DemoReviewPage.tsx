@@ -42,38 +42,35 @@ const DemoReviewRatingForm = ({ reviewId }: { reviewId: number }) => {
 };
 
 // Demo version of ResultInfo
+// Demo version of ResultInfo
+import { JudgmentResult } from "../hooks/useJudgmentResult";
+
 const DemoResultInfo = ({
     problemTitle,
     result
 }: {
     problemTitle: string;
-    result: {
-        resultText: string;
-        memory: number;
-        time: number;
-        language: string;
-        codeLength: number;
-        submittedAt: string;
-        problemId: number;
-    }
+    result: JudgmentResult
 }) => {
+    const { metaData } = result;
     return (
         <Paper sx={{ p: 2 }}>
             <Stack spacing={1}>
+                {/* problemId exists on root of Judgment, but let's check if it's there. Yes it is. */}
                 <Typography variant="h6">
                     📊 {result.problemId}번: {problemTitle}
                 </Typography>
                 <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
                     <Chip
-                        label={result.resultText}
-                        color={result.resultText === '맞았습니다!!' ? 'success' : 'error'}
+                        label={metaData.resultText}
+                        color={metaData.resultText === '맞았습니다!!' ? 'success' : 'error'}
                         size="small"
                     />
-                    <Typography variant="body2">메모리: {result.memory} KB</Typography>
-                    <Typography variant="body2">시간: {result.time} ms</Typography>
-                    <Typography variant="body2">언어: {result.language}</Typography>
-                    <Typography variant="body2">코드 길이: {result.codeLength} B</Typography>
-                    <Typography variant="body2">제출 시간: {new Date(result.submittedAt).toLocaleString()}</Typography>
+                    <Typography variant="body2">메모리: {metaData.memory} KB</Typography>
+                    <Typography variant="body2">시간: {metaData.time} ms</Typography>
+                    <Typography variant="body2">언어: {metaData.language}</Typography>
+                    <Typography variant="body2">코드 길이: {metaData.codeLength} B</Typography>
+                    <Typography variant="body2">제출 시간: {new Date(metaData.submittedAt).toLocaleString()}</Typography>
                 </Box>
             </Stack>
         </Paper>
@@ -198,7 +195,7 @@ const DemoReviewPage = () => {
                                         />
                                         <DemoCodeArea
                                             submissionId={currentJudgmentResult.submissionId}
-                                            language={currentJudgmentResult.language}
+                                            language={currentJudgmentResult.metaData.language}
                                         />
                                     </>
                                 )}
@@ -261,7 +258,7 @@ const DemoReviewPage = () => {
                             />
                             <DemoCodeArea
                                 submissionId={currentJudgmentResult.submissionId}
-                                language={currentJudgmentResult.language}
+                                language={currentJudgmentResult.metaData.language}
                             />
                         </>
                     )}
