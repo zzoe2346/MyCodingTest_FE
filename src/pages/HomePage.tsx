@@ -97,10 +97,14 @@ const steps = [
     },
 ];
 
+import MaintenanceNotice from "../components/MaintenanceNotice.tsx";
+
 const HomePage = () => {
     return (
-        <Fade in={true} timeout={500}>
-            <Container maxWidth="xl" sx={{ py: 2 }}>
+        <>
+            <MaintenanceNotice />
+            <Fade in={true} timeout={500}>
+                <Container maxWidth="xl" sx={{ py: 2 }}>
                 {/* Hero Section */}
                 <Box
                     sx={{
@@ -549,6 +553,7 @@ const HomePage = () => {
                 </Paper>
             </Container>
         </Fade>
+        </>
     );
 }
 
