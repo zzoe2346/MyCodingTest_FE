@@ -28,21 +28,22 @@ import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
 
 // Mock announcements data (최신 5개)
+// Mock announcements data (최신 5개)
 const announcements = [
-    { id: 1, title: "서비스 정식 오픈!", date: "2025.01.25", isNew: true },
-    { id: 2, title: "크롬 익스텐션 등록 완료", date: "2025.01.25", isNew: true },
-    { id: 3, title: "핵심 기능 정상 작동 확인", date: "2025.01.31", isNew: false },
+    { id: 1, title: "로그인 UX 개선 및 점검 알림 기능", date: "2026.01.18", isNew: true },
+    { id: 2, title: "데모 모드 오픈 & UI 디자인 개편", date: "2026.01.09", isNew: false },
+    { id: 3, title: "서비스 재시작 준비(프론트, 서버 모두 재정비 진행 중...)", date: "2026.01.08", isNew: false },
     { id: 4, title: "UI 개선 및 스크린샷 GIF 추가", date: "2025.02.06", isNew: false },
-    { id: 5, title: "데모 모드 추가", date: "2025.01.09", isNew: true },
+    { id: 5, title: "서비스 정식 오픈!", date: "2025.01.25", isNew: false },
 ];
 
 // Mock updates data (최신 5개)
 const updates = [
-    { id: 1, version: "v1.3.0", title: "데모 모드 및 UI 현대화", date: "2025.01.09" },
-    { id: 2, version: "v1.2.0", title: "결과 색상 구분 및 GIF 추가", date: "2025.02.06" },
-    { id: 3, version: "v1.1.0", title: "공지 페이지 완성", date: "2025.01.31" },
-    { id: 4, version: "v1.0.0", title: "크롬 익스텐션 등록", date: "2025.01.25" },
-    { id: 5, version: "v0.9.0", title: "베타 서비스 시작", date: "2025.01.20" },
+    { id: 1, version: "v2.1.0", title: "로그인 UX 및 알림 개선", date: "2026.01.18" },
+    { id: 2, version: "v2.0.1", title: "안정화 및 구조 개선", date: "2026.01.10" },
+    { id: 3, version: "v2.0.0", title: "데모 모드 및 UI 리뉴얼", date: "2026.01.09" },
+    { id: 4, version: "v1.1.0", title: "결과 색상 구분 및 GIF 추가", date: "2025.02.06" },
+    { id: 5, version: "v1.0.0", title: "크롬 익스텐션 등록", date: "2025.01.25" },
 ];
 
 // Features data
