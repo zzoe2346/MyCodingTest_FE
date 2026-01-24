@@ -118,6 +118,10 @@ export const useReview = (reviewId: number) => {
         await updateReview({ content: newContent });
     };
 
+    const updateCode = async (newCode: string) => {
+        await updateReview({ code: newCode });
+    };
+
     const updateFavorite = async (favorite: boolean) => {
         await updateReview({ isFavorite: favorite });
     };
@@ -174,6 +178,7 @@ export const useReview = (reviewId: number) => {
         isFavorite,
         updateFavorite,
         updateMemo,
+        updateCode,
         updateStatus,
         handleSave,
         reviewed,

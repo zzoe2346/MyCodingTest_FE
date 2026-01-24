@@ -25,8 +25,10 @@ const ReviewPage = () => {
     const {
         reviewData,
         content,
+        sourceCode,
         loading: reviewLoading,
         updateMemo,
+        updateCode,
         isFavorite,
         updateFavorite,
         updateStatus,
@@ -186,21 +188,21 @@ const ReviewPage = () => {
                                         <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
                                             <CircularProgress />
                                         </Box>
-                                    ) : currentJudgment ? (
+                                    ) : (
                                         <>
-                                            <ResultInfo
-                                                problemTitle={problemTitle}
-                                                result={currentJudgment}
-                                            />
+                                            {currentJudgment && (
+                                                <ResultInfo
+                                                    problemTitle={problemTitle}
+                                                    result={currentJudgment}
+                                                />
+                                            )}
                                             <CodeArea
-                                                sourceCode={currentJudgment.sourceCode}
-                                                language={currentJudgment.metaData?.language || ''}
+                                                originalCode={currentJudgment?.sourceCode}
+                                                reviewCode={sourceCode}
+                                                language={currentJudgment?.metaData?.language || ''}
+                                                onUpdate={updateCode}
                                             />
                                         </>
-                                    ) : (
-                                        <Typography color="text.secondary" sx={{ textAlign: 'center', py: 4 }}>
-                                            채점 결과가 없습니다
-                                        </Typography>
                                     )}
                                 </Stack>
                             </Fade>
@@ -233,21 +235,21 @@ const ReviewPage = () => {
                             <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
                                 <CircularProgress />
                             </Box>
-                        ) : currentJudgment ? (
+                        ) : (
                             <>
-                                <ResultInfo
-                                    problemTitle={problemTitle}
-                                    result={currentJudgment}
-                                />
+                                {currentJudgment && (
+                                    <ResultInfo
+                                        problemTitle={problemTitle}
+                                        result={currentJudgment}
+                                    />
+                                )}
                                 <CodeArea
-                                    sourceCode={currentJudgment.sourceCode}
-                                    language={currentJudgment.metaData?.language || ''}
+                                    originalCode={currentJudgment?.sourceCode}
+                                    reviewCode={sourceCode}
+                                    language={currentJudgment?.metaData?.language || ''}
+                                    onUpdate={updateCode}
                                 />
                             </>
-                        ) : (
-                            <Typography color="text.secondary" sx={{ textAlign: 'center', py: 4 }}>
-                                채점 결과가 없습니다
-                            </Typography>
                         )}
                         <ReviewStatusChangeButton 
                             reviewed={reviewed ?? false}
