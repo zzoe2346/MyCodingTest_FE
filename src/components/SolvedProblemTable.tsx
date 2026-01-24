@@ -52,6 +52,9 @@ interface TableHeaderProps {
 }
 
 const TableHeader: React.FC<TableHeaderProps> = ({ handleRequestSort, order, orderBy }) => {
+    // const createSortHandler = (property: keyof SolvedProblemWithReview | string) => () => {
+    //     handleRequestSort(property);
+    // };
     return (
         <TableHead>
             <TableRow>
@@ -108,7 +111,7 @@ const TableBodyComponent: React.FC<TableBodyProps> = ({ rows, handleFavorite }) 
                         {new Date(row.recentSubmitAt).toLocaleDateString()}
                     </TableCell>
                     <TableCell>
-                        <Typography variant="body2" fontWeight={'bold'} color={row.recentResultText === '맞았습니다!!' ? 'success' : 'error'}>
+                        <Typography variant="body2" fontWeight={'bold'} color={row.recentResultText === 'SUCCESS' ? 'success' : 'error'}>
                             {row.recentResultText}
                         </Typography>
                     </TableCell>
