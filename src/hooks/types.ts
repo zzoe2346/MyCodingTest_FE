@@ -22,34 +22,45 @@ export interface SolvedProblemWithReview {
     importanceLevel: number;
     isReviewed: boolean;
     reviewedAt: string;
+    status: 'TO_DO' | 'IN_PROGRESS' | 'COMPLETED' | 'MASTERED';
     tags?: string;
 }
 
 export interface PageResponse<T> {
     totalElements: number;
     totalPages: number;
-    first: boolean;
-    last: boolean;
-    size: number;
     content: T[];
-    number: number;
-    sort: {
-        empty: boolean;
-        sorted: boolean;
-        unsorted: boolean;
-    };
-    numberOfElements: number;
-    pageable: {
-        offset: number;
-        sort: {
-            empty: boolean;
-            sorted: boolean;
-            unsorted: boolean;
-        };
-        paged: boolean;
-        pageNumber: number;
-        pageSize: number;
-        unpaged: boolean;
-    };
-    empty: boolean;
+    pageNumber: number;
+    pageSize: number;
+    isLast: boolean;
 }
+
+// 기존 페이지네이션용 인터페이스. 추후 참고할 것.
+// export interface PageResponse<T> {
+//     totalElements: number;
+//     totalPages: number;
+//     first: boolean;
+//     last: boolean;
+//     size: number;
+//     content: T[];
+//     number: number;
+//     sort: {
+//         empty: boolean;
+//         sorted: boolean;
+//         unsorted: boolean;
+//     };
+//     numberOfElements: number;
+//     pageable: {
+//         offset: number;
+//         sort: {
+//             empty: boolean;
+//             sorted: boolean;
+//             unsorted: boolean;
+//         };
+//         paged: boolean;
+//         pageNumber: number;
+//         pageSize: number;
+//         unpaged: boolean;
+//     };
+//     empty: boolean;
+// }
