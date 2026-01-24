@@ -210,11 +210,11 @@ function CodeArea({ originalCode, reviewCode, language, onUpdate }: CodeAreaProp
                         
                         {/* Edit Button - Tag Style (only for review mode) */}
                         {viewMode === 'review' && onUpdate && (
-                            <Box sx={{ px: 2, pb: 2 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', px: 2, pb: 2}}>
                                 <Button variant="outlined" size="small" onClick={() => setIsEditing(true)}>
                                     코드 수정
                                 </Button>
-                            </Box>
+                            </Box>                   
                         )}
                     </>
                 )}
