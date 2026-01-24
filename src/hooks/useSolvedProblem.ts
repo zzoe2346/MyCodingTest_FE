@@ -27,26 +27,29 @@ const useSolvedProblem = (filterOptions: FilterOptions) => {
         setDataLoaded(false);
 
         try {
-            // Build API path according to new spec
             let apiPath: string;
             const queryParams = new URLSearchParams();
 
             queryParams.append('page', page.toString());
             queryParams.append('size', rowsPerPage.toString());
-            queryParams.append('sort', `${options.field},${options.order}`);
+            // Keeping sort parameter as it is often supported by default in Spring Pageable even if not in explicit openapi params for business logic
+            // queryParams.append('sort', `${options.field},${options.order}`);
 
-            if (options.isFavorite) {
-                // GET /api/solved-problems/favorite?isFavorite=true
-                apiPath = '/api/solved-problems/favorite';
-                queryParams.append('isFavorite', 'true');
-            } else if (options.isReviewed !== null && options.isReviewed !== undefined) {
-                // GET /api/solved-problems?isReviewed=true/false
-                apiPath = '/api/solved-problems';
-                queryParams.append('isReviewed', options.isReviewed.toString());
+            if (options.isReviewed === false) {
+                // Review Waiting -> filter=TO_DO
+                apiPath = '/api/reviews';
+                queryParams.append('filter', 'TO_DO');
+            } else if (options.isReviewed === true) {
+                // Review Completed -> filter=COMPLETED
+                apiPath = '/api/reviews';
+                queryParams.append('filter', 'COMPLETED');
             } else {
-                // GET /api/solved-problems/all
-                apiPath = '/api/solved-problems/all';
+                // All Solved Problems -> /api/reviews/all
+                apiPath = '/api/reviews/all';
             }
+
+            // Note: isFavorite usage is not explicitly supported in the new fetch API spec provided. 
+            // We focus on the 3 main pages requested.
 
             const response = await apiClient.get<PageResponse<SolvedProblemWithReview>>(
                 `${apiPath}?${queryParams.toString()}`
