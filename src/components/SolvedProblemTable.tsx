@@ -75,15 +75,11 @@ const statusConfig = {
 };
 
 interface TableHeaderProps {
-    handleRequestSort: (property: keyof SolvedProblemWithReview | string) => void;
     order: Order;
     orderBy: string;
 }
 
-const TableHeader: React.FC<TableHeaderProps> = ({ handleRequestSort, order, orderBy }) => {
-    // const createSortHandler = (property: keyof SolvedProblemWithReview | string) => () => {
-    //     handleRequestSort(property);
-    // };
+const TableHeader: React.FC<TableHeaderProps> = ({ order, orderBy }) => {
     return (
         <TableHead>
             <TableRow>
@@ -204,7 +200,6 @@ const SolvedProblemTable = ({ isReviewed, isFavorite, initSortField, isTagged, t
         handleChangePage,
         handleChangeRowsPerPage,
         handleFavorite,
-        handleRequestSort,
         order,
         orderBy,
         dataLoaded, // dataLoaded 상태 사용
@@ -220,7 +215,6 @@ const SolvedProblemTable = ({ isReviewed, isFavorite, initSortField, isTagged, t
                 }}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHeader
-                        handleRequestSort={handleRequestSort}
                         order={order}
                         orderBy={orderBy}
                     />
