@@ -1,6 +1,6 @@
 import {
     Box,
-    Button,
+    Chip,
     IconButton,
     Link,
     Paper,
@@ -12,7 +12,8 @@ import {
     TableHead,
     TablePagination,
     TableRow,
-    TableSortLabel, Typography
+    Typography,
+    alpha
 } from '@mui/material';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -41,9 +42,37 @@ const headCells: HeadCell[] = [
     { id: 'recentResultText', label: '최근 결과' },
     { id: 'difficultyLevel', label: '체감 난이도' },
     { id: 'importanceLevel', label: '재복습 필요도' },
-    { id: 'reviewedAt', label: '복습' },
+    { id: 'status', label: '상태' },
     { id: 'isFavorite', label: '북마크', disableSorting: true },
 ];
+
+// Status styling configuration
+const statusConfig = {
+    TO_DO: {
+        label: '복습 대기',
+        backgroundColor: alpha('#78909c', 0.15),
+        color: '#455a64',
+        borderColor: '#78909c',
+    },
+    IN_PROGRESS: {
+        label: '복습 중',
+        backgroundColor: alpha('#2196f3', 0.15),
+        color: '#1565c0',
+        borderColor: '#2196f3',
+    },
+    COMPLETED: {
+        label: '복습 완료',
+        backgroundColor: alpha('#4caf50', 0.15),
+        color: '#2e7d32',
+        borderColor: '#4caf50',
+    },
+    MASTERED: {
+        label: '완벽히 이해',
+        backgroundColor: alpha('#9c27b0', 0.15),
+        color: '#6a1b9a',
+        borderColor: '#9c27b0',
+    },
+};
 
 interface TableHeaderProps {
     handleRequestSort: (property: keyof SolvedProblemWithReview | string) => void;
@@ -94,76 +123,74 @@ interface TableBodyProps {
 const TableBodyComponent: React.FC<TableBodyProps> = ({ rows, handleFavorite }) => {
     return (
         <TableBody sx={{ whiteSpace: 'nowrap' }}>
-            {rows.map((row) => (
-                <TableRow key={row.solvedProblemId}>
-                    <TableCell component="th" scope="row" width='auto'>
-                        {row.problemNumber}
-                    </TableCell>
-                    <TableCell width='auto'>
-                        <Link
-                            underline='none'
-                            href={`/review/${row.reviewId}?problemTitle=${row.problemTitle}&sp=${row.solvedProblemId}`}
-                        >
-                            {row.problemTitle}
-                        </Link>
-                    </TableCell>
-                    <TableCell>
-                        {new Date(row.recentSubmitAt).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                        <Typography variant="body2" fontWeight={'bold'} color={row.recentResultText === 'SUCCESS' ? 'success' : 'error'}>
-                            {row.recentResultText}
-                        </Typography>
-                    </TableCell>
-                    <TableCell>
-                        <Rating name="half-rating-read" value={row.difficultyLevel} size="small" readOnly />
-                    </TableCell>
-                    <TableCell>
-                        <Rating name="half-rating-read" value={row.importanceLevel} size="small" readOnly />
-                    </TableCell>
-                    <TableCell>
-                        <Link
-                            href={`/review/${row.reviewId}?problemTitle=${row.problemTitle}&sp=${row.solvedProblemId}`}>
-                            <Button>
-                                {row.isReviewed ? (
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            alignItems: "center",
-                                            margin: "0px"
-                                        }}
-                                    >
-                                        <Typography variant="body2">다시보기</Typography>
-                                        <Typography
-                                            variant="caption"
-                                            sx={{
-                                                marginTop: "0px"
-                                            }}
-                                        >
-                                            {new Date(row.reviewedAt).toLocaleDateString()}
-                                        </Typography>
-                                    </Box>
-                                ) : (
-                                    "복습하기"
-                                )}
-                            </Button>
-                        </Link>
-                    </TableCell>
-                    <TableCell>
-                        {row.isFavorite ?
-                            <IconButton onClick={() => handleFavorite(row.reviewId)}>
-                                <BookmarkIcon />
-                            </IconButton>
-                            :
-                            <IconButton onClick={() => handleFavorite(row.reviewId)}
-                                color="success">
-                                <BookmarkBorderIcon />
-                            </IconButton>
-                        }
-                    </TableCell>
-                </TableRow>
-            ))}
+            {rows.map((row) => {
+                const status = row.status || 'TO_DO';
+                const statusStyle = statusConfig[status];
+                
+                return (
+                    <TableRow key={row.solvedProblemId}>
+                        <TableCell component="th" scope="row" width='auto'>
+                            {row.problemNumber}
+                        </TableCell>
+                        <TableCell width='auto'>
+                            <Link
+                                underline='none'
+                                href={`/review/${row.reviewId}?problemTitle=${row.problemTitle}&sp=${row.solvedProblemId}`}
+                            >
+                                {row.problemTitle}
+                            </Link>
+                        </TableCell>
+                        <TableCell>
+                            {new Date(row.recentSubmitAt).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>
+                            <Typography variant="body2" fontWeight={'bold'} color={row.recentResultText === 'SUCCESS' ? 'success' : 'error'}>
+                                {row.recentResultText}
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Rating name="half-rating-read" value={row.difficultyLevel} size="small" readOnly />
+                        </TableCell>
+                        <TableCell>
+                            <Rating name="half-rating-read" value={row.importanceLevel} size="small" readOnly />
+                        </TableCell>
+                        <TableCell>
+                            <Link
+                                href={`/review/${row.reviewId}?problemTitle=${row.problemTitle}&sp=${row.solvedProblemId}`}
+                                underline="none"
+                            >
+                                <Chip
+                                    label={statusStyle.label}
+                                    size="small"
+                                    sx={{
+                                        backgroundColor: statusStyle.backgroundColor,
+                                        color: statusStyle.color,
+                                        border: `1px solid ${statusStyle.borderColor}`,
+                                        fontWeight: 600,
+                                        fontSize: '0.75rem',
+                                        cursor: 'pointer',
+                                        '&:hover': {
+                                            backgroundColor: alpha(statusStyle.borderColor, 0.25),
+                                        },
+                                    }}
+                                />
+                            </Link>
+                        </TableCell>
+                        <TableCell>
+                            {row.isFavorite ?
+                                <IconButton onClick={() => handleFavorite(row.reviewId)}>
+                                    <BookmarkIcon />
+                                </IconButton>
+                                :
+                                <IconButton onClick={() => handleFavorite(row.reviewId)}
+                                    color="success">
+                                    <BookmarkBorderIcon />
+                                </IconButton>
+                            }
+                        </TableCell>
+                    </TableRow>
+                );
+            })}
         </TableBody>
     );
 };

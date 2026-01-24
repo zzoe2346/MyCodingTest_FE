@@ -7,7 +7,7 @@ const ReviewClearSolvedProblemPage = () => {
             <Stack justifyContent='center' spacing={1}>
                 <Typography variant="h6"> 🔎 복습 완료 문제 모음 </Typography>
                 <Divider></Divider>
-                <SolvedProblemTable isReviewed={true} isFavorite={false} initSortField={"review.reviewedAt"}/>
+                <SolvedProblemTable isReviewed={true} isFavorite={false} initSortField={"reviewedAt"}/>
             </Stack>
         </Container>
     );
