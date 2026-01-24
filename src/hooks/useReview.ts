@@ -5,26 +5,34 @@ import { formatDate } from "../util/DateFormatter.ts";
 
 // 새 API 응답 스펙
 interface ReviewResponse {
-    id: number;
-    createdAt: string;
-    updatedAt: string;
-    problemId: number;
-    userId: number;
-    content: string;          // 메모 내용
-    reviewed: boolean;
     difficultyLevel: number;
     importanceLevel: number;
-    sourceCode: string;       // 소스 코드
+    status: 'TO_DO' | 'IN_PROGRESS' | 'COMPLETED' | 'MASTERED';
     reviewedAt: string;
-    status: 'TO_DO' | 'IN_PROGRESS' | 'DONE';
-    favorited: boolean;
-    recentSubmitAt: string;
-    recentResult: string;
+    id: number;
+    problemId: number;
+    content: string;
+    sourceCode: string;
+    reviewed: boolean; 
 }
 
-interface ReviewRecentStatusResponse {
-    reviewed: boolean;
-    reviewedAt: string;
+interface UpdateReviewRequest {
+    isFavorite?: boolean;
+    difficultyLevel?: number | null;
+    importanceLevel?: number | null;
+    code?: string;
+    content?: string;
+    status?: 'TO_DO' | 'IN_PROGRESS' | 'COMPLETED' | 'MASTERED';
+}
+
+interface UpdatedReviewResponse {
+    isFavorite: boolean;
+    difficultyLevel: number;
+    importanceLevel: number;
+    code: string;
+    content: string;
+    status: 'TO_DO' | 'IN_PROGRESS' | 'COMPLETED' | 'MASTERED';
+    reviewedAt: string; 
 }
 
 export const useReview = (reviewId: number) => {
@@ -38,37 +46,44 @@ export const useReview = (reviewId: number) => {
     const [loading, setLoading] = useState<boolean>(true);
     const { unreviewedCount, setUnreviewedCount } = UserAuth();
 
+    const updateReview = async (data: UpdateReviewRequest) => {
+        try {
+            // PUT /api/reviews/{reviewId}
+            const response = await apiClient.put<UpdatedReviewResponse>(`/api/reviews/${reviewId}`, data);
+            
+            // Update local state based on response or request
+            
+            if (data.difficultyLevel !== undefined) setDifficulty(data.difficultyLevel);
+            if (data.importanceLevel !== undefined) setImportance(data.importanceLevel);
+            
+            if (data.status === 'COMPLETED' || data.status === 'MASTERED') {
+                 setReviewed(true);
+                 setReviewedAt(formatDate(new Date())); 
+            }
+            
+            const responseData = response.data;
+            if (responseData.status === 'COMPLETED' || responseData.status === 'MASTERED') {
+                 setReviewed(true);
+            }
+            if (responseData.difficultyLevel) setDifficulty(responseData.difficultyLevel);
+            if (responseData.importanceLevel) setImportance(responseData.importanceLevel);
+
+        } catch (error) {
+            console.error('Error updating review:', error);
+        }
+    }
+
     const handleStatusChange = () => {
-        handleStatusSave();
+        updateReview({ status: 'COMPLETED' }).then(() => {
+             setUnreviewedCount(unreviewedCount - 1);
+        });
     };
 
     const handleSave = async (difficultyValue: number | null, importanceValue: number | null) => {
-        try {
-            // PUT /api/reviews/{reviewId}/levels
-            await apiClient.put(`/api/reviews/${reviewId}/levels`, {
-                difficultyLevel: difficultyValue,
-                importanceLevel: importanceValue,
-            });
-            setDifficulty(difficultyValue);
-            setImportance(importanceValue);
-        } catch (error) {
-            console.error('Error updating data:', error);
-        }
-    };
-
-    const handleStatusSave = async () => {
-        try {
-            // PUT /api/reviews/{reviewId}/status
-            const response = await apiClient.put<ReviewRecentStatusResponse>(
-                `/api/reviews/${reviewId}/status`
-            );
-            const { reviewedAt } = response.data;
-            setReviewedAt(formatDate(new Date(reviewedAt)));
-            setReviewed(true);
-            setUnreviewedCount(unreviewedCount - 1);
-        } catch (error) {
-            console.error('Error updating data:', error);
-        }
+         await updateReview({
+             difficultyLevel: difficultyValue,
+             importanceLevel: importanceValue
+         });
     };
 
     const fetchData = async () => {
@@ -81,7 +96,10 @@ export const useReview = (reviewId: number) => {
             setReviewData(data);
             setDifficulty(data.difficultyLevel);
             setImportance(data.importanceLevel);
-            setReviewed(data.reviewed);
+            
+            const isReviewed = data.status === 'COMPLETED' || data.status === 'MASTERED';
+            setReviewed(isReviewed);
+            
             setContent(data.content || "");
             setSourceCode(data.sourceCode || "");
 
