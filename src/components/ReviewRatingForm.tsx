@@ -1,35 +1,25 @@
 import { Paper, Rating, Stack, Typography, alpha } from "@mui/material";
-import { useReview } from "../hooks/useReview.ts";
 import { SyntheticEvent } from "react";
 import { useSnackbar } from "notistack";
 
 interface ReviewRatingFormProps {
-    reviewId: number;
     isMobile: boolean;
+    difficulty: number | null;
+    importance: number | null;
+    onSave: (difficulty: number | null, importance: number | null) => void;
 }
 
-export const ReviewRatingForm = ({ reviewId, isMobile }: ReviewRatingFormProps) => {
-    const {
-        difficulty,
-        importance,
-        setDifficulty,
-        setImportance,
-        handleSave,
-    } = useReview(reviewId);
+export const ReviewRatingForm = ({ isMobile, difficulty, importance, onSave }: ReviewRatingFormProps) => {
     const { enqueueSnackbar } = useSnackbar()
 
-
     const handleDifficultyChange = (_event: SyntheticEvent<Element, Event>, newValue: number | null) => {
-        setDifficulty(newValue);
-        handleSave(newValue, importance);
+        onSave(newValue, importance);
         enqueueSnackbar('체감 난이도 저장 완료!', { variant: 'success' });
     };
 
     const handleImportanceChange = (_event: SyntheticEvent<Element, Event>, newValue: number | null) => {
-        setImportance(newValue);
-        handleSave(difficulty, newValue);
+        onSave(difficulty, newValue);
         enqueueSnackbar('재복습 필요도 저장 완료!', { variant: 'success' });
-
     };
 
     const RatingCard = ({

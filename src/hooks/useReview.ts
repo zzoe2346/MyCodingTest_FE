@@ -14,6 +14,7 @@ interface ReviewResponse {
     content: string;
     sourceCode: string;
     reviewed: boolean; 
+    isFavorite: boolean;
 }
 
 interface UpdateReviewRequest {
@@ -39,6 +40,7 @@ export const useReview = (reviewId: number) => {
     const [reviewData, setReviewData] = useState<ReviewResponse | null>(null);
     const [difficulty, setDifficulty] = useState<number | null>(null);
     const [importance, setImportance] = useState<number | null>(null);
+    const [isFavorite, setIsFavorite] = useState<boolean>(false);
     const [reviewed, setReviewed] = useState<boolean | null>(null);
     const [reviewedAt, setReviewedAt] = useState<string | null>(null);
     const [content, setContent] = useState<string>("");          // 메모
@@ -51,32 +53,73 @@ export const useReview = (reviewId: number) => {
             // PUT /api/reviews/{reviewId}
             const response = await apiClient.put<UpdatedReviewResponse>(`/api/reviews/${reviewId}`, data);
             
-            // Update local state based on response or request
-            
+            const responseData = response.data;
+
+            // Update local state selectively
             if (data.difficultyLevel !== undefined) setDifficulty(data.difficultyLevel);
             if (data.importanceLevel !== undefined) setImportance(data.importanceLevel);
-            
-            if (data.status === 'COMPLETED' || data.status === 'MASTERED') {
-                 setReviewed(true);
-                 setReviewedAt(formatDate(new Date())); 
+            if (data.isFavorite !== undefined) setIsFavorite(data.isFavorite);
+            if (data.content !== undefined) setContent(data.content);
+            if (data.code !== undefined) setSourceCode(data.code);
+
+            // Special logic for status
+            if (data.status) {
+                 const isReviewed = data.status === 'COMPLETED' || data.status === 'MASTERED';
+                 setReviewed(isReviewed);
             }
             
-            const responseData = response.data;
-            if (responseData.status === 'COMPLETED' || responseData.status === 'MASTERED') {
-                 setReviewed(true);
+            // Sync with response if available
+            if (responseData.status) {
+                const isReviewed = responseData.status === 'COMPLETED' || responseData.status === 'MASTERED';
+                setReviewed(isReviewed);
             }
             if (responseData.difficultyLevel) setDifficulty(responseData.difficultyLevel);
             if (responseData.importanceLevel) setImportance(responseData.importanceLevel);
+            if (responseData.isFavorite !== undefined) setIsFavorite(responseData.isFavorite);
+            if (responseData.reviewedAt) setReviewedAt(formatDate(new Date(responseData.reviewedAt)));
+
+            // Update reviewData to reflect changes in UI
+            setReviewData(prev => prev ? {
+                ...prev,
+                ...data,
+                status: responseData.status || data.status || prev.status,
+                difficultyLevel: responseData.difficultyLevel || data.difficultyLevel || prev.difficultyLevel,
+                importanceLevel: responseData.importanceLevel || data.importanceLevel || prev.importanceLevel,
+                isFavorite: responseData.isFavorite !== undefined ? responseData.isFavorite : (data.isFavorite !== undefined ? data.isFavorite : prev.isFavorite),
+                content: data.content !== undefined ? data.content : prev.content,
+                sourceCode: data.code !== undefined ? data.code : prev.sourceCode,
+                reviewedAt: responseData.reviewedAt || prev.reviewedAt,
+            } : null);
 
         } catch (error) {
             console.error('Error updating review:', error);
         }
     }
 
-    const handleStatusChange = () => {
-        updateReview({ status: 'COMPLETED' }).then(() => {
-             setUnreviewedCount(unreviewedCount - 1);
-        });
+    const updateStatus = async (status: 'TO_DO' | 'IN_PROGRESS' | 'COMPLETED' | 'MASTERED') => {
+        const previousStatus = reviewData?.status;
+        const wasReviewed = previousStatus === 'COMPLETED' || previousStatus === 'MASTERED';
+        const willBeReviewed = status === 'COMPLETED' || status === 'MASTERED';
+        
+        await updateReview({ status });
+        
+        // Only change count when transitioning between reviewed/unreviewed states
+        if (!wasReviewed && willBeReviewed) {
+            // TO_DO/IN_PROGRESS -> COMPLETED/MASTERED: 미복습 -> 복습완료
+            setUnreviewedCount(unreviewedCount - 1);
+        } else if (wasReviewed && !willBeReviewed) {
+            // COMPLETED/MASTERED -> TO_DO/IN_PROGRESS: 복습완료 -> 미복습
+            setUnreviewedCount(unreviewedCount + 1);
+        }
+        // Same category transitions (e.g., TO_DO -> IN_PROGRESS or COMPLETED -> MASTERED) don't change count
+    };
+
+    const updateMemo = async (newContent: string) => {
+        await updateReview({ content: newContent });
+    };
+
+    const updateFavorite = async (favorite: boolean) => {
+        await updateReview({ isFavorite: favorite });
     };
 
     const handleSave = async (difficultyValue: number | null, importanceValue: number | null) => {
@@ -84,6 +127,11 @@ export const useReview = (reviewId: number) => {
              difficultyLevel: difficultyValue,
              importanceLevel: importanceValue
          });
+    };
+
+    // Deprecated or alias to updateStatus('COMPLETED')
+    const handleStatusChange = () => {
+        updateStatus('COMPLETED');
     };
 
     const fetchData = async () => {
@@ -96,10 +144,10 @@ export const useReview = (reviewId: number) => {
             setReviewData(data);
             setDifficulty(data.difficultyLevel);
             setImportance(data.importanceLevel);
-            
+            setIsFavorite(data.isFavorite);
             const isReviewed = data.status === 'COMPLETED' || data.status === 'MASTERED';
             setReviewed(isReviewed);
-            
+
             setContent(data.content || "");
             setSourceCode(data.sourceCode || "");
 
@@ -123,6 +171,10 @@ export const useReview = (reviewId: number) => {
         setDifficulty,
         importance,
         setImportance,
+        isFavorite,
+        updateFavorite,
+        updateMemo,
+        updateStatus,
         handleSave,
         reviewed,
         reviewedAt,

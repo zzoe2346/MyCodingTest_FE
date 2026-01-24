@@ -10,6 +10,8 @@ import { useReview } from "../hooks/useReview.ts";
 import { useJudgmentResult } from "../hooks/useJudgmentResult.ts";
 import TagSelection from "../components/TagUpdater.tsx";
 import ResultInfo from "../components/GradingResultInfo.tsx";
+import { FavoriteButton } from "../components/FavoriteButton.tsx";
+import { ReviewStatusSelect } from "../components/ReviewStatusSelect.tsx";
 
 const ReviewPage = () => {
     const { reviewId } = useParams();
@@ -19,11 +21,21 @@ const ReviewPage = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery('(max-width:1200px)');
 
-    // Review 데이터 가져오기
+    // Review 데이터 가져오기 - 한 번만 호출
     const {
         reviewData,
         content,
         loading: reviewLoading,
+        updateMemo,
+        isFavorite,
+        updateFavorite,
+        updateStatus,
+        difficulty,
+        importance,
+        handleSave,
+        reviewed,
+        reviewedAt,
+        handleStatusChange,
     } = useReview(reviewId ? parseInt(reviewId) : 0);
 
     // Judgment 데이터 가져오기 (problemId 사용)
@@ -120,24 +132,39 @@ const ReviewPage = () => {
         </Paper>
     );
 
+    // Current status for ReviewStatusSelect
+    const currentStatus = reviewData?.status || 'TO_DO';
+
     // Sidebar Component
     const Sidebar = () => (
         <Stack spacing={2}>
-            {/* Status */}
+            {/* Status Select & Favorite */}
             <Box sx={{ display: 'flex', gap: 1 }}>
+                <FavoriteButton 
+                    isFavorite={isFavorite} 
+                    onToggle={updateFavorite} 
+                />
                 <Box sx={{ flex: 1 }}>
-                    <ReviewStatusChangeButton reviewId={parseInt(reviewId)} />
+                    <ReviewStatusSelect 
+                        status={currentStatus} 
+                        onStatusChange={updateStatus} 
+                    />
                 </Box>
             </Box>
 
             {/* Rating Form */}
-            <ReviewRatingForm isMobile={false} reviewId={parseInt(reviewId)} />
+            <ReviewRatingForm 
+                isMobile={false} 
+                difficulty={difficulty}
+                importance={importance}
+                onSave={handleSave}
+            />
 
             {/* Tags */}
             {solvedProblemId && <TagSelection solvedProblemId={solvedProblemId} />}
 
-            {/* Memo - 읽기 전용 (review.content) */}
-            <ReviewMemo content={content} />
+            {/* Memo - 편집 가능 */}
+            <ReviewMemo content={content} onUpdate={updateMemo} />
         </Stack>
     );
 
@@ -222,14 +249,31 @@ const ReviewPage = () => {
                                 채점 결과가 없습니다
                             </Typography>
                         )}
+                        <ReviewStatusChangeButton 
+                            reviewed={reviewed ?? false}
+                            reviewedAt={reviewedAt}
+                            onStatusChange={handleStatusChange}
+                        />
                         <Box sx={{ display: 'flex', gap: 1 }}>
+                            <FavoriteButton 
+                                isFavorite={isFavorite} 
+                                onToggle={updateFavorite} 
+                            />
                             <Box sx={{ flex: 1 }}>
-                                <ReviewStatusChangeButton reviewId={parseInt(reviewId)} />
+                                <ReviewStatusSelect 
+                                    status={currentStatus} 
+                                    onStatusChange={updateStatus} 
+                                />
                             </Box>
                         </Box>
-                        <ReviewRatingForm isMobile={true} reviewId={parseInt(reviewId)} />
+                        <ReviewRatingForm 
+                            isMobile={true} 
+                            difficulty={difficulty}
+                            importance={importance}
+                            onSave={handleSave}
+                        />
                         {solvedProblemId && <TagSelection solvedProblemId={solvedProblemId} />}
-                        <ReviewMemo content={content} />
+                        <ReviewMemo content={content} onUpdate={updateMemo} />
                     </Stack>
                 </Fade>
             )}
