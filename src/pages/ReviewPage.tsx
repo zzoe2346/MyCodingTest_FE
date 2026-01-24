@@ -162,8 +162,8 @@ const ReviewPage = () => {
                 onSave={handleSave}
             />
 
-            {/* Tags */}
-            {solvedProblemId && <TagSelection solvedProblemId={solvedProblemId} />}
+            {/* Tags 태그 일단 주석화한다.*/}
+            {/* {solvedProblemId && <TagSelection solvedProblemId={solvedProblemId} />} */}
 
             {/* Memo - 편집 가능 */}
             <ReviewMemo content={content} onUpdate={updateMemo} />
