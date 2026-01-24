@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Paper, TextField, Button, Stack, Typography, CircularProgress } from '@mui/material';
+import { Box, Paper, Stack, Typography, Button, TextField, IconButton } from "@mui/material";
+import ReactMarkdown from 'react-markdown';
+import { useState, useEffect } from "react";
+import EditIcon from '@mui/icons-material/Edit';
 import { demoMemos } from '../demo/demoData';
 
 interface DemoReviewMemoProps {
@@ -7,96 +9,73 @@ interface DemoReviewMemoProps {
 }
 
 function DemoReviewMemo({ reviewId }: DemoReviewMemoProps) {
-    const [memo, setMemo] = useState("");
-    const [originalMemo, setOriginalMemo] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
+    const [content, setContent] = useState("");
+    const [tempContent, setTempContent] = useState("");
 
     useEffect(() => {
-        setIsLoading(true);
-        // Simulate loading delay
-        setTimeout(() => {
-            const mockMemo = demoMemos[reviewId] || "";
-            setMemo(mockMemo);
-            setOriginalMemo(mockMemo);
-            setIsLoading(false);
-        }, 300);
+        const mockMemo = demoMemos[reviewId] || "";
+        setContent(mockMemo);
+        setTempContent(mockMemo);
     }, [reviewId]);
 
-    const handleEdit = () => {
-        setIsEditing(true);
-    };
-
     const handleSave = () => {
-        // In demo mode, just update local state
-        setOriginalMemo(memo);
+        setContent(tempContent);
         setIsEditing(false);
     };
 
     const handleCancel = () => {
-        setMemo(originalMemo);
+        setTempContent(content);
         setIsEditing(false);
     };
 
-    if (isLoading) {
-        return (
-            <Paper sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
-                <CircularProgress size={24} />
-            </Paper>
-        );
-    }
-
     return (
-        <Paper sx={{ p: 2 }}>
-            <Stack spacing={2}>
-                <Typography variant="h6">📝 메모</Typography>
-                <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic' }}>
-                    📌 데모 모드: 메모 수정은 임시로만 저장됩니다
-                </Typography>
-                {!isEditing ? (
-                    <>
-                        <Button variant="outlined" onClick={handleEdit} size="small">
-                            메모 수정
-                        </Button>
-                        {memo ? (
-                            <Typography
-                                component="pre"
-                                sx={{
-                                    whiteSpace: 'pre-wrap',
-                                    fontFamily: 'inherit',
-                                    backgroundColor: '#f5f5f5',
-                                    p: 2,
-                                    borderRadius: 1
-                                }}
-                            >
-                                {memo}
-                            </Typography>
-                        ) : (
-                            <Typography color="text.secondary">
-                                아직 메모가 없습니다. 메모를 추가해보세요!
-                            </Typography>
-                        )}
-                    </>
-                ) : (
-                    <>
-                        <Stack direction="row" spacing={1}>
-                            <Button variant="contained" onClick={handleSave} size="small">
-                                저장
-                            </Button>
-                            <Button variant="outlined" onClick={handleCancel} size="small">
-                                취소
-                            </Button>
+        <Paper style={{ minHeight: 200 }}>
+            <Stack spacing={0.5} sx={{ p: 2 }}>
+                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    <Box>
+                        <Typography variant="h6">
+                            메모
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                            markdown 지원 · 📌 데모 모드
+                        </Typography>
+                    </Box>
+                    {!isEditing && (
+                        <IconButton onClick={() => setIsEditing(true)} size="small">
+                            <EditIcon />
+                        </IconButton>
+                    )}
+                </Stack>
+
+                <Box style={{ minHeight: 150 }}>
+                    {isEditing ? (
+                        <Stack spacing={2}>
+                            <TextField
+                                multiline
+                                minRows={6}
+                                fullWidth
+                                value={tempContent}
+                                onChange={(e) => setTempContent(e.target.value)}
+                                placeholder="메모를 입력하세요..."
+                            />
+                            <Stack direction="row" spacing={1} justifyContent="flex-end">
+                                <Button variant="outlined" onClick={handleCancel}>취소</Button>
+                                <Button variant="contained" onClick={handleSave}>저장</Button>
+                            </Stack>
                         </Stack>
-                        <TextField
-                            value={memo}
-                            onChange={(e) => setMemo(e.target.value)}
-                            multiline
-                            rows={10}
-                            placeholder="복습 메모를 작성해보세요..."
-                            fullWidth
-                        />
-                    </>
-                )}
+                    ) : (
+                        <Box>
+                            {content ? (
+                                <ReactMarkdown>{content}</ReactMarkdown>
+                            ) : (
+                                <Typography color="text.secondary" sx={{ fontStyle: 'italic' }}>
+                                    작성된 메모가 없습니다
+                                </Typography>
+                            )}
+                        </Box>
+                    )}
+                </Box>
             </Stack>
         </Paper>
     );

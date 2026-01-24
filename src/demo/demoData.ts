@@ -16,6 +16,7 @@ export const demoSolvedProblems: SolvedProblemWithReview[] = [
         tags: 'math,basic',
         isReviewed: true,
         reviewedAt: '2024-01-16T10:00:00',
+        status: 'COMPLETED',
     },
     {
         solvedProblemId: 2,
@@ -30,6 +31,7 @@ export const demoSolvedProblems: SolvedProblemWithReview[] = [
         tags: 'math,basic',
         isReviewed: false,
         reviewedAt: '',
+        status: 'TO_DO',
     },
     {
         solvedProblemId: 3,
@@ -44,6 +46,7 @@ export const demoSolvedProblems: SolvedProblemWithReview[] = [
         tags: 'output,basic',
         isReviewed: true,
         reviewedAt: '2024-01-17T12:00:00',
+        status: 'MASTERED',
     },
     {
         solvedProblemId: 4,
@@ -58,6 +61,7 @@ export const demoSolvedProblems: SolvedProblemWithReview[] = [
         tags: 'bruteforce,implementation',
         isReviewed: false,
         reviewedAt: '',
+        status: 'IN_PROGRESS',
     },
     {
         solvedProblemId: 5,
@@ -72,6 +76,7 @@ export const demoSolvedProblems: SolvedProblemWithReview[] = [
         tags: 'binary_search,sorting',
         isReviewed: false,
         reviewedAt: '',
+        status: 'TO_DO',
     },
     {
         solvedProblemId: 6,
@@ -86,6 +91,7 @@ export const demoSolvedProblems: SolvedProblemWithReview[] = [
         tags: 'greedy',
         isReviewed: true,
         reviewedAt: '2024-01-20T18:00:00',
+        status: 'COMPLETED',
     },
     {
         solvedProblemId: 7,
@@ -100,6 +106,7 @@ export const demoSolvedProblems: SolvedProblemWithReview[] = [
         tags: 'dp',
         isReviewed: false,
         reviewedAt: '',
+        status: 'IN_PROGRESS',
     },
     {
         solvedProblemId: 8,
@@ -114,8 +121,28 @@ export const demoSolvedProblems: SolvedProblemWithReview[] = [
         tags: 'bfs,dfs,graph',
         isReviewed: true,
         reviewedAt: '2024-01-22T14:00:00',
+        status: 'COMPLETED',
     },
 ];
+
+// Mock review codes (editable by user)
+export const demoReviewCodes: Record<number, string> = {
+    1: `# A+B - 내가 수정한 코드
+a, b = map(int, input().split())
+# 덧셈 결과 출력
+print(a + b)`,
+    4: `// 체스판 다시 칠하기 - 복습용 메모 추가
+// 핵심: 8x8 체스판 패턴 비교
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        // TODO: 구현
+    }
+}`,
+    7: `// RGB거리 - DP로 수정 예정
+// dp[i][j] = i번째 집을 j색으로 칠했을 때 최소 비용`,
+};
 
 // Mock judgment results for each problem
 export const demoJudgmentResults: Record<string, JudgmentResult[]> = {
