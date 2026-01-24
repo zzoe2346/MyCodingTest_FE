@@ -131,7 +131,7 @@ const TableBodyComponent: React.FC<TableBodyProps> = ({ rows, handleFavorite }) 
                         <TableCell width='auto'>
                             <Link
                                 underline='none'
-                                href={`/review/${row.reviewId}?problemTitle=${row.problemTitle}&sp=${row.solvedProblemId}`}
+                                href={`/review/${row.reviewId}?problemTitle=${encodeURIComponent(row.problemTitle)}`}
                             >
                                 {row.problemTitle}
                             </Link>
@@ -152,7 +152,7 @@ const TableBodyComponent: React.FC<TableBodyProps> = ({ rows, handleFavorite }) 
                         </TableCell>
                         <TableCell>
                             <Link
-                                href={`/review/${row.reviewId}?problemTitle=${row.problemTitle}&sp=${row.solvedProblemId}`}
+                                href={`/review/${row.reviewId}?problemTitle=${encodeURIComponent(row.problemTitle)}`}
                                 underline="none"
                             >
                                 <Chip
