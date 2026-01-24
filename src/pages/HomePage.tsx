@@ -27,8 +27,6 @@ import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
 
-// Mock announcements data (최신 5개)
-// Mock announcements data (최신 5개)
 const announcements = [
     { id: 1, title: "로그인 UX 개선 및 점검 알림 기능", date: "2026.01.18", isNew: true },
     { id: 2, title: "데모 모드 오픈 & UI 디자인 개편", date: "2026.01.09", isNew: false },

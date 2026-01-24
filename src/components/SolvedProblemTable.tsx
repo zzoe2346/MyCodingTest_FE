@@ -39,9 +39,9 @@ const headCells: HeadCell[] = [
     { id: 'problemTitle', label: '문제 제목' },
     { id: 'recentSubmitAt', label: '최근 제출 시간' },
     { id: 'recentResultText', label: '최근 결과' },
-    { id: 'review.difficultyLevel', label: '체감 난이도' },
-    { id: 'review.importanceLevel', label: '재복습 필요도' },
-    { id: 'review.reviewedAt', label: '복습' },
+    { id: 'difficultyLevel', label: '체감 난이도' },
+    { id: 'importanceLevel', label: '재복습 필요도' },
+    { id: 'reviewedAt', label: '복습' },
     { id: 'isFavorite', label: '북마크', disableSorting: true },
 ];
 
@@ -52,9 +52,6 @@ interface TableHeaderProps {
 }
 
 const TableHeader: React.FC<TableHeaderProps> = ({ handleRequestSort, order, orderBy }) => {
-    const createSortHandler = (property: keyof SolvedProblemWithReview | string) => () => {
-        handleRequestSort(property);
-    };
     return (
         <TableHead>
             <TableRow>
@@ -64,6 +61,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({ handleRequestSort, order, ord
                         key={headCell.id}
                         sortDirection={orderBy === headCell.id ? order : undefined}
                     >
+                        {/* Sorting disabled temporarily
                         {headCell.disableSorting ? (
                             headCell.label
                         ) : (
@@ -75,7 +73,9 @@ const TableHeader: React.FC<TableHeaderProps> = ({ handleRequestSort, order, ord
                             >
                                 {headCell.label}
                             </TableSortLabel>
-                        )}
+                        )} 
+                        */}
+                        {headCell.label}
                     </TableCell>
                 ))}
             </TableRow>
