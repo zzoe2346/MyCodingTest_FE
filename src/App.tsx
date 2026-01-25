@@ -17,6 +17,7 @@ import ErrorPage from "./pages/ErrorPage.tsx";
 import DemoSolvedProblemPage from "./pages/DemoSolvedProblemPage.tsx";
 import DemoReviewPage from "./pages/DemoReviewPage.tsx";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage.tsx";
+import ReviewInProgressSolvedProblemPage from "./pages/ReviewInProgressSolvedProblemPage.tsx";
 import { NavigateSetter } from "./api/apiClient.ts";
 
 function App() {
@@ -203,6 +204,14 @@ function App() {
                             element={
                                 <PrivateRoute>
                                     <ReviewUnClearSolvedProblemPage />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/review-in-progress"
+                            element={
+                                <PrivateRoute>
+                                    <ReviewInProgressSolvedProblemPage />
                                 </PrivateRoute>
                             }
                         />

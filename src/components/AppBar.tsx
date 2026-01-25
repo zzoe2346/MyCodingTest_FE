@@ -26,7 +26,7 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
 import ListAltRoundedIcon from '@mui/icons-material/ListAltRounded';
 import PendingActionsRoundedIcon from '@mui/icons-material/PendingActionsRounded';
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import LocalOfferRoundedIcon from '@mui/icons-material/LocalOfferRounded';
 import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
@@ -173,6 +173,7 @@ const NavigationButtons = () => {
         { text: '데모', path: '/demo/solved-problems', icon: <PlayCircleFilledRoundedIcon />, isDemo: true },
         { text: '푼 문제들', path: '/solved-problems', icon: <ListAltRoundedIcon /> },
         { text: '복습 대기 문제들', path: '/review-unclear', icon: <PendingActionsRoundedIcon />, badge: unreviewedCount },
+        { text: '복습 진행 문제들', path: '/review-in-progress', icon: <DirectionsRunIcon /> },
         { text: '복습 완료 문제들', path: '/review-clear', icon: <CheckCircleRoundedIcon /> },
         // { text: '태그별 문제들', path: '/tag', icon: <LocalOfferRoundedIcon /> },
         { text: '북마크 문제들', path: '/favorite', icon: <BookmarkRoundedIcon /> },
@@ -287,6 +288,7 @@ const MobileNavigationDrawer = () => {
         { text: '🎮 데모써보기', path: '/demo/solved-problems', icon: <PlayCircleFilledRoundedIcon />, isDemo: true },
         { text: '푼 문제들', path: '/solved-problems', icon: <ListAltRoundedIcon /> },
         { text: '복습 대기 문제들', path: '/review-unclear', icon: <PendingActionsRoundedIcon />, badge: unreviewedCount },
+        { text: '복습 진행 문제들', path: '/review-in-progress', icon: <DirectionsRunIcon /> },
         { text: '복습 완료 문제들', path: '/review-clear', icon: <CheckCircleRoundedIcon /> },
         { text: '태그별 문제들', path: '/tag', icon: <LocalOfferRoundedIcon /> },
         { text: '북마크 문제들', path: '/favorite', icon: <BookmarkRoundedIcon /> },

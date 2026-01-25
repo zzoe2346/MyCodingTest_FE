@@ -7,6 +7,7 @@ export type Order = 'asc' | 'desc';
 interface FilterOptions {
     isReviewed?: boolean | null;
     isFavorite?: boolean;
+    isInProgress?: boolean;
     field: string;
     order: Order;
     isTagged?: boolean
@@ -35,7 +36,11 @@ const useSolvedProblem = (filterOptions: FilterOptions) => {
             // Keeping sort parameter as it is often supported by default in Spring Pageable even if not in explicit openapi params for business logic
             // queryParams.append('sort', `${options.field},${options.order}`);
 
-            if (options.isReviewed === false) {
+            if (options.isInProgress === true) {
+                // In Progress -> filter=IN_PROGRESS
+                apiPath = '/api/reviews';
+                queryParams.append('filter', 'IN_PROGRESS');
+            } else if (options.isReviewed === false) {
                 // Review Waiting -> filter=TO_DO
                 apiPath = '/api/reviews';
                 queryParams.append('filter', 'TO_DO');

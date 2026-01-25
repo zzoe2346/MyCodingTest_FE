@@ -24,6 +24,7 @@ import React from "react";
 interface SolvedProblemTableProps {
     isReviewed?: boolean | null;
     isFavorite?: boolean;
+    isInProgress?: boolean;
     initSortField: string;
     isTagged?: boolean;
     tagId?: number | undefined;
@@ -191,7 +192,7 @@ const TableBodyComponent: React.FC<TableBodyProps> = ({ rows, handleFavorite }) 
     );
 };
 
-const SolvedProblemTable = ({ isReviewed, isFavorite, initSortField, isTagged, tagId }: SolvedProblemTableProps) => {
+const SolvedProblemTable = ({ isReviewed, isFavorite, isInProgress, initSortField, isTagged, tagId }: SolvedProblemTableProps) => {
     const {
         page,
         rowsPerPage,
@@ -203,7 +204,7 @@ const SolvedProblemTable = ({ isReviewed, isFavorite, initSortField, isTagged, t
         order,
         orderBy,
         dataLoaded, // dataLoaded 상태 사용
-    } = useSolvedProblem({ isReviewed, isFavorite, field: initSortField, order: 'desc', tagId, isTagged });
+    } = useSolvedProblem({ isReviewed, isFavorite, isInProgress, field: initSortField, order: 'desc', tagId, isTagged });
 
 
     return (
