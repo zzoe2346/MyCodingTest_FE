@@ -111,13 +111,19 @@ export const useReview = (reviewId: number) => {
 
     const updateStatus = async (status: 'TO_DO' | 'IN_PROGRESS' | 'COMPLETED' | 'MASTERED') => {
         const previousStatus = reviewData?.status;
-        const wasReviewed = previousStatus === 'COMPLETED' || previousStatus === 'MASTERED';
-        const willBeReviewed = status === 'COMPLETED' || status === 'MASTERED';
+        
+        // MASTERED는 무시, TO_DO만 미복습으로 카운트
+        // IN_PROGRESS, COMPLETED는 복습 진행/완료로 취급 (카운트에서 제외)
+        const wasUnreviewed = previousStatus === 'TO_DO';
+        const willBeUnreviewed = status === 'TO_DO';
         
         // Optimistic: Update count immediately before API call
-        if (!wasReviewed && willBeReviewed) {
+        // TO_DO에서 IN_PROGRESS/COMPLETED로 변경 시 -1
+        // IN_PROGRESS/COMPLETED에서 TO_DO로 변경 시 +1
+        // IN_PROGRESS ↔ COMPLETED 사이 전환은 변화 없음
+        if (wasUnreviewed && !willBeUnreviewed) {
             setUnreviewedCount(unreviewedCount - 1);
-        } else if (wasReviewed && !willBeReviewed) {
+        } else if (!wasUnreviewed && willBeUnreviewed && previousStatus !== 'MASTERED') {
             setUnreviewedCount(unreviewedCount + 1);
         }
         
