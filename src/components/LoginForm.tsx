@@ -1,19 +1,22 @@
 import { useEffect, useState } from 'react';
-import { Box, Divider, Fade, Paper, Stack, Typography } from '@mui/material';
+import { Box, CircularProgress, Divider, Fade, Paper, Stack, Typography } from '@mui/material';
 import MaintenanceNotice from "./MaintenanceNotice.tsx";
 
 const Login = () => {
     const [loaded, setLoaded] = useState(false);
     const [maintenanceOpen, setMaintenanceOpen] = useState(false);
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
 
     const handleGoogleLogin = () => {
         setMaintenanceOpen(false);
+        setIsLoggingIn(true);
         // window.location.href = 'http://localhost:8080/oauth2/authorization/google';
         window.location.href = 'https://api.mycodingtest.com/oauth2/authorization/google';
     };
 
     const handleKakaoLogin = () => {
         setMaintenanceOpen(false);
+        setIsLoggingIn(true);
         // window.location.href = 'http://localhost:8080/oauth2/authorization/kakao';
         window.location.href = 'https://api.mycodingtest.com/oauth2/authorization/kakao';
     };
@@ -21,6 +24,40 @@ const Login = () => {
     useEffect(() => {
         setLoaded(true);
     }, []);
+
+    // 로딩 중 화면
+    if (isLoggingIn) {
+        return (
+            <Fade in={true} timeout={300}>
+                <Paper
+                    elevation={0}
+                    sx={{
+                        p: 5,
+                        borderRadius: '20px',
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        maxWidth: 420,
+                        mx: 'auto',
+                    }}
+                >
+                    <Stack spacing={3} alignItems="center" sx={{ py: 4 }}>
+                        <CircularProgress 
+                            size={48} 
+                            sx={{ 
+                                color: 'primary.main',
+                            }} 
+                        />
+                        <Typography variant="h6" fontWeight={600} color="text.primary">
+                            로그인 중...
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary" textAlign="center">
+                            잠시만 기다려주세요
+                        </Typography>
+                    </Stack>
+                </Paper>
+            </Fade>
+        );
+    }
 
     return (
         <>
@@ -145,3 +182,4 @@ const Login = () => {
 };
 
 export default Login;
+
