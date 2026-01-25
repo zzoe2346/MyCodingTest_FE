@@ -16,6 +16,7 @@ import HomePage from "./pages/HomePage.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
 import DemoSolvedProblemPage from "./pages/DemoSolvedProblemPage.tsx";
 import DemoReviewPage from "./pages/DemoReviewPage.tsx";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage.tsx";
 import { NavigateSetter } from "./api/apiClient.ts";
 
 function App() {
@@ -216,6 +217,8 @@ function App() {
                         {/* Demo Routes */}
                         <Route path="/demo/solved-problems" element={<DemoSolvedProblemPage />} />
                         <Route path="/demo/review/:reviewId" element={<DemoReviewPage />} />
+                        {/* Privacy Policy */}
+                        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
                     </Routes>
                 </SnackbarProvider>
             </AuthProvider>
