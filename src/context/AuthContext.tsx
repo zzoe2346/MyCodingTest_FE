@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState, useCallback } from 'react';
 import apiClient from "../api/apiClient.ts";
 import { User } from "../hooks/types.ts";
 
@@ -28,8 +28,14 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [user, setUser] = useState<User | null>(null);
+    // localStorage에서 초기 상태 복원 (깜빡임 방지)
+    const [isLoggedIn, setIsLoggedIn] = useState(() => {
+        return localStorage.getItem('isLoggedIn') === 'true';
+    });
+    const [user, setUser] = useState<User | null>(() => {
+        const cached = localStorage.getItem('user');
+        return cached ? JSON.parse(cached) : null;
+    });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
     const [unreviewedCount, setUnreviewedCount] = useState(0);
@@ -41,6 +47,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             if (userResponse.status === 200) {
                 console.log(userResponse.data);
                 setUser(userResponse.data);
+                // localStorage에 캐시 저장
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('user', JSON.stringify(userResponse.data));
                 const unreviewedResponse = await apiClient.get('/api/reviews/unreviewed/count');
                 setUnreviewedCount(unreviewedResponse.data.count);
                 setIsLoggedIn(true);
@@ -53,6 +62,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         } catch {
             setUser(null);
             setIsLoggedIn(false);
+            // localStorage 초기화
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('user');
             setLoading(false);
             return false;
         }
@@ -79,32 +91,36 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         initializeAuth();
     }, []);
 
-    const signOut = async () => {
+    const signOut = useCallback(async () => {
         setLoading(true);
         try {
             await apiClient.get('/api/sign-out');
             setIsLoggedIn(false);
             setUser(null);
+            // localStorage 초기화
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('user');
         } catch (err) {
             console.error(err);
             setError('Error occurred during logout');
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+
+    const contextValue = useMemo(() => ({
+        isLoggedIn,
+        user,
+        error,
+        loading,
+        signOut,
+        unreviewedCount,
+        setUnreviewedCount,
+        checkAuth,
+    }), [isLoggedIn, user, error, loading, signOut, unreviewedCount]);
 
     return (
-        <AuthContext.Provider
-            value={{
-                isLoggedIn,
-                user,
-                error,
-                loading,
-                signOut,
-                unreviewedCount,
-                setUnreviewedCount,
-                checkAuth,
-            }}>
+        <AuthContext.Provider value={contextValue}>
             {children}
         </AuthContext.Provider>
     );
