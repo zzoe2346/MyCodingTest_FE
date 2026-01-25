@@ -43,7 +43,11 @@ const useSolvedProblem = (filterOptions: FilterOptions) => {
                 // Review Completed -> filter=COMPLETED
                 apiPath = '/api/reviews';
                 queryParams.append('filter', 'COMPLETED');
-            } else {
+            } 
+            else if (options.isFavorite === true) {
+                apiPath = '/api/reviews/favorite';
+            }
+            else {
                 // All Solved Problems -> /api/reviews/all
                 apiPath = '/api/reviews/all';
             }
