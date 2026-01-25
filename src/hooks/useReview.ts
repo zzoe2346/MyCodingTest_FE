@@ -5,8 +5,8 @@ import { formatDate } from "../util/DateFormatter.ts";
 
 // 새 API 응답 스펙
 interface ReviewResponse {
-    difficultyLevel: number;
-    importanceLevel: number;
+    difficultyLevel: number | null;
+    importanceLevel: number | null;
     status: 'TO_DO' | 'IN_PROGRESS' | 'COMPLETED' | 'MASTERED';
     reviewedAt: string;
     id: number;
@@ -49,50 +49,63 @@ export const useReview = (reviewId: number) => {
     const { unreviewedCount, setUnreviewedCount } = UserAuth();
 
     const updateReview = async (data: UpdateReviewRequest) => {
+        // Save previous state for rollback
+        const prevState = {
+            reviewData,
+            difficulty,
+            importance,
+            isFavorite,
+            reviewed,
+            reviewedAt,
+            content,
+            sourceCode,
+        };
+
+        // Optimistic update: Update UI immediately
+        if (data.difficultyLevel !== undefined) setDifficulty(data.difficultyLevel);
+        if (data.importanceLevel !== undefined) setImportance(data.importanceLevel);
+        if (data.isFavorite !== undefined) setIsFavorite(data.isFavorite);
+        if (data.content !== undefined) setContent(data.content);
+        if (data.code !== undefined) setSourceCode(data.code);
+        if (data.status) {
+            const isReviewed = data.status === 'COMPLETED' || data.status === 'MASTERED';
+            setReviewed(isReviewed);
+        }
+
+        // Optimistically update reviewData
+        setReviewData(prev => prev ? {
+            ...prev,
+            ...(data.difficultyLevel !== undefined && { difficultyLevel: data.difficultyLevel }),
+            ...(data.importanceLevel !== undefined && { importanceLevel: data.importanceLevel }),
+            ...(data.isFavorite !== undefined && { isFavorite: data.isFavorite }),
+            ...(data.content !== undefined && { content: data.content }),
+            ...(data.code !== undefined && { sourceCode: data.code }),
+            ...(data.status && { status: data.status }),
+        } : null);
+
         try {
-            // PUT /api/reviews/{reviewId}
+            // PUT /api/reviews/{reviewId} - background API call
             const response = await apiClient.put<UpdatedReviewResponse>(`/api/reviews/${reviewId}`, data);
-            
             const responseData = response.data;
 
-            // Update local state selectively
-            if (data.difficultyLevel !== undefined) setDifficulty(data.difficultyLevel);
-            if (data.importanceLevel !== undefined) setImportance(data.importanceLevel);
-            if (data.isFavorite !== undefined) setIsFavorite(data.isFavorite);
-            if (data.content !== undefined) setContent(data.content);
-            if (data.code !== undefined) setSourceCode(data.code);
-
-            // Special logic for status
-            if (data.status) {
-                 const isReviewed = data.status === 'COMPLETED' || data.status === 'MASTERED';
-                 setReviewed(isReviewed);
-            }
-            
-            // Sync with response if available
+            // Sync with server response (in case server modified values)
+            if (responseData.reviewedAt) setReviewedAt(formatDate(new Date(responseData.reviewedAt)));
             if (responseData.status) {
                 const isReviewed = responseData.status === 'COMPLETED' || responseData.status === 'MASTERED';
                 setReviewed(isReviewed);
             }
-            if (responseData.difficultyLevel) setDifficulty(responseData.difficultyLevel);
-            if (responseData.importanceLevel) setImportance(responseData.importanceLevel);
-            if (responseData.isFavorite !== undefined) setIsFavorite(responseData.isFavorite);
-            if (responseData.reviewedAt) setReviewedAt(formatDate(new Date(responseData.reviewedAt)));
-
-            // Update reviewData to reflect changes in UI
-            setReviewData(prev => prev ? {
-                ...prev,
-                ...data,
-                status: responseData.status || data.status || prev.status,
-                difficultyLevel: responseData.difficultyLevel || data.difficultyLevel || prev.difficultyLevel,
-                importanceLevel: responseData.importanceLevel || data.importanceLevel || prev.importanceLevel,
-                isFavorite: responseData.isFavorite !== undefined ? responseData.isFavorite : (data.isFavorite !== undefined ? data.isFavorite : prev.isFavorite),
-                content: data.content !== undefined ? data.content : prev.content,
-                sourceCode: data.code !== undefined ? data.code : prev.sourceCode,
-                reviewedAt: responseData.reviewedAt || prev.reviewedAt,
-            } : null);
 
         } catch (error) {
             console.error('Error updating review:', error);
+            // Rollback to previous state on error
+            setReviewData(prevState.reviewData);
+            setDifficulty(prevState.difficulty);
+            setImportance(prevState.importance);
+            setIsFavorite(prevState.isFavorite);
+            setReviewed(prevState.reviewed);
+            setReviewedAt(prevState.reviewedAt);
+            setContent(prevState.content);
+            setSourceCode(prevState.sourceCode);
         }
     }
 
@@ -101,17 +114,15 @@ export const useReview = (reviewId: number) => {
         const wasReviewed = previousStatus === 'COMPLETED' || previousStatus === 'MASTERED';
         const willBeReviewed = status === 'COMPLETED' || status === 'MASTERED';
         
-        await updateReview({ status });
-        
-        // Only change count when transitioning between reviewed/unreviewed states
+        // Optimistic: Update count immediately before API call
         if (!wasReviewed && willBeReviewed) {
-            // TO_DO/IN_PROGRESS -> COMPLETED/MASTERED: 미복습 -> 복습완료
             setUnreviewedCount(unreviewedCount - 1);
         } else if (wasReviewed && !willBeReviewed) {
-            // COMPLETED/MASTERED -> TO_DO/IN_PROGRESS: 복습완료 -> 미복습
             setUnreviewedCount(unreviewedCount + 1);
         }
-        // Same category transitions (e.g., TO_DO -> IN_PROGRESS or COMPLETED -> MASTERED) don't change count
+        
+        // updateReview now handles optimistic update and rollback internally
+        await updateReview({ status });
     };
 
     const updateMemo = async (newContent: string) => {

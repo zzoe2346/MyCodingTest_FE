@@ -88,16 +88,23 @@ const useSolvedProblem = (filterOptions: FilterOptions) => {
     };
 
     const handleFavorite = async (reviewId: number) => {
+        // Save previous state for rollback
+        const previousRows = [...rows];
+        
+        // Optimistic update: Toggle UI immediately
+        setRows(prevRows =>
+            prevRows.map(row =>
+                row.reviewId === reviewId ? { ...row, isFavorite: !row.isFavorite } : row
+            )
+        );
+
         try {
-            // PUT /api/reviews/{reviewId}/favorite
+            // PUT /api/reviews/{reviewId}/favorite - background API call
             await apiClient.put(`/api/reviews/${reviewId}/favorite`);
-            setRows(prevRows =>
-                prevRows.map(row =>
-                    row.reviewId === reviewId ? { ...row, isFavorite: !row.isFavorite } : row
-                )
-            );
         } catch (error) {
             console.error('Failed to update favorite:', error);
+            // Rollback to previous state on error
+            setRows(previousRows);
         }
     }
 
