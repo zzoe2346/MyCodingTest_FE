@@ -69,14 +69,14 @@ export const ReviewStatusSelect: React.FC<ReviewStatusSelectProps> = ({status, o
                     🔘 복습 대기
                 </MenuItem>
                 <MenuItem value="IN_PROGRESS" sx={{ color: statusStyles.IN_PROGRESS.color, fontWeight: 500 }}>
-                    🔵 복습 중
+                    🔵 복습 진행
                 </MenuItem>
                 <MenuItem value="COMPLETED" sx={{ color: statusStyles.COMPLETED.color, fontWeight: 500 }}>
                     ✅ 복습 완료
                 </MenuItem>
-                <MenuItem value="MASTERED" sx={{ color: statusStyles.MASTERED.color, fontWeight: 500 }}>
+                {/* <MenuItem value="MASTERED" sx={{ color: statusStyles.MASTERED.color, fontWeight: 500 }}>
                     🌟 완벽히 이해
-                </MenuItem>
+                </MenuItem> */}
             </Select>
         </FormControl>
     );
